@@ -1,0 +1,146 @@
+// put all mixins here
+
+ir()
+  // image replacement mixin
+  // source: http://css-tricks.com/examples/ImageReplacement/#h5bp
+  border: 0;
+  font: 0/0 a;
+  text-shadow: none;
+  color: transparent;
+
+oocss_block(img,content,ext)
+  display: block;
+  clearfix();
+  {img}
+    loat:left;
+    display:block;
+    margin:0 5px 0 0;
+    & img
+      display:block;
+  {content}
+    display:table-cell;
+    width:10000px; 
+    *width:auto; 
+    *zoom:1;
+  {ext}
+    float:right
+    margin:0 0 0 5px;
+
+screen-at-least(width)
+  condition = 'all and (min-width: %s)' % width
+  @media condition
+    {block}
+
+screen-at-most(width)
+  condition = 'all and (max-width: %s)' % width
+  @media condition
+    {block}
+
+screen-between(min,max)
+  condition = 'all and (min-width: %s) and (max-width: %s)' % min, max
+  @media condition
+    {block}
+
+base-font-size ?= 16px
+base-line-height ?= 24px
+
+//This is the useful part: it compares the given value to the base values and calculates the correct output
+font-size($fontValue = base-font-size, $baseFontValue = base-font-size, $baseLineValue = base-line-height)
+  font-size   $fontValue px
+  font-size   ($fontValue / $baseFontValue) rem
+  line-height ($fontValue / $baseFontValue) * $baseLineValue px
+  line-height ($baseLineValue/$baseFontValue) * ($fontValue / $baseFontValue) rem
+
+
+opacity(n)
+  opacity n
+  filter unquote('progid:DXImageTransform.Microsoft.Alpha(Opacity=' + round(n * 100) + ')')
+  filter: unquote('alpha(opacity=' + round(n * 100) +')')
+
+
+// source: https://gist.github.com/adunkman/2580972
+// background transparency
+background-transparency(hexColor, alpha = 1)
+  ms-color = argb(hexColor, alpha)
+  background hexToRgb(hexColor)
+  background rgba(hexColor, alpha)
+  .mod-no-rgba &
+    zoom 1
+    background transparent
+    filter s('progid:DXImageTransform.Microsoft.gradient(startColorstr=%s,endColorstr=%s)', ms-color, ms-color)
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr="+ms-color+",endColorstr="+ms-color+")";
+    &:nth-child(n)
+      filter none
+      -ms-filter none
+ 
+hex(decimal)
+   hex-value = ('0') ('1') ('2') ('3') ('4') ('5') ('6') ('7') ('8') ('9') ('A') ('B') ('C') ('D') ('E') ('F')
+   unquote(hex-value[floor(decimal / 16)] + hex-value[floor(decimal % 16)])
+ 
+argb(hexColor, alpha = 1)
+  // need to convert to string and remove the "#"
+  str = substr(""+hexColor,1)
+  // then we need to convert back by using unquote
+  s('#%s%s', hex(alpha * 255), unquote(str))
+
+// convert hex colors to RGB
+hexToRgb(hexColor)
+  s('rgb(%s, %s, %s)', red(hexColor), green(hexColor), blue(hexColor))
+
+
+// image replace function
+// source: http://css-tricks.com/examples/ImageReplacement/#h5bp
+ir()
+  border: 0;
+  font: 0/0 a;
+  text-shadow: none;
+  color: transparent;
+
+// good for centering vertically any item.  Just returns a pixel so you can use in
+// a position, padding, or margin, etc
+vert(height1, height2)
+  floor((height1 / 2) - (height2 / 2))
+
+
+
+webfont()
+  @font-face
+    {block}
+
+fontface(family, file)
+  fontLocation = "fonts/"
+  eot = fontLocation + file + '.eot'
+  woff = fontLocation + file + '.woff'
+  otf = fontLocation + file + '.otf'
+  svg = fontLocation + file + '.svg#' + family
+
+  +webfont()
+    font-family: family;
+    src: url(eot);
+    src: local('☺︎'),
+      url(woff) format("woff"),
+      url(otf) format("opentype"),
+      url(svg) format("svg");
+
+    // for Android 2.3
+    @media screen and (max-device-width: 480px)
+      +webfont()
+        font-family: family;
+        src: url(woff) format("woff"),
+          url(otf) format("opentype"),
+          url(svg) format("svg");
+
+
+// source: http://clock.co.uk/blog/handling-ie-with-stylus
+ie($version, $strict = false)
+  if ($is-ie == true)
+    if($strict == true)
+      if ($is-ie--version == $version)
+        {block}
+    else
+      if ($is-ie--version <= $version)
+        {block}
+
+isDev()
+  if ($env == "dev")
+    {block}

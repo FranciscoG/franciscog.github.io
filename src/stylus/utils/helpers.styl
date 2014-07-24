@@ -1,0 +1,161 @@
+
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+/* 
+  sources: 
+  http://www.stubbornella.org/content/2010/06/25/the-media-object-saves-hundreds-of-lines-of-code/
+  http://jsfiddle.net/necolas/rZvEF/
+*/
+
+
+/* ----- REUSABLE IMG BLOCK ----- */
+
+.imgblock {
+  display: block;
+  clearfix();
+}
+
+.imgblock .img {
+    float:left;
+    display:block;
+    margin:0 5px 0 0;
+}
+
+.imgblock .img img {
+    display:block;
+}
+
+/*
+ * 1. Create new block formatting context in modern browsers
+ * 2. Avoid shrink-wrap behaviour of table-cell
+ * 3. Override for IE6/7
+ * 4. Create new block formatting context in IE6/7
+ * Alternatively, use `overflow:hidden` if clipping is OK
+ * www.stubbornella.org/content/2010/06/25/the-media-object-saves-hundreds-of-lines-of-code/
+ * facebook.com
+*/
+
+.imgblock .content {
+    display:table-cell; /* 1 */
+    width:10000px; /* 2 */
+    *width:auto; /* 3 */
+    *zoom:1; /* 4 */
+}
+
+.imgblock .ext {
+    float: right;
+    margin:0 0 0 5px;
+}
+
+
+.nobr {
+    white-space: nowrap;
+}
+
+// source: http://css-tricks.com/examples/ImageReplacement/#h5bp
+/* image replacement */
+.ir {
+  border: 0;
+  font: 0/0 a;
+  text-shadow: none;
+  color: transparent;
+}
+
+
+/*
+ * Hide visually and from screen readers: h5bp.com/u
+ */
+
+.hidden {
+    display: none !important;
+    visibility: hidden;
+}
+
+/*
+ * Hide only visually, but have it available for screen readers: h5bp.com/v
+ */
+
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+/*
+ * Extends the .visuallyhidden class to allow the element to be focusable
+ * when navigated to via the keyboard: h5bp.com/p
+ */
+
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+}
+
+/*
+ * Hide visually and from screen readers, but maintain layout
+ */
+
+.invisible {
+    visibility: hidden;
+}
+
+/*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    `contenteditable` attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *    `:before` to contain the top-margins of child elements.
+ 
+
+   Nib includes a Clearfix mixin but leaving this hear for info
+
+  .clearfix:before,
+  .clearfix:after {
+1     content: " ";   
+2     display: table; 
+  }
+
+  .clearfix:after {
+      clear: both;
+  }
+*/
+
+.cf {
+    clearfix();
+}
+
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   
+
+@media only screen and (min-width: 35em) {
+    // Style adjustments for viewports that meet the condition 
+}
+
+@media print,
+       (-o-min-device-pixel-ratio: 5/4),
+       (-webkit-min-device-pixel-ratio: 1.25),
+       (min-resolution: 120dpi) {
+    // Style adjustments for high resolution devices 
+}
+
+========================================================================== */
+
