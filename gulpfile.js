@@ -22,8 +22,6 @@ gulp.task('jade', function() {
 
 var stylus = require('gulp-stylus');
 var nib = require('nib');
-var rename = require("gulp-rename");
-
 
 gulp.task('stylus', function() {
   gulp.src('./src/stylus/app.styl')
@@ -69,7 +67,7 @@ gulp.task('browserify', ['lint_modules', 'lint_main'], function() {
 gulp.task('watch', function() {
   gulp.watch('./src/js/**/**/*.js', ['browserify']); // will jshint first
   gulp.watch('./src/stylus/**/*.styl', ['stylus']); // will generate styleguide first
-  gulp.watch('./views/**/*.jade', ['jade']);
+  gulp.watch('./src/views/**/*.jade', ['jade']);
 });
 
 /**********************************************

@@ -1,6 +1,12 @@
 // source: http://codentronix.com/2011/07/22/html5-canvas-3d-starfield/
+
+var dimension = [document.documentElement.clientWidth, document.documentElement.clientHeight];
+var field = document.getElementById("field");
+field.width = dimension[0];
+field.height = dimension[1];
+
 var MAX_DEPTH = 32;
-var canvas, ctx;
+var ctx;
 var totalStars = 512;
 var stars = new Array(totalStars);
 
@@ -20,6 +26,7 @@ function initStars() {
 }
 
 function loop() {
+  var canvas = field;
   var halfWidth = canvas.width / 2;
   var halfHeight = canvas.height / 2;
 
@@ -51,9 +58,8 @@ function loop() {
 }
 
 window.onload = function() {
-  canvas = document.getElementById("field");
-  if (canvas && canvas.getContext) {
-    ctx = canvas.getContext("2d");
+  if (field && field.getContext) {
+    ctx = field.getContext("2d");
     initStars(); // place the stars in random locations within the canvas
     setInterval(loop, 22);
   }
