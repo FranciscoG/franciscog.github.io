@@ -332,8 +332,13 @@ textarea {
 .cf:after {
   clear: both;
 }
-#field {
+body {
+  margin: 0;
+  overflow: hidden;
+}
+canvas {
   position: absolute;
+  display: block;
 }
 @media print {
   * {
