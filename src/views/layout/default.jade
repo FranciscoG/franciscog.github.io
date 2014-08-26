@@ -8,4 +8,4 @@ html(class="no-js", lang="en")
     main.container
       block content
     
-    script(src="js/site.js")
+    script(src=(jsFile)? "js/"+jsFile : "js/site.js")

@@ -24,7 +24,7 @@ var stylus = require('gulp-stylus');
 var nib = require('nib');
 
 gulp.task('stylus', function() {
-  gulp.src('./src/stylus/app.styl')
+  gulp.src('./src/stylus/*.styl')
     .pipe(stylus({
       use: [nib()]
     }))
@@ -50,7 +50,7 @@ gulp.task('lint_modules', function() {
 });
 
 gulp.task('lint_main', function() {
-  return gulp.src('./src/js/app.js')
+  return gulp.src('./src/js/*.js')
     .pipe(jshint('./src/js/.jshintrc'))
     .pipe(jshint.reporter(stylish));
 });
@@ -60,12 +60,18 @@ gulp.task('browserify', ['lint_modules', 'lint_main'], function() {
   return bundleStream.pipe(gulp.dest('./js'));
 });
 
+/* Just moving the viewport file*/
+gulp.task('viewport', ['lint_main'], function() {
+  return gulp.src('./src/js/viewport.js')
+    .pipe(gulp.dest('./js'));
+});
+
 /**********************************************
  * Watch
  */
 
 gulp.task('watch', function() {
-  gulp.watch('./src/js/**/**/*.js', ['browserify']); // will jshint first
+  gulp.watch('./src/js/**/**/*.js', ['browserify', 'viewport']); // will jshint first
   gulp.watch('./src/stylus/**/*.styl', ['stylus']); // will generate styleguide first
   gulp.watch('./src/views/**/*.jade', ['jade']);
 });

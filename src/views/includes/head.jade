@@ -14,5 +14,5 @@ head
       var html = d.getElementsByTagName("html")[0];
           html.className = "";
     })(document);
-  link(rel="stylesheet", href="css/app.css")
+  link(rel="stylesheet", href=(cssFile)? "css/"+cssFile : "css/app.css")
   script(src="js/vendor/modernizr.custom.js")

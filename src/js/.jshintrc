@@ -15,6 +15,7 @@
   "expr" : true,
   "globals": {
     "_gaq" : true,
-    "ga" : true
+    "ga" : true,
+    "$" : true
   }
 }
