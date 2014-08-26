@@ -3,7 +3,7 @@ $(function() {
   var ua = navigator.userAgent;
 
   var isMobile = /Android|webOS|iPhone|iP[ao]d|Windows Phone/i.test(ua);
-  var retina = window.devicePixelRatio > 1;
+  var retina = window.devicePixelRatio >= 2;
 
   if (isMobile) {
     $("#mobile").text("this is a mobile device");
