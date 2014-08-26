@@ -1,0 +1,33 @@
+$is-ie ?= false
+//$env ?= "dev"
+
+// nib is a library of mixins for Stylus
+// documentattion:  http://visionmedia.github.io/nib/
+@import 'nib'
+
+// jeet is a grid system mixin library for Stylus
+// documentation: http://jeet.gs/
+@import 'jeet'
+
+
+@import "utils/normalize"
+
+/************* Viewport page stylus variables here ************************/
+
+/************************************************************/
+
+@import 'utils/base'
+@import 'utils/helpers'
+
+/************* Viewport page CSS here ************************/
+
+.container { padding: 0 50px 0;}
+span { word-wrap: break-word; display:inline-block;}
+.test { background: #6495ED; border:1px solid #F0E68C;  padding: 10px;}
+.test p {margin: 0; padding: 0;}
+.footnote { font-size: 12px; }
+
+/**********************************************/
+
+// the following should always be at the end
+@import 'utils/print'
