@@ -1,15 +1,16 @@
 $(function() {
 
-  var isMobile = (function() {
-    if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iP[ao]d/i) || navigator.userAgent.match(/Windows Phone/i)) {
-      return true;
-    } else {
-      return false;
-    }
-  })();
+  var ua = navigator.userAgent;
+
+  var isMobile = /Android|webOS|iPhone|iP[ao]d|Windows Phone/i.test(ua);
+  var retina = window.devicePixelRatio > 1;
 
   if (isMobile) {
     $("#mobile").text("this is a mobile device");
+    $('.scrollbar').hide();
+  }
+  if (retina) {
+    $('#retina').show();
   }
 
 
@@ -23,23 +24,22 @@ $(function() {
     return (w1 - w2);
   };
 
-  var ua = navigator.userAgent;
   $('.ua').text(ua);
 
   var checkSize = function() {
     var scrollbar = getScrollbarWidth();
     var winW = $(window).width();
     var winH = $(window).height();
-    winW = winW - scrollbar;
+    //winW = winW - scrollbar;
 
-    $('#width').text(winW + "px");
-    $('#height').text(winH + "px");
+    $('.showWidth').text(winW + "px");
+    $('.showHeight').text(winH + "px");
+    $('.showScrollWidth').text(scrollbar + "px");
 
-    $('.container').css('height', winH + "px");
+    //$('.container').css('height', winH + "px");
   };
 
   checkSize();
-
 
   $(window).on("resize", function() {
     checkSize();

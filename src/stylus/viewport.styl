@@ -14,18 +14,152 @@ $is-ie ?= false
 
 /************* Viewport page stylus variables here ************************/
 
+$sb_border = 5px;
+$sb_border_color = #ccc;
+
 /************************************************************/
+
+screen-at-least(width)
+  condition = 'all and (min-width: %s)' % width
+  @media condition
+    {block}
+
+screen-at-most(width)
+  condition = 'all and (max-width: %s)' % width
+  @media condition
+    {block}
+
+screen-between(min,max)
+  condition = 'all and (min-width: %s) and (max-width: %s)' % min, max
+  @media condition
+    {block}
 
 @import 'utils/base'
 @import 'utils/helpers'
 
 /************* Viewport page CSS here ************************/
 
-.container { padding: 0 50px 0;}
-span { word-wrap: break-word; display:inline-block;}
-.test { background: #6495ED; border:1px solid #F0E68C;  padding: 10px;}
-.test p {margin: 0; padding: 0;}
-.footnote { font-size: 12px; }
+body {
+  background-color: #eee;
+}
+
+.u {
+  text-decoration: underline;
+}
+
+.container {
+  margin: 5% auto 0;
+  background-color: #fff;
+  padding: 10px;
+  position: relative;
+  z-index: 3;
+ 
+  +screen-at-least(960px) {
+    width: 70%
+    border: 1px solid #ccc;
+    box-shadow:  3px 3px 2px 0px rgba(50, 50, 50, 0.76);
+  }
+}
+
+.dims_container {
+  clearfix()
+  .inner {
+    width: 80%;
+    margin: 20px auto;
+    
+    .img, .ext {
+      width: 30%;
+      text-align: center;
+      span {
+        display: block;
+        padding: 10px;
+        background: #87CEEB;
+      }
+    }
+
+    .content {
+      height: 100%;
+      text-align: center;
+      padding-top: 32px;
+    }
+  }
+}
+
+.agent {
+  margin: 1em 0;
+}
+
+#mobile {
+  text-align: center
+  margin: 1em 0;
+}
+
+#retina {
+  text-align: center
+  display: none;
+}
+
+.scrollbar {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  right: 30px;
+  bottom: 7%;
+  height: auto;
+  padding: 15px 15px 15px 12px;
+  margin: 1em 0 3em;
+  border: $sb_border solid $sb_border_color;
+  color: #333;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px
+  background-color: #fff;
+  &:before {
+    content: "";
+    position: absolute;
+    border-style: solid;
+    display: block;
+    width: 0;
+    top: 10px;
+    bottom: auto;
+    left: auto;
+    right: -30px;
+    border-width: 15px 0 15px 30px;
+    border-color: transparent $sb_border_color;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    border-style: solid;
+    display: block;
+    width: 0;
+    top: 16px;
+    bottom: auto;
+    left: auto;
+    right: -21px;
+    border-width: 9px 0 9px 21px;
+    border-color: transparent #fff;
+  }
+}
+
+.line {
+  position: absolute;
+  z-index: 1;
+  &.vline {
+    border-left: 3px dashed #ccc;
+    right: 20%;
+    top: 0;
+    height: 100%;
+  }
+
+  &.hline {
+    border-top: 3px dashed #ccc;
+    bottom: 20%;
+    right: 0;
+    width: 100%;
+  }
+}
 
 /**********************************************/
 

@@ -9,24 +9,31 @@ block vars
   - var cssFile = "viewport.css"
 
 block content
-  h1 Pixel Info
-  p A simple tool to determine what is the current pixel dimensions of your browser
-  p
-    strong.
-      Width = <span id="width"></span>
-      Height = <span id="height">605px</span>
-  
-  p
-    strong Browser User Agent:
-    span(class="ua")
-  
-  h3(id="mobile") not on a mobile device
-      
-  p(class="footnote").
-    Work in progess.  I'm accomadating for scollbar width using <a href="http://stackoverflow.com/a/7501799">this</a> technique.  It's not perfect,  if you resize the window it's better to refresh for more accurate data.
+  .line.hline
+    span.showWidth
+  .line.vline
+    span.showHeight
+  .scrollbar Your browser's scrollbar width is: <span class="showScrollWidth"></span>
 
-  .test
-    p This container div above has been give the exact height of your browser's viewable area. You should begin seeing this immediately after scolling down
+  .container
+    h1 Viewport info
+    p A simple tool to determine what is the current pixel dimensions of your browser
+    
+    .dims_container
+      .inner.imgblock
+        p.img Width
+          span(class="showWidth")
+        p.ext Height
+          span(class="showHeight")
+        span.content x
+        
+    h3#mobile this is <span class="u">not</span> a mobile device
+    h3#retina this is a retina device
+    
+    p.agent
+      strong Your User Agent: <br>
+      span(class="ua")
+    
 
   script(src="js/vendor/jquery-1.11.1.min.js")
 
