@@ -30,26 +30,19 @@ $(function() {
     var scrollbar = getScrollbarWidth();
     var winW = $(window).width();
     var winH = $(window).height();
-    //winW = winW - scrollbar;
 
     $('.showWidth').text(winW + "px");
     $('.showHeight').text(winH + "px");
     $('.showScrollWidth').text(scrollbar + "px");
 
-    //$('.container').css('height', winH + "px");
   };
 
   checkSize();
 
-  $(window).on("resize", function() {
-    checkSize();
-  });
-
-  // $(window).on("scroll", function() {
-  //   $(window).resize(function(e) {
-  //     e.stopPropagation();
-  //   });
-  // });
-
+  if (!isMobile) {
+    $(window).on("resize", function() {
+      checkSize();
+    });
+  }
 
 });
