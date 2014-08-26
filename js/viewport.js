@@ -3,14 +3,14 @@ $(function() {
   var ua = navigator.userAgent;
 
   var isMobile = /Android|webOS|iPhone|iP[ao]d|Windows Phone/i.test(ua);
-  var retina = window.devicePixelRatio >= 2;
+  var pixelRatio = window.devicePixelRatio;
 
   if (isMobile) {
     $("#mobile").text("this is a mobile device");
     $('.scrollbar').hide();
   }
-  if (retina) {
-    $('#retina').show();
+  if (pixelRatio) {
+    $('#retina').show().text("Device Pixel Ratio: " + pixelRatio);
   }
 
 
