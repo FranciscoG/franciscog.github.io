@@ -45,7 +45,7 @@ base-font-size ?= 16px
 base-line-height ?= 24px
 
 //This is the useful part: it compares the given value to the base values and calculates the correct output
-font-size($fontValue = base-font-size, $baseFontValue = base-font-size, $baseLineValue = base-line-height)
+fontsize($fontValue = base-font-size, $baseFontValue = base-font-size, $baseLineValue = base-line-height)
   font-size   $fontValue px
   font-size   ($fontValue / $baseFontValue) rem
   line-height ($fontValue / $baseFontValue) * $baseLineValue px

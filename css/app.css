@@ -54,10 +54,7 @@ dfn {
   font-style: italic;
 }
 h1 {
-  font-size: 2px;
-  font-size: 0.125rem;
-  line-height: 3px;
-  line-height: 0.1875rem;
+  font-size: 2em;
   margin: 0.67em 0;
 }
 mark {
@@ -65,17 +62,11 @@ mark {
   color: #000;
 }
 small {
-  font-size: 80px;
-  font-size: 5rem;
-  line-height: 120px;
-  line-height: 7.5rem;
+  font-size: 80%;
 }
 sub,
 sup {
-  font-size: 75px;
-  font-size: 4.6875rem;
-  line-height: 112.5px;
-  line-height: 7.03125rem;
+  font-size: 75%;
   line-height: 0;
   position: relative;
   vertical-align: baseline;
@@ -110,10 +101,7 @@ kbd,
 pre,
 samp {
   font-family: monospace, monospace;
-  font-size: 1px;
-  font-size: 0.0625rem;
-  line-height: 1.5px;
-  line-height: 0.09375rem;
+  font-size: 1em;
 }
 button,
 input,
@@ -197,12 +185,12 @@ th {
   padding: 0;
 }
 /* HTML5 Boilerplate v4.3.0 | MIT License | http://h5bp.com/ */
+/* ==========================================================================
+   Base styles: opinionated defaults
+   ========================================================================== */
 html {
   color: #222;
-  font-size: 1px;
-  font-size: 0.0625rem;
-  line-height: 1.5px;
-  line-height: 0.09375rem;
+  font-size: 1em;
   line-height: 1.4;
 }
 *,
@@ -331,56 +319,18 @@ textarea {
 body {
   margin: 0;
   overflow: hidden;
+  font-size: 16px;
 }
 canvas {
   position: absolute;
   display: block;
 }
-@media print {
-  * {
-    background: transparent !important;
-    color: #000 !important; /* Black prints faster: h5bp.com/s */
-    -webkit-box-shadow: none !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
-  }
-  a,
-  a:visited {
-    text-decoration: underline;
-  }
-  a[href]:after {
-    content: " (" attr(href) ")";
-  }
-  abbr[title]:after {
-    content: " (" attr(title) ")";
-  }
-  a[href^="#"]:after,
-  a[href^="javascript:"]:after {
-    content: "";
-  }
-  pre,
-  blockquote {
-    border: 1px solid #999;
-    page-break-inside: avoid;
-  }
-  thead {
-    display: table-header-group; /* h5bp.com/t */
-  }
-  tr,
-  img {
-    page-break-inside: avoid;
-  }
-  img {
-    max-width: 100% !important;
-  }
-  p,
-  h2,
-  h3 {
-    orphans: 3;
-    widows: 3;
-  }
-  h2,
-  h3 {
-    page-break-after: avoid;
-  }
+#terminal {
+  color: #fff;
+  font-family: 'VT323', "Lucida Console", monospace;
+  font-size: 2em;
+  width: 500px;
+  position: absolute;
+  top: 20%;
+  left: 20%;
 }
