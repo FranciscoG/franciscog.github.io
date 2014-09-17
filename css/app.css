@@ -54,7 +54,10 @@ dfn {
   font-style: italic;
 }
 h1 {
-  font-size: 2em;
+  font-size: 2px;
+  font-size: 0.125rem;
+  line-height: 3px;
+  line-height: 0.1875rem;
   margin: 0.67em 0;
 }
 mark {
@@ -62,11 +65,17 @@ mark {
   color: #000;
 }
 small {
-  font-size: 80%;
+  font-size: 80px;
+  font-size: 5rem;
+  line-height: 120px;
+  line-height: 7.5rem;
 }
 sub,
 sup {
-  font-size: 75%;
+  font-size: 75px;
+  font-size: 4.6875rem;
+  line-height: 112.5px;
+  line-height: 7.03125rem;
   line-height: 0;
   position: relative;
   vertical-align: baseline;
@@ -101,7 +110,10 @@ kbd,
 pre,
 samp {
   font-family: monospace, monospace;
-  font-size: 1em;
+  font-size: 1px;
+  font-size: 0.0625rem;
+  line-height: 1.5px;
+  line-height: 0.09375rem;
 }
 button,
 input,

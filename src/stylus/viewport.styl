@@ -1,15 +1,7 @@
 $is-ie ?= false
-//$env ?= "dev"
 
-// nib is a library of mixins for Stylus
-// documentattion:  http://visionmedia.github.io/nib/
 @import 'nib'
-
-// jeet is a grid system mixin library for Stylus
-// documentation: http://jeet.gs/
 @import 'jeet'
-
-
 @import "utils/normalize"
 
 /************* Viewport page stylus variables here ************************/
@@ -35,7 +27,6 @@ screen-between(min,max)
     {block}
 
 @import 'utils/base'
-@import 'utils/helpers'
 
 /************* Viewport page CSS here ************************/
 
@@ -160,8 +151,3 @@ body {
     width: 100%;
   }
 }
-
-/**********************************************/
-
-// the following should always be at the end
-@import 'utils/print'

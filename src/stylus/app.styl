@@ -1,25 +1,24 @@
 $is-ie ?= false
-//$env ?= "dev"
 
-// font-family: 'VT323', ;
-
-// nib is a library of mixins for Stylus
-// documentattion:  http://visionmedia.github.io/nib/
 @import 'nib'
-
-// jeet is a grid system mixin library for Stylus
-// documentation: http://jeet.gs/
 @import 'jeet'
+@import 'utils/mixins'
+
+// *****************************************************
+// Begin Variables 
+// can move to a separate file if they get too big
+// *****************************************************
+
+$terminal_font = 'VT323', "Lucida Console", monospace;
 
 
 @import "utils/normalize"
-
-@import 'utils/variables'
-@import 'utils/mixins'
 @import 'utils/base'
-@import 'utils/helpers'
+
+// *****************************************************
+// Begin Page Specific Styles
+// *****************************************************
 
 @import 'pages/home'
 
-// the following should always be at the end
-@import 'utils/print'
+
