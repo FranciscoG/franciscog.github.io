@@ -6,7 +6,7 @@
  * ▌ = \u258C   or    &#9612;
  */
 
-module.exports = function(elem, str) {
+module.exports = function(elem, str, cb) {
   var progress = 0;
   elem.textContent = '';
   var timer = setInterval(function() {
@@ -15,6 +15,9 @@ module.exports = function(elem, str) {
       clearInterval(timer);
       setTimeout(function() {
         elem.textContent = str;
+        if (typeof cb === 'function') {
+          cb();
+        }
       }, 500);
     }
   }, 80);

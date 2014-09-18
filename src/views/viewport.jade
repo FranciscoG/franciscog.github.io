@@ -9,30 +9,31 @@ block vars
   - var cssFile = "viewport.css"
 
 block content
-  .line.hline
-    span.showWidth
-  .line.vline
-    span.showHeight
-  .scrollbar Your browser's scrollbar width is: <span class="showScrollWidth"></span>
+  main
+    .line.hline
+      span.showWidth
+    .line.vline
+      span.showHeight
+    .scrollbar Your browser's scrollbar width is: <span class="showScrollWidth"></span>
 
-  .container
-    h1 Viewport info
-    p A simple tool to determine what is the current pixel dimensions of your browser
-    
-    .dims_container
-      .inner.imgblock
-        p.img Width
-          span(class="showWidth")
-        p.ext Height
-          span(class="showHeight")
-        span.content x
-        
-    h3#mobile this is <span class="u">not</span> a mobile device
-    h3#retina
-    
-    p.agent
-      strong Your User Agent: <br>
-      span(class="ua")
+    .container
+      h1 Viewport info
+      p A simple tool to determine what is the current pixel dimensions of your browser
+      
+      .dims_container
+        .inner.imgblock
+          p.img Width
+            span(class="showWidth")
+          p.ext Height
+            span(class="showHeight")
+          span.content x
+          
+      h3#mobile this is <span class="u">not</span> a mobile device
+      h3#retina
+      
+      p.agent
+        strong Your User Agent: <br>
+        span(class="ua")
     
 
   script(src="js/vendor/jquery-1.11.1.min.js")

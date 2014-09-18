@@ -4,8 +4,8 @@ html(class="no-js", lang="en")
   include ../includes/head
 
   body&attributes(bodyAttributes? bodyAttributes : {})
+
+    block content
     
-    main
-      block content
-    
+    script(src="js/vendor/html2canvas.js")
     script(src=(jsFile)? "js/"+jsFile : "js/site.js")

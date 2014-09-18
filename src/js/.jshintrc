@@ -16,6 +16,7 @@
   "globals": {
     "_gaq" : true,
     "ga" : true,
+    "html2canvas" : true,
     "$" : true
   }
 }

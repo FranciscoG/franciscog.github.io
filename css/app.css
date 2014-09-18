@@ -321,6 +321,10 @@ body {
   overflow: hidden;
   font-size: 16px;
 }
+main {
+  position: relative;
+  padding: 10% 0 0 10%;
+}
 canvas {
   position: absolute;
   display: block;
@@ -329,8 +333,4 @@ canvas {
   color: #fff;
   font-family: 'VT323', "Lucida Console", monospace;
   font-size: 2em;
-  width: 500px;
-  position: absolute;
-  top: 20%;
-  left: 20%;
 }
