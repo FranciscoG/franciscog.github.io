@@ -1,58 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var starfield = require('../js/modules/starfield.js');
-var typer = require('../js/modules/text_writer.js');
-var imgFilters = require('../js/modules/image_filters.js');
+var terminal = require('../js/modules/terminal.js');
 
-// Converts canvas to an image
-function convertCanvasToImage(canvas) {
-  var image = new Image();
-  image.src = canvas.toDataURL("image/png");
-  return image;
-}
-
-function imageDataToCanvas(idata) {
-  var c = document.createElement('canvas');
-  c.width = idata.width;
-  c.height = idata.height;
-  var ctx = c.getContext('2d');
-  ctx.putImageData(idata, 0, 0);
-  return c;
-}
-
-function createNxN(num) {
-  // create an array of NxN
-  // where each item is 1/NxN
-  var _tempArr = [];
-  for (var i = 0; i < num; i++) {
-    _tempArr.push(1 / num);
-  }
-  return _tempArr;
-}
-
-var terminal = {};
-
-terminal.test = function() {
-  var title = document.getElementById("title");
-  var options = {
-    background: 'undefined',
-    onrendered: function(canvas) {
-      // take returned canvas element and convert it into an image
-      var newTimg = convertCanvasToImage(canvas);
-      // pass this image to image filter library and add blur, returns a canvas image data
-      var blurredImg = imgFilters.filterImage(imgFilters.convolute, newTimg, createNxN(36));
-      // put imageData onto a canvas and append that a div
-      var newCanvas = imageDataToCanvas(blurredImg);
-      newCanvas.className = "lastText";
-      document.getElementById('terminal').appendChild(newCanvas);
-    }
-  };
-  html2canvas(title, options);
-};
-
-terminal.init = function() {
-  var title = document.getElementById("title");
-  typer(title, "Welcome to FranciscoG.com", terminal.test);
-};
 
 // http://bililite.com/wvm/cli.html
 window.addEventListener("load", function() {
@@ -63,7 +12,7 @@ window.addEventListener("load", function() {
 window.onresize = function() {
   starfield.main.setField();
 };
-},{"../js/modules/image_filters.js":2,"../js/modules/starfield.js":3,"../js/modules/text_writer.js":4}],2:[function(require,module,exports){
+},{"../js/modules/starfield.js":3,"../js/modules/terminal.js":4}],2:[function(require,module,exports){
 // source: http://www.html5rocks.com/en/tutorials/canvas/imagefilters/
 var Filters = {};
 Filters.getPixels = function(img) {
@@ -337,6 +286,113 @@ starfield.main = {
 
 module.exports = starfield;
 },{}],4:[function(require,module,exports){
+var typer = require('../modules/text_writer.js');
+var imgFilters = require('../modules/image_filters.js');
+typer.speed = 50;
+
+/**
+ * Defining some utilities functions mostly use in termina.blur below
+ */
+
+/**
+ * Converts a rendered canvas into an image dataURI
+ * @param  {canvas} canvas
+ * @return {image node}
+ */
+function convertCanvasToImage(canvas) {
+  var image = new Image();
+  image.src = canvas.toDataURL("image/png");
+  return image;
+}
+
+function imageDataToCanvas(idata) {
+  var c = document.createElement('canvas');
+  c.width = idata.width;
+  c.height = idata.height;
+  var ctx = c.getContext('2d');
+  ctx.putImageData(idata, 0, 0);
+  return c;
+}
+
+function createNxN(num) {
+  // create an array with a total of NxN 
+  // where each item is 1 / NxN
+  var _tempArr = [];
+  for (var i = 0; i < num; i++) {
+    _tempArr.push(1 / num);
+  }
+  return _tempArr;
+}
+
+var terminal = {};
+
+// this probably doesn't belong here but originally I was going to use it to replicate
+// the computer scene from the 2001 film Avalon by Mamoru Oshii
+terminal.blur = function(elem) {
+  var options = {
+    background: 'undefined',
+    onrendered: function(canvas) {
+      // take returned canvas element and convert it into an image
+      var newTimg = convertCanvasToImage(canvas);
+      // pass this image to image filter library and add blur, returns a canvas image data
+      var blurredImg = imgFilters.filterImage(imgFilters.convolute, newTimg, createNxN(36));
+      // put imageData onto a canvas and append that a div
+      var newCanvas = imageDataToCanvas(blurredImg);
+      newCanvas.className = "lastText";
+      document.getElementById('terminal').appendChild(newCanvas);
+    }
+  };
+  html2canvas(elem, options);
+};
+
+terminal.cli = function(elem, handler) {
+  var prompt = '&gt;&nbsp';
+
+  function newline() {
+    var input = document.createElement('p');
+    input.style.overflow = 'hidden';
+    input.innerHTML = prompt + '<span id="input" style="outline:none" contenteditable></span>';
+    elem.appendChild(input);
+    input.childNodes[1].focus();
+  }
+  newline();
+
+  elem.addEventListener('keydown', function(evt) {
+    if (evt.keyCode === 13) {
+      var currentInput = document.getElementById("input");
+      currentInput.removeAttribute('contenteditable');
+      currentInput.removeAttribute('id');
+      var response = document.createElement('p');
+      response.className = "response";
+      elem.appendChild(response);
+      typer.go(response, handler(currentInput.textContent || currentInput.innerText), function() {
+        newline();
+      });
+      return false;
+    }
+  }, false);
+};
+
+terminal.init = function() {
+  var title = document.getElementById("title");
+  typer.go(title, "Welcome to FranciscoG.com", function() {
+    terminal.cli(document.getElementById("terminal"), function(text) {
+      if (/(ls|menu|help)/i.test(text)) {
+        return ['[v] viewport tool', '[g] github'];
+      }
+      if (/v/i.test(text)) {
+        window.location.href = window.location.href + 'viewport.html';
+      }
+      if (/g/i.test(text)) {
+        window.location.href = 'https://github.com/FranciscoG';
+      }
+      return 'I do not understand: ' + text;
+    });
+  });
+};
+
+module.exports = terminal;
+},{"../modules/image_filters.js":2,"../modules/text_writer.js":5}],5:[function(require,module,exports){
 /** 
  * inspiration:
  * https://github.com/jaz303/jquery-grab-bag/blob/master/javascripts/jquery.text-effects.js
@@ -344,21 +400,55 @@ module.exports = starfield;
  * half-block unicode info: http://www.fileformat.info/info/unicode/char/258c/index.htm
  * ▌ = \u258C   or    &#9612;
  */
+var text_writer = {};
 
-module.exports = function(elem, str, cb) {
-  var progress = 0;
+text_writer.speed = text_writer.speed || 80;
+
+text_writer.go = function(elem, str, cb) {
+  var repeat = false,
+    i = 0,
+    progress = 0;
+  if (typeof str === 'object') {
+    repeat = true;
+  }
   elem.textContent = '';
-  var timer = setInterval(function() {
-    elem.textContent = str.substring(0, progress++) + '\u258C';
-    if (progress > str.length) {
-      clearInterval(timer);
-      setTimeout(function() {
-        elem.textContent = str;
-        if (typeof cb === 'function') {
-          cb();
-        }
-      }, 500);
+
+  var stopTyping = function(__str) {
+    return setTimeout(function() {
+      elem.textContent = __str;
+      if (typeof cb === 'function') {
+        cb();
+      }
+    }, 500);
+  };
+
+  var startTyping = function() {
+    var _str = (repeat) ? str[i] : str;
+
+    if (repeat && i === str.length) {
+      return stopTyping(_str);
     }
-  }, 80);
+
+    var timer = setInterval(function() {
+      elem.textContent = _str.substring(0, progress++) + '\u258C';
+      if (progress > _str.length) {
+        clearInterval(timer);
+        if (repeat && i < str.length) {
+          i++;
+          elem.textContent = _str;
+          elem.insertAdjacentHTML('afterend', '<p class="next"></p>');
+          elem = elem.nextSibling;
+          progress = 0;
+          return startTyping();
+        } else {
+          return stopTyping(_str);
+        }
+      }
+    }, text_writer.speed);
+  };
+  startTyping();
+
 };
+
+module.exports = text_writer;
 },{}]},{},[1])

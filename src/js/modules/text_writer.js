@@ -5,20 +5,54 @@
  * half-block unicode info: http://www.fileformat.info/info/unicode/char/258c/index.htm
  * ▌ = \u258C   or    &#9612;
  */
+var text_writer = {};
 
-module.exports = function(elem, str, cb) {
-  var progress = 0;
+text_writer.speed = text_writer.speed || 80;
+
+text_writer.go = function(elem, str, cb) {
+  var repeat = false,
+    i = 0,
+    progress = 0;
+  if (typeof str === 'object') {
+    repeat = true;
+  }
   elem.textContent = '';
-  var timer = setInterval(function() {
-    elem.textContent = str.substring(0, progress++) + '\u258C';
-    if (progress > str.length) {
-      clearInterval(timer);
-      setTimeout(function() {
-        elem.textContent = str;
-        if (typeof cb === 'function') {
-          cb();
-        }
-      }, 500);
+
+  var stopTyping = function(__str) {
+    return setTimeout(function() {
+      elem.textContent = __str;
+      if (typeof cb === 'function') {
+        cb();
+      }
+    }, 500);
+  };
+
+  var startTyping = function() {
+    var _str = (repeat) ? str[i] : str;
+
+    if (repeat && i === str.length) {
+      return stopTyping(_str);
     }
-  }, 80);
+
+    var timer = setInterval(function() {
+      elem.textContent = _str.substring(0, progress++) + '\u258C';
+      if (progress > _str.length) {
+        clearInterval(timer);
+        if (repeat && i < str.length) {
+          i++;
+          elem.textContent = _str;
+          elem.insertAdjacentHTML('afterend', '<p class="next"></p>');
+          elem = elem.nextSibling;
+          progress = 0;
+          return startTyping();
+        } else {
+          return stopTyping(_str);
+        }
+      }
+    }, text_writer.speed);
+  };
+  startTyping();
+
 };
+
+module.exports = text_writer;

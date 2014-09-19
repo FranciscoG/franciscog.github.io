@@ -1,4 +1,17 @@
 var gulp = require('gulp');
+var browserSync = require('browser-sync');
+var reload = browserSync.reload;
+
+/**********************************************
+ * Setup Browser Sync's static server
+ */
+gulp.task('browser-sync', function() {
+  browserSync({
+    server: {
+      baseDir: "./"
+    }
+  });
+});
 
 /**********************************************
  * Compile Jade Templates
@@ -70,10 +83,10 @@ gulp.task('viewport', ['lint_main'], function() {
  * Watch
  */
 
-gulp.task('watch', function() {
-  gulp.watch('./src/js/**/**/*.js', ['browserify', 'viewport']); // will jshint first
-  gulp.watch('./src/stylus/**/*.styl', ['stylus']); // will generate styleguide first
-  gulp.watch('./src/views/**/*.jade', ['jade']);
+gulp.task('watch', ['browser-sync'], function() {
+  gulp.watch('./src/js/**/**/*.js', ['browserify', 'viewport', browserSync.reload]);
+  gulp.watch('./src/stylus/**/*.styl', ['stylus', browserSync.reload]);
+  gulp.watch('./src/views/**/*.jade', ['jade', browserSync.reload]);
 });
 
 /**********************************************
