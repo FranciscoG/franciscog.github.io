@@ -85,20 +85,38 @@ terminal.cli = function(elem, handler) {
   }, false);
 };
 
+terminal.commands = {
+  ls: function() {
+    return ['[v] viewport tool', '[g] github'];
+  },
+  menu: function() {
+    return this.ls();
+  },
+  help: function() {
+    return this.ls();
+  },
+  g: function() {
+    window.location.href = 'https://github.com/FranciscoG';
+  },
+  v: function() {
+    window.location.href = window.location.href + 'viewport.html';
+  },
+  exit: function() {
+    return 'Are you sure? [Y/N]';
+  }
+};
+
 terminal.init = function() {
   var title = document.getElementById("title");
   typer.go(title, "Welcome to FranciscoG.com", function() {
     terminal.cli(document.getElementById("terminal"), function(text) {
-      if (/(ls|menu|help)/i.test(text)) {
-        return ['[v] viewport tool', '[g] github'];
+
+      if (typeof terminal.commands[text] === 'undefined') {
+        return 'I do not understand: ' + text;
+      } else {
+        return terminal.commands[text]();
       }
-      if (/v/i.test(text)) {
-        window.location.href = window.location.href + 'viewport.html';
-      }
-      if (/g/i.test(text)) {
-        window.location.href = 'https://github.com/FranciscoG';
-      }
-      return 'I do not understand: ' + text;
+
     });
   });
 };

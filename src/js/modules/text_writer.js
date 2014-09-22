@@ -36,6 +36,7 @@ text_writer.go = function(elem, str, cb) {
 
     var timer = setInterval(function() {
       elem.textContent = _str.substring(0, progress++) + '\u258C';
+      elem.parentNode.scrollTop = elem.parentNode.scrollHeight;
       if (progress > _str.length) {
         clearInterval(timer);
         if (repeat && i < str.length) {
