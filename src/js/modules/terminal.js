@@ -111,7 +111,11 @@ terminal.init = function() {
   typer.go(title, "Welcome to FranciscoG.com", function() {
     terminal.cli(document.getElementById("terminal"), function(text) {
 
-      if (typeof terminal.commands[text] === 'undefined') {
+      if (text === 'shut up') {
+        return 'You shut up';
+      } else if (/i know you are but what am i/i.test(text)) {
+        return text;
+      } else if (typeof terminal.commands[text] === 'undefined') {
         return 'I do not understand: ' + text;
       } else {
         return terminal.commands[text]();
