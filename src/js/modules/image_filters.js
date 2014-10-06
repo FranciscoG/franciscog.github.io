@@ -1,5 +1,6 @@
 // source: http://www.html5rocks.com/en/tutorials/canvas/imagefilters/
 var Filters = {};
+
 Filters.getPixels = function(img) {
   var c = this.getCanvas(img.width, img.height);
   var ctx = c.getContext('2d');

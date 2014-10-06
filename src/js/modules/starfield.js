@@ -56,14 +56,14 @@ starfield.main = {
   context: null,
 
   setField: function() {
-    this.field = document.getElementById("field");
     this.field.width = window.innerWidth;
     this.field.height = window.innerHeight;
     this.fieldWidth = this.field.offsetWidth;
     this.fieldHeight = this.field.offsetHeight;
   },
 
-  init: function() {
+  init: function(id) {
+    this.field = document.getElementById(id);
     this.setField();
 
     if (!this.field.getContext) {

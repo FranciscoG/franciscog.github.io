@@ -1,20 +1,120 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var starfield = require('../js/modules/starfield.js');
 var terminal = require('../js/modules/terminal.js');
+var blurify = require('../js/modules/blurify.js');
 
+function resizeHeight(id) {
+  return document.getElementById(id).style.height = window.innerHeight + "px";
+}
+
+var field = document.getElementById("field");
+var stopped = false;
 
 // http://bililite.com/wvm/cli.html
 window.addEventListener("load", function() {
-  starfield.main.init();
-  terminal.init();
+  starfield.main.init("field");
+  resizeHeight("terminal");
 }, false);
 
-window.onresize = function() {
-  starfield.main.setField();
+var terminalListener = function(e) {
+  stopped = true;
+  starfield.main.stop();
+  var blurry = new blurify({
+    type: 'canvas',
+    canvas: field,
+    intensity: 25
+  });
+  var blurred = blurry.blurCanvas();
+  var boop = blurry.imageDataToCanvas(blurred);
+  var beep = blurry.convertCanvasToImage(boop);
+  field.remove();
+  document.body.style.backgroundImage = 'url(' + beep.src + ')';
+  terminal.init();
+  document.body.removeEventListener("click", terminalListener, false);
 };
-},{"../js/modules/starfield.js":3,"../js/modules/terminal.js":4}],2:[function(require,module,exports){
+document.body.addEventListener("click", terminalListener, false);
+
+window.onresize = function() {
+  if (!stopped) {
+    starfield.main.setField();
+  }
+  resizeHeight("terminal");
+};
+},{"../js/modules/blurify.js":2,"../js/modules/starfield.js":4,"../js/modules/terminal.js":5}],2:[function(require,module,exports){
+var imgFilters = require('../modules/image_filters.js');
+// also requires html2canvas.js
+
+function blurify(options) {
+  this.options = options;
+  this.options.intensity = this.options.intensity || 25;
+}
+
+blurify.prototype.blurIMG = function(img) {
+  var _img = this.options.image || img;
+  return imgFilters.filterImage(imgFilters.convolute, _img, this.createNxN(this.options.intensity));
+};
+
+blurify.prototype.blurCanvas = function(canvas) {
+  var _canvas = this.options.canvas || canvas;
+  var newImg = this.convertCanvasToImage(_canvas);
+  return imgFilters.filterImage(imgFilters.convolute, newImg, this.createNxN(this.options.intensity));
+};
+
+blurify.prototype.blurHTML = function(elem) {
+  var _elem = this.options.node || elem;
+  var self = this;
+  html2canvas(_elem, {
+    background: 'undefined', // makes it transparent
+    onrendered: function(canvas) {
+      if (typeof self.options.callback === 'function') {
+        return self.options.callback(self.blurCanvas(canvas));
+      } else {
+        console.error('Blurify: Must specify a callback function');
+      }
+    }
+  });
+};
+
+/**
+ * Converts a rendered canvas into an image dataURI
+ * @param  {canvas} canvas
+ * @return {image node}
+ */
+blurify.prototype.convertCanvasToImage = function(canvas) {
+  var image = new Image();
+  image.src = canvas.toDataURL("image/png");
+  return image;
+};
+
+blurify.prototype.imageDataToCanvas = function(idata) {
+  var c = document.createElement('canvas');
+  c.width = idata.width;
+  c.height = idata.height;
+  var ctx = c.getContext('2d');
+  ctx.putImageData(idata, 0, 0);
+  return c;
+};
+
+/**
+ * creates a NxN array of 1/N that's used for setting intensity of blur
+ * @param  {number} num   a whole number that is X squared.  examples: 4, 9, 16, 25, 36, ...
+ * @return {object}       the array
+ */
+blurify.prototype.createNxN = function(num) {
+  // create an array with a total of NxN 
+  // where each item is 1 / NxN
+  var _tempArr = [];
+  for (var i = 0; i < num; i++) {
+    _tempArr.push(1 / num);
+  }
+  return _tempArr;
+};
+
+module.exports = blurify;
+},{"../modules/image_filters.js":3}],3:[function(require,module,exports){
 // source: http://www.html5rocks.com/en/tutorials/canvas/imagefilters/
 var Filters = {};
+
 Filters.getPixels = function(img) {
   var c = this.getCanvas(img.width, img.height);
   var ctx = c.getContext('2d');
@@ -129,7 +229,7 @@ Filters.convolute = function(pixels, weights, opaque) {
 };
 
 module.exports = Filters;
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 /**
  * 3D Star field animation
  * using Javascript and HTML5 Canvas
@@ -188,14 +288,14 @@ starfield.main = {
   context: null,
 
   setField: function() {
-    this.field = document.getElementById("field");
     this.field.width = window.innerWidth;
     this.field.height = window.innerHeight;
     this.fieldWidth = this.field.offsetWidth;
     this.fieldHeight = this.field.offsetHeight;
   },
 
-  init: function() {
+  init: function(id) {
+    this.field = document.getElementById(id);
     this.setField();
 
     if (!this.field.getContext) {
@@ -285,65 +385,11 @@ starfield.main = {
 };
 
 module.exports = starfield;
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var typer = require('../modules/text_writer.js');
-var imgFilters = require('../modules/image_filters.js');
 typer.speed = 50;
 
-/**
- * Defining some utilities functions mostly use in termina.blur below
- */
-
-/**
- * Converts a rendered canvas into an image dataURI
- * @param  {canvas} canvas
- * @return {image node}
- */
-function convertCanvasToImage(canvas) {
-  var image = new Image();
-  image.src = canvas.toDataURL("image/png");
-  return image;
-}
-
-function imageDataToCanvas(idata) {
-  var c = document.createElement('canvas');
-  c.width = idata.width;
-  c.height = idata.height;
-  var ctx = c.getContext('2d');
-  ctx.putImageData(idata, 0, 0);
-  return c;
-}
-
-function createNxN(num) {
-  // create an array with a total of NxN 
-  // where each item is 1 / NxN
-  var _tempArr = [];
-  for (var i = 0; i < num; i++) {
-    _tempArr.push(1 / num);
-  }
-  return _tempArr;
-}
-
 var terminal = {};
-
-// this probably doesn't belong here but originally I was going to use it to replicate
-// the computer scene from the 2001 film Avalon by Mamoru Oshii
-terminal.blur = function(elem) {
-  var options = {
-    background: 'undefined',
-    onrendered: function(canvas) {
-      // take returned canvas element and convert it into an image
-      var newTimg = convertCanvasToImage(canvas);
-      // pass this image to image filter library and add blur, returns a canvas image data
-      var blurredImg = imgFilters.filterImage(imgFilters.convolute, newTimg, createNxN(36));
-      // put imageData onto a canvas and append that a div
-      var newCanvas = imageDataToCanvas(blurredImg);
-      newCanvas.className = "lastText";
-      document.getElementById('terminal').appendChild(newCanvas);
-    }
-  };
-  html2canvas(elem, options);
-};
 
 terminal.cli = function(elem, handler) {
   var prompt = '&gt;&nbsp';
@@ -414,7 +460,7 @@ terminal.init = function() {
 };
 
 module.exports = terminal;
-},{"../modules/image_filters.js":2,"../modules/text_writer.js":5}],5:[function(require,module,exports){
+},{"../modules/text_writer.js":6}],6:[function(require,module,exports){
 /** 
  * inspiration:
  * https://github.com/jaz303/jquery-grab-bag/blob/master/javascripts/jquery.text-effects.js
