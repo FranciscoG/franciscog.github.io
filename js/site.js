@@ -17,18 +17,18 @@ window.addEventListener("load", function() {
 }, false);
 
 var terminalListener = function(e) {
-  stopped = true;
-  starfield.main.stop();
-  var blurry = new blurify({
-    type: 'canvas',
-    canvas: field,
-    intensity: 25
-  });
-  var blurred = blurry.blurCanvas();
-  var boop = blurry.imageDataToCanvas(blurred);
-  var beep = blurry.convertCanvasToImage(boop);
-  field.remove();
-  document.body.style.backgroundImage = 'url(' + beep.src + ')';
+  // stopped = true;
+  // starfield.main.stop();
+  // var blurry = new blurify({
+  //   type: 'canvas',
+  //   canvas: field,
+  //   intensity: 25
+  // });
+  // var blurred = blurry.blurCanvas();
+  // var boop = blurry.imageDataToCanvas(blurred);
+  // var beep = blurry.convertCanvasToImage(boop);
+  // field.remove();
+  // document.body.style.backgroundImage = 'url(' + beep.src + ')';
   terminal.init();
   document.body.removeEventListener("click", terminalListener, false);
 };
@@ -40,7 +40,7 @@ window.onresize = function() {
   }
   resizeHeight("terminal");
 };
-},{"../js/modules/blurify.js":2,"../js/modules/starfield.js":4,"../js/modules/terminal.js":5}],2:[function(require,module,exports){
+},{"../js/modules/blurify.js":2,"../js/modules/starfield.js":5,"../js/modules/terminal.js":6}],2:[function(require,module,exports){
 var imgFilters = require('../modules/image_filters.js');
 // also requires html2canvas.js
 
@@ -111,7 +111,92 @@ blurify.prototype.createNxN = function(num) {
 };
 
 module.exports = blurify;
-},{"../modules/image_filters.js":3}],3:[function(require,module,exports){
+},{"../modules/image_filters.js":4}],3:[function(require,module,exports){
+/******************************************************************/
+// AJAX helper
+var getJSON = function(url, cb){
+  var request = new XMLHttpRequest();
+  request.open('GET', url, true);
+
+  request.onload = function() {
+    if (request.status >= 200 && request.status < 400) {
+      // Success!
+      var data = JSON.parse(request.responseText);
+      cb(data);
+    } else {
+      // We reached our target server, but it returned an error
+      console.warn("getJSON: target server returned an error");
+    }
+  };
+
+  request.onerror = function() {
+    // There was a connection error of some sort
+    console.error("getJSON: connection error");
+  };
+
+  request.send();
+};
+
+/******************************************************************/
+// Get that creepy gif!
+// some help: http://speckyboy.com/2014/01/22/building-simple-reddit-api-webapp-using-jquery/
+
+// get all the data from reddit and create an array of just the GIFs
+var redditURL = 'http://www.reddit.com/r/creepygifs.json';
+
+var creepyArray = [];
+
+var getRandomFromArray = function(arr) {
+  var num = Math.floor(Math.random()*(arr.length - 1));
+  //console.log(arr.length, num);
+  return arr[num];
+};
+
+var fixImgur = function(gif){
+  if (/i\.imgur/i.test(gif)) {
+    return gif;
+  } else {
+    var g = gif.split("/");
+    return 'http://i.imgur.com/' + g[g.length - 1] + '.gif';
+  }
+};
+
+var callback = null;
+
+var checkArray = function(cb){
+  var stopcheck = 0;
+
+  if (creepyArray.length > 0) {
+    var gif = getRandomFromArray(creepyArray);
+    if (/imgur/i.test(gif)) { 
+      // console.log(gif);
+      gif = fixImgur(gif);
+      return callback(gif);
+    } else {
+      return callback(gif);
+    }
+  } else {
+    // keep looking
+    if (stopcheck < 101) {
+      stopcheck++;
+      window.setTimeout(checkArray, 10);
+    }
+  }
+};
+
+module.exports = function(cb){
+  
+  getJSON(redditURL, function(json){
+    var listing = json.data.children;
+    for(var i=0, l=listing.length; i<l; i++) {
+      var obj = listing[i].data;
+      creepyArray.push(obj.url);
+    } // end for{} loop
+  });
+  callback = cb;
+  checkArray();
+};
+},{}],4:[function(require,module,exports){
 // source: http://www.html5rocks.com/en/tutorials/canvas/imagefilters/
 var Filters = {};
 
@@ -229,7 +314,7 @@ Filters.convolute = function(pixels, weights, opaque) {
 };
 
 module.exports = Filters;
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 /**
  * 3D Star field animation
  * using Javascript and HTML5 Canvas
@@ -385,8 +470,10 @@ starfield.main = {
 };
 
 module.exports = starfield;
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 var typer = require('../modules/text_writer.js');
+var getCreepyGif = require('../modules/getCreepyGif.js');
+
 typer.speed = 50;
 
 var terminal = {};
@@ -396,6 +483,7 @@ terminal.cli = function(elem, handler) {
 
   function newline() {
     var input = document.createElement('p');
+    input.className = "currentInput";
     input.style.overflow = 'hidden';
     input.innerHTML = prompt + '<span id="input" style="outline:none" contenteditable></span>';
     elem.appendChild(input);
@@ -406,6 +494,7 @@ terminal.cli = function(elem, handler) {
   elem.addEventListener('keydown', function(evt) {
     if (evt.keyCode === 13) {
       var currentInput = document.getElementById("input");
+      currentInput.parentNode.className = "pastInput";
       currentInput.removeAttribute('contenteditable');
       currentInput.removeAttribute('id');
       var response = document.createElement('p');
@@ -419,12 +508,21 @@ terminal.cli = function(elem, handler) {
   }, false);
 };
 
+terminal.attachPic = function(pic){
+  var d = document.createElement('div');
+  d.className = "floatingPic";
+  var img = document.createElement('img');
+  img.src = pic;
+  d.appendChild(img);
+  document.body.appendChild(d);
+};
+
 terminal.exit = false;
 
-// TODO:  convert all function names to UPPERCASE 
 terminal.commands = {
   ls: function() {
-    return ['[v] viewport tool', '[g] github'];
+    terminal.exit = false;
+    return ['[v] viewport tool', '[r] CSS clip rect tool', '[g] github', '[c] codepen', '[o] other'];
   },
   menu: function() {
     return this.ls();
@@ -438,19 +536,32 @@ terminal.commands = {
   v: function() {
     window.location.href = window.location.href + 'viewport.html';
   },
+  c: function() {
+    window.location.href = 'http://codepen.io/FranciscoG/';
+  },
+  r: function() {
+    window.location.href = 'http://www.franciscog.com/cliprector/';
+  },
+  o: function(){
+    getCreepyGif(function(gif){
+      terminal.attachPic(gif);
+    });
+    return "you asked for it";
+  },
   exit: function() {
     terminal.exit = true;
     return 'Are you sure? [Y/N]';
   },
-  Y: function() {
+  y: function() {
     if (terminal.exit) {
       terminal.exit = false;
-      return "goodbye!";
+      return "ok, see you later!";
+      // 
     } else {
-      return "'I do not understand: Y";
+      return "I do not understand: Y";
     }
   },
-  N: function() {
+  n: function() {
     if (terminal.exit) {
       terminal.exit = false;
       return "Thanks for not leaving";
@@ -459,8 +570,12 @@ terminal.commands = {
     }
   },
   clear: function() {
-    document.getElementById("terminal").innerHTML = '<p style="overflow: hidden;">&gt;&nbsp;<span id="input" style="outline:none" contenteditable=""></span></p>';
-    return 'Welcome to FranciscoG.com';
+    terminal.exit = false;
+    var past = Array.prototype.slice.call(document.querySelectorAll(".pastInput, .response, .next"));
+    past.forEach(function(e,i,r){
+      document.getElementById("terminal").removeChild(past[i]);
+    });
+    return '&nbsp';
   }
 };
 
@@ -469,7 +584,7 @@ terminal.init = function() {
   typer.go(title, "Welcome to FranciscoG.com", function() {
     terminal.cli(document.getElementById("terminal"), function(text) {
 
-      // TODO: convert all toUPPERCASE
+      text = text.toLowerCase();
       if (text === 'shut up') {
         return 'You shut up';
       } else if (/i know you are but what am i/i.test(text)) {
@@ -485,7 +600,7 @@ terminal.init = function() {
 };
 
 module.exports = terminal;
-},{"../modules/text_writer.js":6}],6:[function(require,module,exports){
+},{"../modules/getCreepyGif.js":3,"../modules/text_writer.js":7}],7:[function(require,module,exports){
 /** 
  * inspiration:
  * https://github.com/jaz303/jquery-grab-bag/blob/master/javascripts/jquery.text-effects.js

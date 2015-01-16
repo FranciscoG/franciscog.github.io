@@ -16,18 +16,18 @@ window.addEventListener("load", function() {
 }, false);
 
 var terminalListener = function(e) {
-  stopped = true;
-  starfield.main.stop();
-  var blurry = new blurify({
-    type: 'canvas',
-    canvas: field,
-    intensity: 25
-  });
-  var blurred = blurry.blurCanvas();
-  var boop = blurry.imageDataToCanvas(blurred);
-  var beep = blurry.convertCanvasToImage(boop);
-  field.remove();
-  document.body.style.backgroundImage = 'url(' + beep.src + ')';
+  // stopped = true;
+  // starfield.main.stop();
+  // var blurry = new blurify({
+  //   type: 'canvas',
+  //   canvas: field,
+  //   intensity: 25
+  // });
+  // var blurred = blurry.blurCanvas();
+  // var boop = blurry.imageDataToCanvas(blurred);
+  // var beep = blurry.convertCanvasToImage(boop);
+  // field.remove();
+  // document.body.style.backgroundImage = 'url(' + beep.src + ')';
   terminal.init();
   document.body.removeEventListener("click", terminalListener, false);
 };

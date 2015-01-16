@@ -1,4 +1,6 @@
 var typer = require('../modules/text_writer.js');
+var getCreepyGif = require('../modules/getCreepyGif.js');
+
 typer.speed = 50;
 
 var terminal = {};
@@ -8,6 +10,7 @@ terminal.cli = function(elem, handler) {
 
   function newline() {
     var input = document.createElement('p');
+    input.className = "currentInput";
     input.style.overflow = 'hidden';
     input.innerHTML = prompt + '<span id="input" style="outline:none" contenteditable></span>';
     elem.appendChild(input);
@@ -18,6 +21,7 @@ terminal.cli = function(elem, handler) {
   elem.addEventListener('keydown', function(evt) {
     if (evt.keyCode === 13) {
       var currentInput = document.getElementById("input");
+      currentInput.parentNode.className = "pastInput";
       currentInput.removeAttribute('contenteditable');
       currentInput.removeAttribute('id');
       var response = document.createElement('p');
@@ -31,12 +35,21 @@ terminal.cli = function(elem, handler) {
   }, false);
 };
 
+terminal.attachPic = function(pic){
+  var d = document.createElement('div');
+  d.className = "floatingPic";
+  var img = document.createElement('img');
+  img.src = pic;
+  d.appendChild(img);
+  document.body.appendChild(d);
+};
+
 terminal.exit = false;
 
-// TODO:  convert all function names to UPPERCASE 
 terminal.commands = {
   ls: function() {
-    return ['[v] viewport tool', '[g] github'];
+    terminal.exit = false;
+    return ['[v] viewport tool', '[r] CSS clip rect tool', '[g] github', '[c] codepen', '[o] other'];
   },
   menu: function() {
     return this.ls();
@@ -50,19 +63,32 @@ terminal.commands = {
   v: function() {
     window.location.href = window.location.href + 'viewport.html';
   },
+  c: function() {
+    window.location.href = 'http://codepen.io/FranciscoG/';
+  },
+  r: function() {
+    window.location.href = 'http://www.franciscog.com/cliprector/';
+  },
+  o: function(){
+    getCreepyGif(function(gif){
+      terminal.attachPic(gif);
+    });
+    return "you asked for it";
+  },
   exit: function() {
     terminal.exit = true;
     return 'Are you sure? [Y/N]';
   },
-  Y: function() {
+  y: function() {
     if (terminal.exit) {
       terminal.exit = false;
-      return "goodbye!";
+      return "ok, see you later!";
+      // 
     } else {
-      return "'I do not understand: Y";
+      return "I do not understand: Y";
     }
   },
-  N: function() {
+  n: function() {
     if (terminal.exit) {
       terminal.exit = false;
       return "Thanks for not leaving";
@@ -71,8 +97,12 @@ terminal.commands = {
     }
   },
   clear: function() {
-    document.getElementById("terminal").innerHTML = '<p style="overflow: hidden;">&gt;&nbsp;<span id="input" style="outline:none" contenteditable=""></span></p>';
-    return 'Welcome to FranciscoG.com';
+    terminal.exit = false;
+    var past = Array.prototype.slice.call(document.querySelectorAll(".pastInput, .response, .next"));
+    past.forEach(function(e,i,r){
+      document.getElementById("terminal").removeChild(past[i]);
+    });
+    return '&nbsp';
   }
 };
 
@@ -81,7 +111,7 @@ terminal.init = function() {
   typer.go(title, "Welcome to FranciscoG.com", function() {
     terminal.cli(document.getElementById("terminal"), function(text) {
 
-      // TODO: convert all toUPPERCASE
+      text = text.toLowerCase();
       if (text === 'shut up') {
         return 'You shut up';
       } else if (/i know you are but what am i/i.test(text)) {
