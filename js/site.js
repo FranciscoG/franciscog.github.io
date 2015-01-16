@@ -419,6 +419,9 @@ terminal.cli = function(elem, handler) {
   }, false);
 };
 
+terminal.exit = false;
+
+// TODO:  convert all function names to UPPERCASE 
 terminal.commands = {
   ls: function() {
     return ['[v] viewport tool', '[g] github'];
@@ -436,7 +439,28 @@ terminal.commands = {
     window.location.href = window.location.href + 'viewport.html';
   },
   exit: function() {
+    terminal.exit = true;
     return 'Are you sure? [Y/N]';
+  },
+  Y: function() {
+    if (terminal.exit) {
+      terminal.exit = false;
+      return "goodbye!";
+    } else {
+      return "'I do not understand: Y";
+    }
+  },
+  N: function() {
+    if (terminal.exit) {
+      terminal.exit = false;
+      return "Thanks for not leaving";
+    } else {
+      return "'I do not understand: N";
+    }
+  },
+  clear: function() {
+    document.getElementById("terminal").innerHTML = '<p style="overflow: hidden;">&gt;&nbsp;<span id="input" style="outline:none" contenteditable=""></span></p>';
+    return 'Welcome to FranciscoG.com';
   }
 };
 
@@ -445,6 +469,7 @@ terminal.init = function() {
   typer.go(title, "Welcome to FranciscoG.com", function() {
     terminal.cli(document.getElementById("terminal"), function(text) {
 
+      // TODO: convert all toUPPERCASE
       if (text === 'shut up') {
         return 'You shut up';
       } else if (/i know you are but what am i/i.test(text)) {
