@@ -1,7 +1,7 @@
 var typer = require('../modules/text_writer.js');
 var getCreepyGif = require('../modules/getCreepyGif.js');
 
-typer.speed = 50;
+typer.speed = 30;
 
 var terminal = {};
 
@@ -35,7 +35,7 @@ terminal.cli = function(elem, handler) {
   }, false);
 };
 
-terminal.attachPic = function(pic){
+terminal.attachPic = function(pic) {
   var d = document.createElement('div');
   d.className = "floatingPic";
   var img = document.createElement('img');
@@ -47,6 +47,9 @@ terminal.attachPic = function(pic){
 terminal.exit = false;
 
 terminal.commands = {
+  error: function(t) {
+    return 'I do not understand: ' + t;
+  },
   ls: function() {
     terminal.exit = false;
     return ['[v] viewport tool', '[r] CSS clip rect tool', '[g] github', '[c] codepen', '[o] other'];
@@ -69,8 +72,9 @@ terminal.commands = {
   r: function() {
     window.location.href = 'http://www.franciscog.com/cliprector/';
   },
-  o: function(){
-    getCreepyGif(function(gif){
+  o: function() {
+    terminal.exit = false;
+    getCreepyGif(function(gif) {
       terminal.attachPic(gif);
     });
     return "you asked for it";
@@ -83,9 +87,8 @@ terminal.commands = {
     if (terminal.exit) {
       terminal.exit = false;
       return "ok, see you later!";
-      // 
     } else {
-      return "I do not understand: Y";
+      return this.error("Y");
     }
   },
   n: function() {
@@ -93,16 +96,20 @@ terminal.commands = {
       terminal.exit = false;
       return "Thanks for not leaving";
     } else {
-      return "'I do not understand: N";
+      return this.error("N");
     }
   },
   clear: function() {
     terminal.exit = false;
     var past = Array.prototype.slice.call(document.querySelectorAll(".pastInput, .response, .next"));
-    past.forEach(function(e,i,r){
-      document.getElementById("terminal").removeChild(past[i]);
-    });
-    return '&nbsp';
+    if (past.length > 0) {
+      past.forEach(function(e, i, r) {
+        if (i < past.length - 1) {
+          document.getElementById("terminal").removeChild(past[i]);
+        }
+      });
+    }
+    return '';
   }
 };
 
@@ -117,7 +124,7 @@ terminal.init = function() {
       } else if (/i know you are but what am i/i.test(text)) {
         return text;
       } else if (typeof terminal.commands[text] === 'undefined') {
-        return 'I do not understand: ' + text;
+        return terminal.commands.error(text);
       } else {
         return terminal.commands[text]();
       }
