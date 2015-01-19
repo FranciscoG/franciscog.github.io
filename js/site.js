@@ -485,7 +485,7 @@ terminal.cli = function(elem, handler) {
     var input = document.createElement('p');
     input.className = "currentInput";
     input.style.overflow = 'hidden';
-    input.innerHTML = prompt + '<span id="input" style="outline:none" contenteditable></span>';
+    input.innerHTML = prompt + '<input type="text" id="input" style="outline:none;">';
     elem.appendChild(input);
     input.childNodes[1].focus();
   }
@@ -495,12 +495,12 @@ terminal.cli = function(elem, handler) {
     if (evt.keyCode === 13) {
       var currentInput = document.getElementById("input");
       currentInput.parentNode.className = "pastInput";
-      currentInput.removeAttribute('contenteditable');
+      // currentInput.removeAttribute('contenteditable');
       currentInput.removeAttribute('id');
       var response = document.createElement('p');
       response.className = "response";
       elem.appendChild(response);
-      typer.go(response, handler(currentInput.textContent || currentInput.innerText), function() {
+      typer.go(response, handler(currentInput.value), function() {
         newline();
       });
       return false;
