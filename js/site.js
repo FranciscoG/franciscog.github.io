@@ -168,6 +168,12 @@ var checkArray = function(cb){
 
   if (creepyArray.length > 0) {
     var gif = getRandomFromArray(creepyArray);
+    
+    if (/5keG7TI/.test(gif)) {
+      // testing for NSFW gif that shouldn't be on the subreddit
+      return 'http://i.imgur.com/6UsS7jw.gif';
+    }
+
     if (/imgur/i.test(gif)) { 
       // console.log(gif);
       gif = fixImgur(gif);
