@@ -73,18 +73,13 @@ gulp.task('browserify', ['lint_modules', 'lint_main'], function() {
   return bundleStream.pipe(gulp.dest('./js'));
 });
 
-/* Just moving the viewport file*/
-gulp.task('viewport', ['lint_main'], function() {
-  return gulp.src('./src/js/viewport.js')
-    .pipe(gulp.dest('./js'));
-});
 
 /**********************************************
  * Watch
  */
 
 gulp.task('watch', ['browser-sync'], function() {
-  gulp.watch('./src/js/**/**/*.js', ['browserify', 'viewport', browserSync.reload]);
+  gulp.watch('./src/js/**/**/*.js', ['browserify', browserSync.reload]);
   gulp.watch('./src/stylus/**/*.styl', ['stylus', browserSync.reload]);
   gulp.watch('./src/views/**/*.jade', ['jade', browserSync.reload]);
 });

@@ -64,7 +64,7 @@ terminal.commands = {
     window.location.href = 'https://github.com/FranciscoG';
   },
   v: function() {
-    window.location.href = window.location.href + 'viewport.html';
+    window.location.href = 'http://www.franciscog.com/viewport/';
   },
   c: function() {
     window.location.href = 'http://codepen.io/FranciscoG/';
