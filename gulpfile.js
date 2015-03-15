@@ -20,7 +20,7 @@ gulp.task('browser-sync', function() {
 var jade = require('gulp-jade');
 gulp.task('jade', function() {
 
-  gulp.src('./src/views/*.jade')
+  gulp.src('src/views/*.jade')
     .pipe(jade({
       pretty: true
     }))
@@ -37,7 +37,7 @@ var stylus = require('gulp-stylus');
 var nib = require('nib');
 
 gulp.task('stylus', function() {
-  gulp.src('./src/stylus/*.styl')
+  gulp.src('src/stylus/*.styl')
     .pipe(stylus({
       use: [nib()]
     }))
@@ -57,14 +57,14 @@ var source = require('vinyl-source-stream');
 var browserify = require('browserify');
 
 gulp.task('lint_modules', function() {
-  return gulp.src('./src/js/modules/**/*.js')
-    .pipe(jshint('./src/js/.jshintrc'))
+  return gulp.src('src/js/modules/**/*.js')
+    .pipe(jshint('src/js/.jshintrc'))
     .pipe(jshint.reporter(stylish));
 });
 
 gulp.task('lint_main', function() {
-  return gulp.src('./src/js/*.js')
-    .pipe(jshint('./src/js/.jshintrc'))
+  return gulp.src('src/js/*.js')
+    .pipe(jshint('src/js/.jshintrc'))
     .pipe(jshint.reporter(stylish));
 });
 
@@ -79,9 +79,9 @@ gulp.task('browserify', ['lint_modules', 'lint_main'], function() {
  */
 
 gulp.task('watch', ['browser-sync'], function() {
-  gulp.watch('./src/js/**/**/*.js', ['browserify', browserSync.reload]);
-  gulp.watch('./src/stylus/**/*.styl', ['stylus', browserSync.reload]);
-  gulp.watch('./src/views/**/*.jade', ['jade', browserSync.reload]);
+  gulp.watch('src/js/**/**/*.js', ['browserify', browserSync.reload]);
+  gulp.watch('src/stylus/**/*.styl', ['stylus', browserSync.reload]);
+  gulp.watch('src/views/**/*.jade', ['jade', browserSync.reload]);
 });
 
 /**********************************************

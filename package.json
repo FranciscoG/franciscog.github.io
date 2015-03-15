@@ -19,17 +19,16 @@
   },
   "homepage": "https://github.com/FranciscoG/boilerplate",
   "devDependencies": {
-    "browser-sync": "^1.3.7",
-    "browserify": "^4.2.0",
-    "gulp": "^3.8.8",
-    "gulp-jade": "^0.6.1",
-    "gulp-jshint": "^1.6.3",
-    "gulp-kss": "0.0.2",
-    "gulp-rename": "^1.2.0",
-    "gulp-stylus": "^1.0.2",
+    "browser-sync": "latest",
+    "browserify": "latest",
+    "gulp": "latest",
+    "gulp-jade": "latest",
+    "gulp-jshint": "latest",
+    "gulp-rename": "latest",
+    "gulp-stylus": "latest",
     "jquery": "^1.11.1",
-    "jshint-stylish": "^0.2.0",
-    "nib": "^1.0.2",
-    "vinyl-source-stream": "^0.1.1"
+    "jshint-stylish": "latest",
+    "nib": "latest",
+    "vinyl-source-stream": "latest"
   }
 }
