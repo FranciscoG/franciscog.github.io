@@ -1,7 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var starfield = require('../js/modules/starfield.js');
-var terminal = require('../js/modules/terminal.js');
-var blurify = require('../js/modules/blurify.js');
+var starfield = require('../dist/js/modules/starfield.js');
+var terminal = require('../dist/js/modules/terminal.js');
+var blurify = require('../dist/js/modules/blurify.js');
 
 function resizeHeight(id) {
   return document.getElementById(id).style.height = window.innerHeight + "px";
@@ -40,7 +40,7 @@ window.onresize = function() {
   }
   resizeHeight("terminal");
 };
-},{"../js/modules/blurify.js":2,"../js/modules/starfield.js":5,"../js/modules/terminal.js":6}],2:[function(require,module,exports){
+},{"../dist/js/modules/blurify.js":2,"../dist/js/modules/starfield.js":5,"../dist/js/modules/terminal.js":6}],2:[function(require,module,exports){
 var imgFilters = require('../modules/image_filters.js');
 // also requires html2canvas.js
 
