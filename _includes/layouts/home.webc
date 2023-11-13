@@ -1,0 +1,4 @@
+---
+layout: layouts/base.webc
+---
+<template @html="content" webc:nokeep></template>

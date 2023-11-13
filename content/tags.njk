@@ -1,0 +1,23 @@
+---
+pagination:
+  data: collections
+  size: 1
+  alias: tag
+  filter:
+    - all
+    - post
+    - posts
+    - tagList
+  addAllPagesToCollections: true
+layout: layouts/home.webc
+eleventyComputed:
+  title: Tagged "{{ tag }}"
+permalink: /tags/{{ tag | slugify }}/
+---
+<h1>Tagged #{{ tag }}</h1>
+
+{% renderTemplate "webc", { postslist: collections[ tag ] } %}
+<posts-list :posts="postslist"></posts-list>
+{% endrenderTemplate %}
+
+<p>See <a href="/tags/">all tags</a>.</p>

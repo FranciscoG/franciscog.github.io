@@ -1,0 +1,34 @@
+<!doctype html>
+<html :lang="metadata.language">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title @html="title || metadata.title"></title>
+		<meta name="description" :content="description || metadata.description">
+
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" :title="metadata.title">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" :title="metadata.title">
+
+		<meta name="generator" :content="eleventy.generator">
+
+		<script webc:keep src="/js/theme-switcher.js"></script>
+
+		<link rel="stylesheet" href="../../public/css/index.css">
+		<style @raw="getBundle('css')" webc:keep></style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+		<div id="page">
+
+			<header>
+				<a href="/" class="home-link" @html="metadata.title"></a>
+				<site-nav webc:nokeep :collections="collections"></site-nav>
+			</header>
+
+			<main id="skip" @html="content"></main>
+
+			<footer @html="`&copy; ${year()} ${metadata.title}`"></footer>
+		</div>
+		<script @raw="getBundle('js')" webc:keep></script>
+	</body>
+</html>
