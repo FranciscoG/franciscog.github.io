@@ -30,7 +30,6 @@
 	};
 
 	window.addEventListener("load", () => {
-		reflectPreference();
 		document.querySelector("#theme-toggle").addEventListener("click", onClick);
 	});
 
@@ -40,4 +39,6 @@
 			theme = isDark ? DARK : LIGHT;
 			setPreference();
 		});
+
+	reflectPreference();
 })();
