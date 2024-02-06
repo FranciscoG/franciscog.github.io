@@ -27,7 +27,9 @@
 
 			<main id="skip" @html="content"></main>
 
-			<footer @html="`&copy; ${year()} ${metadata.title}`"></footer>
+			<footer>
+				<p @html="`&copy; ${year()} ${metadata.title}`"></p>
+			</footer>
 		</div>
 		<script @raw="getBundle('js')" webc:keep></script>
 	</body>

@@ -1,5 +1,5 @@
 ---
-layout: layouts/base.webc
+layout: layouts/base.njk
 eleventyNavigation:
   key: Misc
   order: 4

@@ -6,7 +6,7 @@ const pluginSyntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const pluginBundle = require("@11ty/eleventy-plugin-bundle");
 const pluginNavigation = require("@11ty/eleventy-navigation");
 const { EleventyHtmlBasePlugin, EleventyRenderPlugin } = require("@11ty/eleventy");
-const pluginWebc = require("@11ty/eleventy-plugin-webc");
+// const pluginWebc = require("@11ty/eleventy-plugin-webc");
 
 const pluginDrafts = require("./eleventy.config.drafts.js");
 const pluginImages = require("./eleventy.config.images.js");
@@ -38,9 +38,9 @@ module.exports = function(eleventyConfig) {
 	eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
 	eleventyConfig.addPlugin(pluginBundle);
 	eleventyConfig.addPlugin(EleventyRenderPlugin);
-	eleventyConfig.addPlugin(pluginWebc, {
-		components: "./_components/**/*.webc",
-	});
+	// eleventyConfig.addPlugin(pluginWebc, {
+	// 	components: "./_components/**/*.webc",
+	// });
 
 	eleventyConfig.addFilter("getNewestCollectionItemDate", pluginRss.getNewestCollectionItemDate);
 	eleventyConfig.addFilter("dateToRfc3339", pluginRss.dateToRfc3339);

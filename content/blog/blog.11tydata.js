@@ -2,5 +2,5 @@ module.exports = {
 	tags: [
 		"posts"
 	],
-	"layout": "layouts/post.webc",
+	"layout": "layouts/post.njk",
 };

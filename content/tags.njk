@@ -9,15 +9,14 @@ pagination:
     - posts
     - tagList
   addAllPagesToCollections: true
-layout: layouts/home.webc
+layout: layouts/home.njk
 eleventyComputed:
   title: Tagged "{{ tag }}"
 permalink: /tags/{{ tag | slugify }}/
 ---
 <h1>Tagged #{{ tag }}</h1>
 
-{% renderTemplate "webc", { postslist: collections[ tag ] } %}
-<posts-list :posts="postslist"></posts-list>
-{% endrenderTemplate %}
+{% set postslist = collections[ tag ] %}
+{% include "postslist.njk" %}
 
 <p>See <a href="/tags/">all tags</a>.</p>
