@@ -1,4 +1,6 @@
 /* Defaults */
+@import "https://unpkg.com/open-props/easings.min.css";
+
 :root {
 	--font-family: -apple-system, system-ui, sans-serif;
 	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono,
@@ -34,10 +36,17 @@ html[data-theme="dark"] {
 	--background-color: #15202b;
 }
 
-
 /* Global stylesheet */
-* {
+*,
+*::before,
+*::after {
 	box-sizing: border-box;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	:root {
+		scroll-behavior: smooth;
+	}
 }
 
 html,
@@ -64,7 +73,9 @@ body {
 	flex-direction: column;
 }
 
-header, main, footer {
+header,
+main,
+footer {
 	width: 100%;
 	max-width: 50em;
 	margin-left: auto;
@@ -201,6 +212,77 @@ nav {
 	margin-left: auto;
 }
 
+.theme-toggle {
+	--size: 2rem;
+
+	background: none;
+	border: none;
+	padding: 0;
+
+	inline-size: var(--size);
+	block-size: var(--size);
+	aspect-ratio: 1;
+	border-radius: 50%;
+	cursor: pointer;
+	touch-action: manipulation;
+	-webkit-tap-highlight-color: transparent;
+	outline-offset: 5px;
+}
+
+.theme-toggle > svg {
+	inline-size: 100%;
+	block-size: 100%;
+	stroke-linecap: round;
+}
+@media (hover: none) {
+	.theme-toggle {
+		--size: 48px;
+	}
+}
+
+.sun-and-moon > :is(.moon, .sun, .sun-beams) {
+	transform-origin: center center;
+}
+
+.sun-and-moon > :is(.moon, .sun) {
+	fill: var(--icon-fill);
+}
+
+.theme-toggle:is(:hover, :focus-visible) > .sun-and-moon > :is(.moon, .sun) {
+	fill: var(--icon-fill-hover);
+}
+
+.sun-and-moon > .sun-beams {
+	stroke: var(--icon-fill);
+	stroke-width: 2px;
+}
+
+.theme-toggle:is(:hover, :focus-visible) .sun-and-moon > .sun-beams {
+	stroke: var(--icon-fill-hover);
+}
+[data-theme="dark"] .sun-and-moon > .sun {
+	transform: scale(1.75);
+}
+
+[data-theme="dark"] .sun-and-moon > .sun-beams {
+	opacity: 0;
+}
+[data-theme="dark"] .sun-and-moon > .moon > circle {
+	transform: translateX(-7px);
+
+}
+@supports (cx: 1) {
+	[data-theme="dark"] .sun-and-moon > .moon > circle {
+		transform: translateX(0);
+		cx: 17;
+	}
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sun {
+    transition: transform .5s var(--ease-elastic-3);
+  }
+}
+
 /* Posts list */
 .postlist {
 	list-style: none;
@@ -224,7 +306,6 @@ nav {
 	font-size: 1.1875em; /* 19px /16 */
 	font-weight: 700;
 	flex-basis: calc(100% - 1.5rem);
-	padding-left: 0.25em;
 	padding-right: 0.5em;
 	text-underline-position: from-font;
 	text-underline-offset: 0;
@@ -285,4 +366,30 @@ h2 + .header-anchor {
 
 footer {
 	padding-bottom: 20px;
+}
+
+code[class*="language-"],
+pre[class*="language-"] {
+	font-size: 0.875rem;
+}
+
+.sidenote {
+	padding: 20px;
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+.visually-hidden,
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+	width: 1px !important;
+	height: 1px !important;
+	padding: 0 !important;
+	margin: -1px !important;
+	overflow: hidden !important;
+	clip: rect(0, 0, 0, 0) !important;
+	white-space: nowrap !important;
+	border: 0 !important;
+}
+.visually-hidden:not(caption),
+.visually-hidden-focusable:not(:focus):not(:focus-within):not(caption) {
+	position: absolute !important;
 }

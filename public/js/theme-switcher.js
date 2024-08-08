@@ -15,8 +15,8 @@
 
 	const reflectPreference = () => {
 		document.firstElementChild.setAttribute("data-theme", theme);
-
-		document.querySelector("#theme-toggle")?.setAttribute("aria-label", theme);
+		const toggle = document.querySelector("#theme-toggle");
+		if (toggle) toggle.setAttribute("aria-label", theme);
 	};
 
 	const setPreference = () => {
