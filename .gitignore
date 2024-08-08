@@ -14,3 +14,5 @@ tmp
 
 _site/
 node_modules/
+
+DRAFT-*.md
