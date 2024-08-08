@@ -2,7 +2,7 @@ module.exports = {
 	title: "Francisco G.",
 	url: "https://franciscog.com/",
 	language: "en",
-	description: "Developer non-extraordinaire",
+	description: "Developer ordinaire",
 	author: {
 		name: "Francisco",
 		email: "",
