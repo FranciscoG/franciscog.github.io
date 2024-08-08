@@ -6,4 +6,5 @@ eleventyNavigation:
 ---
 <h1>Archive</h1>
 
-<posts-list :posts="collections.posts"></posts-list>
+{% set postslist = collections.posts %}
+{% include "postslist.njk" %}
