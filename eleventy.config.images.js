@@ -1,7 +1,7 @@
-const path = require("path");
-const eleventyImage = require("@11ty/eleventy-img");
+import path from "node:path";
+import eleventyImage from "@11ty/eleventy-img";
 
-module.exports = eleventyConfig => {
+export default function (eleventyConfig) {
 	function relativeToInputPath(inputPath, relativeFilePath) {
 		let split = inputPath.split("/");
 		split.pop();
@@ -11,33 +11,35 @@ module.exports = eleventyConfig => {
 
 	// Eleventy Image shortcode
 	// https://www.11ty.dev/docs/plugins/image/
-	eleventyConfig.addAsyncShortcode("image", 
-	/**
-	 * 
-	 * @param {string} src 
-	 * @param {string} alt 
-	 * @param {string} widths 
-	 * @param {string} sizes 
-	 * @param {"lazy" | "eager"} loading 
-	 * @returns 
-	 */
-	async function imageShortcode(src, alt, widths, sizes, loading = "lazy") {
-		// Full list of formats here: https://www.11ty.dev/docs/plugins/image/#output-formats
-		// Warning: Avif can be resource-intensive so take care!
-		let formats = ["avif", "webp", "auto"];
-		let file = relativeToInputPath(this.page.inputPath, src);
-		let metadata = await eleventyImage(file, {
-			widths: widths || ["auto"],
-			formats,
-			outputDir: path.join(eleventyConfig.dir.output, "img"), // Advanced usage note: `eleventyConfig.dir` works here because we’re using addPlugin.
-		});
+	eleventyConfig.addAsyncShortcode(
+		"image",
+		/**
+		 *
+		 * @param {string} src
+		 * @param {string} alt
+		 * @param {string} widths
+		 * @param {string} sizes
+		 * @param {"lazy" | "eager"} loading
+		 * @returns
+		 */
+		async function imageShortcode(src, alt, widths, sizes, loading = "lazy") {
+			// Full list of formats here: https://www.11ty.dev/docs/plugins/image/#output-formats
+			// Warning: Avif can be resource-intensive so take care!
+			let formats = ["avif", "webp", "auto"];
+			let file = relativeToInputPath(this.page.inputPath, src);
+			let metadata = await eleventyImage(file, {
+				widths: widths || ["auto"],
+				formats,
+				outputDir: path.join(eleventyConfig.dir.output, "img"), // Advanced usage note: `eleventyConfig.dir` works here because we’re using addPlugin.
+			});
 
-		let imageAttributes = {
-			alt,
-			sizes,
-			loading,
-			decoding: "async",
-		};
-		return eleventyImage.generateHTML(metadata, imageAttributes);
-	});
-};
+			let imageAttributes = {
+				alt,
+				sizes,
+				loading,
+				decoding: "async",
+			};
+			return eleventyImage.generateHTML(metadata, imageAttributes);
+		}
+	);
+}

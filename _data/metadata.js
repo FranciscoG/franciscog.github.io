@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 	title: "Francisco G.",
 	url: "https://franciscog.com/",
 	language: "en",
@@ -6,6 +6,6 @@ module.exports = {
 	author: {
 		name: "Francisco",
 		email: "",
-		url: "https://franciscog.com/"
-	}
-}
+		url: "https://franciscog.com/",
+	},
+};
