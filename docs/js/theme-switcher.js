@@ -1,48 +1,63 @@
 // src: https://web.dev/articles/building/a-theme-switch-component#javascript
-(function () {
-	const STORAGE_KEY = "theme-preference";
-  const LIGHT = "light";
-  const DARK = "dark";
 
-	const getColorPreference = () => {
-		if (localStorage.getItem(STORAGE_KEY)) {
-			return localStorage.getItem(STORAGE_KEY);
-		} else {
-			return window.matchMedia("(prefers-color-scheme: dark)").matches
-				? DARK
-				: LIGHT;
-		}
-	};
+class ThemeToggle {
+	constructor() {
+		this.STORAGE_KEY = "theme-preference";
+		this.LIGHT = "light";
+		this.DARK = "dark";
+		this.selector = "#theme-toggle";
+		this.theme = this.getColorPreference();
 
-  let theme = getColorPreference();
+		this.reflectPreference = this.reflectPreference.bind(this);
+		this.setPreference = this.setPreference.bind(this);
 
-	const reflectPreference = () => {
-		document.firstElementChild.setAttribute("data-theme", theme);
+		window.addEventListener("load", this.onLoad.bind(this));
 
+		window
+			.matchMedia("(prefers-color-scheme: dark)")
+			.addEventListener("change", this.onMatch.bind(this));
+
+		this.reflectPreference();
+	}
+
+	onLoad() {
 		document
-			.querySelector("#theme-toggle")
-			?.setAttribute("aria-label", theme);
-	};
+			.querySelector(this.selector)
+			.addEventListener("change", this.themeOnChange.bind(this));
+	}
 
-	const setPreference = () => {
-		localStorage.setItem(STORAGE_KEY, theme);
-		reflectPreference();
-	};
+	onMatch(e) {
+		const isDark = e.matches;
+		this.theme = isDark ? this.DARK : this.LIGHT;
+		this.setPreference();
+	}
 
-	const onClick = () => {
-		theme = theme === LIGHT ? DARK : LIGHT;
-		setPreference();
-	};
+	getColorPreference() {
+		return (
+			localStorage.getItem(this.STORAGE_KEY) ||
+			(window.matchMedia("(prefers-color-scheme: dark)").matches
+				? this.DARK
+				: this.LIGHT)
+		);
+	}
 
-	window.addEventListener("load", () => {
-		reflectPreference();
-		document.querySelector("#theme-toggle").addEventListener("click", onClick);
-	});
+	reflectPreference() {
+		document.firstElementChild.setAttribute("data-theme", this.theme);
+		const toggle = document.querySelector(this.selector);
+		if (toggle) {
+			toggle.checked = this.theme === this.DARK;
+		}
+	}
 
-	window
-		.matchMedia("(prefers-color-scheme: dark)")
-		.addEventListener("change", ({ matches: isDark }) => {
-			theme = isDark ? DARK : LIGHT;
-			setPreference();
-		});
-})();
+	setPreference() {
+		localStorage.setItem(this.STORAGE_KEY, this.theme);
+		this.reflectPreference();
+	}
+
+	themeOnChange(e) {
+		this.theme = e.target.checked ? this.DARK : this.LIGHT;
+		this.setPreference();
+	}
+}
+
+window.themeToggle = new ThemeToggle();

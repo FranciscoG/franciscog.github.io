@@ -1,0 +1,14 @@
+{
+	"version": "https://jsonfeed.org/version/1.1",
+	"title": "Francisco G.",
+	"language": "en",
+	"home_page_url": "https://franciscog.com/",
+	"feed_url": "https://franciscog.com/feed/feed.json",
+	"description": "Developer ordinaire",
+	"author": {
+		"name": "Francisco",
+		"url": "https://franciscog.com/"
+	},
+	"items": [
+	]
+}

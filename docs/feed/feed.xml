@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:base="en">
+	<title>Francisco G.</title>
+	<subtitle>Developer ordinaire</subtitle>
+	<link href="https://franciscog.com/feed/feed.xml" rel="self"/>
+	<link href="https://franciscog.com/"/>
+	<updated>2024-08-08T19:44:18Z</updated>
+	<id>https://franciscog.com/</id>
+	<author>
+		<name>Francisco</name>
+		<email></email>
+	</author>
+</feed>

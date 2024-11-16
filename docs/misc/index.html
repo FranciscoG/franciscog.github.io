@@ -1,4 +1,18 @@
-/* Defaults */
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Francisco G.</title>
+		<meta name="description" content="Developer ordinaire">
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="Francisco G.">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title="Francisco G.">
+
+		<meta name="generator" content="Eleventy v2.0.1">
+    <script defer src="/js/theme-switcher.js"></script>
+    
+		
+		<style>/* Defaults */
 @import "https://unpkg.com/open-props/easings.min.css";
 
 :root {
@@ -330,4 +344,68 @@ pre[class*="language-"] {
 .visually-hidden:not(caption),
 .visually-hidden-focusable:not(:focus):not(:focus-within):not(caption) {
 	position: absolute !important;
-}
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+    <div id="page">
+
+      <header>
+        <a href="/" class="home-link">Francisco G.</a>
+        <nav>
+          <h2 class="visually-hidden">Top level navigation menu</h2>
+          <ul class="nav">
+            <li class="nav-item"><a href="/">Home</a></li>
+            <li class="nav-item"><a href="/blog/">Archive</a></li>
+            <li class="nav-item"><a href="/misc/" aria-current="page">Misc</a></li>
+
+           <li class="nav-item nav-item-feed">
+              <a href="/feed/feed.xml">
+                Feed
+              </a>
+            </li>
+
+            <li class="nav-item nav-item-theme">
+              <label for="theme-toggle" class="dark-mode-checkbox">
+                Dark Mode
+                <input type="checkbox" role="switch" id="theme-toggle">
+              </label>
+
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      <main id="skip">
+        <h1 id="miscellany" tabindex="-1">Miscellany <a class="header-anchor" href="#miscellany">#</a></h1>
+<p>I maintain a <a href="https://open.spotify.com/playlist/3dBiKJSoAQ6msoYzl99wp2?si=9b28df94ffc440be">Spotify Playlist</a> of downtempo chill electronic music that I like to listen to while working. I originally started this playlist as a collaborative one that I posted on some dev related subreddits (when someone asked about what music they listen to while working), hence the name &quot;Reddit Coders: Downtempo&quot;. It was going well for a while but then someone wiped out the whole playlist one day. Thankfully I kept a back-up but it's no longer collaborative.</p>
+<div id="spotify-embed"></div>
+
+      </main>
+
+      <footer>
+        <p>
+          &copy; Francisco G. 
+        </p>
+      </footer>
+    </div>
+		<!-- Current page: /misc/ -->
+    <script>// if user has JS disabled then this iframe should never load and they can use the link in the text above
+  (function(){
+    const iframe = document.createElement('iframe');
+    iframe.style.borderRadius = "12px";
+    iframe.src = "https://open.spotify.com/embed/playlist/3dBiKJSoAQ6msoYzl99wp2?utm_source=generator&theme=0";
+    iframe.width = "100%";
+    iframe.height = "380";
+    iframe.frameBorder = "0";
+    iframe.allowfullscreen = "";
+    iframe.allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture";
+    document.getElementById('spotify-embed').appendChild(iframe)
+  })()</script>
+
+    <script>
+      // quick fix for theme switch
+      window.themeToggle.reflectPreference();
+    </script>
+	</body>
+</html>

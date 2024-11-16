@@ -1,4 +1,18 @@
-/* Defaults */
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Francisco G.</title>
+		<meta name="description" content="Developer ordinaire">
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="Francisco G.">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title="Francisco G.">
+
+		<meta name="generator" content="Eleventy v2.0.1">
+    <script defer src="/js/theme-switcher.js"></script>
+    
+		
+		<style>/* Defaults */
 @import "https://unpkg.com/open-props/easings.min.css";
 
 :root {
@@ -330,4 +344,68 @@ pre[class*="language-"] {
 .visually-hidden:not(caption),
 .visually-hidden-focusable:not(:focus):not(:focus-within):not(caption) {
 	position: absolute !important;
-}
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+    <div id="page">
+
+      <header>
+        <a href="/" class="home-link">Francisco G.</a>
+        <nav>
+          <h2 class="visually-hidden">Top level navigation menu</h2>
+          <ul class="nav">
+            <li class="nav-item"><a href="/">Home</a></li>
+            <li class="nav-item"><a href="/blog/">Archive</a></li>
+            <li class="nav-item"><a href="/misc/">Misc</a></li>
+
+           <li class="nav-item nav-item-feed">
+              <a href="/feed/feed.xml">
+                Feed
+              </a>
+            </li>
+
+            <li class="nav-item nav-item-theme">
+              <label for="theme-toggle" class="dark-mode-checkbox">
+                Dark Mode
+                <input type="checkbox" role="switch" id="theme-toggle">
+              </label>
+
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      <main id="skip">
+        
+<h1 id="content-not-found" tabindex="-1">Content not found. <a class="header-anchor" href="#content-not-found">#</a></h1>
+<p>Go <a href="/">home</a>.</p>
+<!--
+
+Read more: https://www.11ty.dev/docs/quicktips/not-found/
+
+This will work for both GitHub pages and Netlify:
+
+* https://help.github.com/articles/creating-a-custom-404-page-for-your-github-pages-site/
+* https://www.netlify.com/docs/redirects/#custom-404
+
+-->
+
+
+      </main>
+
+      <footer>
+        <p>
+          &copy; Francisco G. 
+        </p>
+      </footer>
+    </div>
+		<!-- Current page: /404.html -->
+    <script></script>
+
+    <script>
+      // quick fix for theme switch
+      window.themeToggle.reflectPreference();
+    </script>
+	</body>
+</html>
