@@ -22,6 +22,8 @@
 	--text-color-link-active: #5f2b48;
 	--text-color-link-visited: #17050f;
 
+	--code-bg-color: var(--color-gray-20);
+
 	--syntax-tab-size: 2;
 }
 
@@ -34,6 +36,8 @@ html[data-theme="dark"] {
 	--text-color-link-visited: #a6a6f8;
 
 	--background-color: #15202b;
+
+	--code-bg-color: #272822;
 }
 
 /* Global stylesheet */
@@ -309,6 +313,13 @@ footer {
 code[class*="language-"],
 pre[class*="language-"] {
 	font-size: 0.875rem;
+}
+
+/* inline code blocks */
+code:not([class]) {
+	background-color: var(--code-bg-color);
+	padding: 0.1em 0.3em;
+	border-radius: 0.2em;
 }
 
 .sidenote {
