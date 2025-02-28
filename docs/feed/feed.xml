@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:base="en">
+	<title>Francisco G.</title>
+	<subtitle>Developer ordinaire</subtitle>
+	<link href="https://franciscog.com/feed/feed.xml" rel="self"/>
+	<link href="https://franciscog.com/"/>
+	<updated>2025-02-28T00:00:00Z</updated>
+	<id>https://franciscog.com/</id>
+	<author>
+		<name>Francisco</name>
+		<email></email>
+	</author>
+	
+	<entry>
+		<title>Stitching together videos and images with FFmpeg</title>
+		<link href="https://franciscog.com/blog/ffmpeg/"/>
+		<updated>2025-02-28T00:00:00Z</updated>
+		<id>https://franciscog.com/blog/ffmpeg/</id>
+		<content type="html">&lt;style&gt;
+    .icon { width: 15px; height: 15px;}
+&lt;/style&gt;
+&lt;p&gt;I wanted do a quick write-up about something I figured out with code.&lt;/p&gt;
+&lt;p&gt;Back in early January I was trying to create one of those year-end highlight reels you see on social media that quickly goes through a bunch of photos and videos. Google Photos has a feature where you can combine photos and videos into a &amp;quot;movie&amp;quot; but it has a limit of 50 items, I had 124 items 😬. I knew there was a way to do this with FFmpeg but I had never tried it before. So I took a crack at it and it wasn&#39;t that hard in the end.&lt;/p&gt;
+&lt;p&gt;The data source:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I had photos in either landscape or portrait mode, all jpg&lt;/li&gt;
+&lt;li&gt;I had videos in either landscape or portrait mode, all mp4&lt;/li&gt;
+&lt;li&gt;the videos are of varying lengths&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Desired outcome:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;to produce a single video with everything stitched together&lt;/li&gt;
+&lt;li&gt;for videos it should only use the first 5 seconds&lt;/li&gt;
+&lt;li&gt;output a video in portrait mode with anything in landscape scaled to fit width-wise without cropping, showing black bars above and below, no distortion&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I&#39;m going to start by showing you an example of what the CLI command looks like and then I&#39;ll break down and explain each part.&lt;/p&gt;
+&lt;p&gt;In this command we are combining 2 videos and 2 images into 1 video.&lt;/p&gt;
+&lt;pre class=&quot;language-bash&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;ffmpeg &lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;
+&lt;span class=&quot;token parameter variable&quot;&gt;-loop&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-t&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-i&lt;/span&gt; photo1.jpg &lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;
+&lt;span class=&quot;token parameter variable&quot;&gt;-t&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;5&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-i&lt;/span&gt; video1.mp4 &lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;
+&lt;span class=&quot;token parameter variable&quot;&gt;-loop&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-t&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-i&lt;/span&gt; photo2.jpg &lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;
+&lt;span class=&quot;token parameter variable&quot;&gt;-t&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;5&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-i&lt;/span&gt; video2.mp4 &lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;
+&lt;span class=&quot;token parameter variable&quot;&gt;-f&lt;/span&gt; lavfi &lt;span class=&quot;token parameter variable&quot;&gt;-t&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-i&lt;/span&gt; anullsrc &lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;
+&lt;span class=&quot;token parameter variable&quot;&gt;-filter_complex&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&#92;
+[0:v]scale=1080:-1,setsar=1,pad=1080:1920:0:(oh-ih)/2[v0];&#92;
+[1:v]scale=1080:-1,setsar=1,pad=1080:1920:0:(oh-ih)/2[v1];&#92;
+[2:v]scale=1080:-1,setsar=1,pad=1080:1920:0:(oh-ih)/2[v2];&#92;
+[3:v]scale=1080:-1,setsar=1,pad=1080:1920:0:(oh-ih)/2[v3];&#92;
+[v0][4:a][v1][1:a][v2][4:a][v3][3:a]concat=n=4:v=1:a=1[v][a]&quot;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;
+&lt;span class=&quot;token parameter variable&quot;&gt;-map&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;[v]&quot;&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-map&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;[a]&quot;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;output.mp4&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Lets break this down.&lt;/p&gt;
+&lt;h3 id=&quot;part-1-the-inputs&quot; tabindex=&quot;-1&quot;&gt;Part 1: The Inputs &lt;a class=&quot;header-anchor&quot; href=&quot;https://franciscog.com/blog/ffmpeg/#part-1-the-inputs&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;pre class=&quot;language-bash&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token parameter variable&quot;&gt;-loop&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-t&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-i&lt;/span&gt; photo1.jpg &lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;
+&lt;span class=&quot;token parameter variable&quot;&gt;-t&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;5&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-i&lt;/span&gt; video1.mp4 &lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;
+&lt;span class=&quot;token parameter variable&quot;&gt;-loop&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-t&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-i&lt;/span&gt; photo2.jpg &lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;
+&lt;span class=&quot;token parameter variable&quot;&gt;-t&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;5&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-i&lt;/span&gt; video2.mp4 &lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;
+&lt;span class=&quot;token parameter variable&quot;&gt;-f&lt;/span&gt; lavfi &lt;span class=&quot;token parameter variable&quot;&gt;-t&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-i&lt;/span&gt; anullsrc &lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-loop &amp;lt;duration&amp;gt;&lt;/code&gt; - (images only) continually loop the image for the duration &lt;a href=&quot;https://ffmpeg.org/ffmpeg-formats.html#image2-1&quot;&gt;&lt;span title=&quot;documentation&quot;&gt;&lt;i class=&quot;fa-solid fa-book icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;span class=&quot;visually-hidden&quot;&gt;documentation&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-t &amp;lt;duration&amp;gt;&lt;/code&gt; - &amp;quot;When used as an input option (before &lt;code&gt;-i&lt;/code&gt;), limit the duration of data read from the input file&amp;quot; &lt;a href=&quot;https://ffmpeg.org/ffmpeg.html#Main-options&quot;&gt;&lt;span title=&quot;documentation&quot;&gt;&lt;i class=&quot;fa-solid fa-book icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;span class=&quot;visually-hidden&quot;&gt;documentation&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;. In the case of a video input, only read the first 5 seconds of the video. For images, loop the images to 1 second.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-i &amp;lt;file&amp;gt;&lt;/code&gt; - the input (the file to use)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This is one is a little different but it&#39;s important.&lt;/p&gt;
+&lt;pre class=&quot;language-bash&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token parameter variable&quot;&gt;-f&lt;/span&gt; lavfi &lt;span class=&quot;token parameter variable&quot;&gt;-t&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-i&lt;/span&gt; anullsrc&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-f lavfi&lt;/code&gt; - use the Libavfilter virtual input device &lt;a href=&quot;https://ffmpeg.org/ffmpeg-devices.html#lavfi&quot;&gt;&lt;span title=&quot;documentation&quot;&gt;&lt;i class=&quot;fa-solid fa-book icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;span class=&quot;visually-hidden&quot;&gt;documentation&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-t 1&lt;/code&gt; - for 1 second&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-i anullsrc&lt;/code&gt; - creates a null audio source which generates silent audio frames &lt;a href=&quot;https://ffmpeg.org/ffmpeg-filters.html#anullsrc&quot;&gt;&lt;span title=&quot;documentation&quot;&gt;&lt;i class=&quot;fa-solid fa-book icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;span class=&quot;visually-hidden&quot;&gt;documentation&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;. Since the final product is a video, we need an audio track to go along with the images.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;part-2-the-filter-complex&quot; tabindex=&quot;-1&quot;&gt;Part 2: The -filter_complex &lt;a class=&quot;header-anchor&quot; href=&quot;https://franciscog.com/blog/ffmpeg/#part-2-the-filter-complex&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;You&#39;ll see this repeated a few times:&lt;/p&gt;
+&lt;pre class=&quot;language-bash&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;:v&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;scale&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1080&lt;/span&gt;:-1,setsar&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;,pad&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1080&lt;/span&gt;:1920:0:&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;oh-ih&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;/2&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;v0&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;[0:v]&lt;/code&gt; - Select the video input from the file at index 0 (this could be an image or a video)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;scale=1080:-1&lt;/code&gt; - scales input to 1080px width. The &lt;code&gt;-1&lt;/code&gt; means auto-calculate height. This keeps the aspect ratio of the input so it&#39;s not distorted.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;setsar=1&lt;/code&gt; - sets the Sample Aspect Ratio (SAR) of a video to 1:1. This means that each pixel in the video is treated as a perfect square &lt;a href=&quot;https://ffmpeg.org/ffmpeg-filters.html#setdar_002c-setsar&quot;&gt;&lt;span title=&quot;documentation&quot;&gt;&lt;i class=&quot;fa-solid fa-book icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;span class=&quot;visually-hidden&quot;&gt;documentation&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pad=1080:1920&lt;/code&gt; - This helps set the output to exactly 1080x1920. By default it will fill with the color black and if an input doesn&#39;t cover the space, then this is what will give us the black bars. &lt;a href=&quot;https://ffmpeg.org/ffmpeg-filters.html#pad-1&quot;&gt;&lt;span title=&quot;documentation&quot;&gt;&lt;i class=&quot;fa-solid fa-book icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;span class=&quot;visually-hidden&quot;&gt;documentation&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;0:(oh-ih)/2&lt;/code&gt; - the &lt;code&gt;x:y&lt;/code&gt; coordinates of where to place the input within the 1080x1920 space.
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;0&lt;/code&gt; - Since we always scale our inputs to 1080, we know the &lt;code&gt;x&lt;/code&gt; position will always be 0.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;(oh-ih)/2&lt;/code&gt; = &lt;code&gt;(output height - input height) / 2&lt;/code&gt; - which is the calculation for the &lt;code&gt;y&lt;/code&gt; position to get the input vertically centerd&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[v0]&lt;/code&gt; - label the output of this filter for further use in the filter chain.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;part-3-the-concat-filter&quot; tabindex=&quot;-1&quot;&gt;Part 3: The concat filter &lt;a class=&quot;header-anchor&quot; href=&quot;https://franciscog.com/blog/ffmpeg/#part-3-the-concat-filter&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;pre class=&quot;language-bash&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;v0&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;4&lt;/span&gt;:a&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;v1&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;:a&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;v2&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;4&lt;/span&gt;:a&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;v3&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;3&lt;/span&gt;:a&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This pairs the labeled video inputs with an audio. You&#39;ll notice that &lt;code&gt;[4:a]&lt;/code&gt; is used twice. This is a reference to the silent audio track paired with an image input. Remember that we have 5 inputs, 4 files and the 5th one being the generated silent audio. &lt;code&gt;[4:a]&lt;/code&gt; refers to that 5th audio input in our 0-indexed inputs array.&lt;/p&gt;
+&lt;pre class=&quot;language-bash&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token assign-left variable&quot;&gt;concat&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;n&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;4&lt;/span&gt;:v&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;:a&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;v&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;a&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is what concatenates multiple input streams.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;concat&lt;/code&gt; - is the filter name. &lt;a href=&quot;https://ffmpeg.org/ffmpeg-filters.html#concat&quot;&gt;&lt;span title=&quot;documentation&quot;&gt;&lt;i class=&quot;fa-solid fa-book icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;span class=&quot;visually-hidden&quot;&gt;documentation&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;n=4&lt;/code&gt; - specifies that four input segments will be concatenated.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;v=1&lt;/code&gt; - indicates that one video stream will be in the output.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;a=1&lt;/code&gt; - specifies that one audio stream will be in the output.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[v][a]&lt;/code&gt; are new labels for the output video and audio streams&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;part-4-map-to-output&quot; tabindex=&quot;-1&quot;&gt;Part 4: Map to output &lt;a class=&quot;header-anchor&quot; href=&quot;https://franciscog.com/blog/ffmpeg/#part-4-map-to-output&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;pre class=&quot;language-bash&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token parameter variable&quot;&gt;-map&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;[v]&quot;&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-map&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;[a]&quot;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;output.mp4&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-map &amp;quot;[v]&amp;quot;&lt;/code&gt; - selects the video stream labeled as &lt;code&gt;[v]&lt;/code&gt; from the filter complex output.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-map &amp;quot;[a]&amp;quot;&lt;/code&gt; - selects the audio stream labeled as &lt;code&gt;[a]&lt;/code&gt; from the filter complex output.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;output.mp4&amp;quot;&lt;/code&gt; - the name of our final output file&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;automate&quot; tabindex=&quot;-1&quot;&gt;Automate &lt;a class=&quot;header-anchor&quot; href=&quot;https://franciscog.com/blog/ffmpeg/#automate&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;As you can see, the command for just 4 files is not very small. I had 124 files to handle. I wrote a Bash script to help me with this:&lt;/p&gt;
+&lt;pre class=&quot;language-bash&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token shebang important&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# Usage: ./concat.sh &amp;lt;folder&gt; &amp;lt;output_file&gt;&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# Example: ./concat.sh /home/user/videos output.mp4&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$#&lt;/span&gt;&quot;&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-ne&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;then&lt;/span&gt;
+    &lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Usage: &lt;span class=&quot;token variable&quot;&gt;$0&lt;/span&gt; &amp;lt;folder&gt; &amp;lt;output_file&gt;&quot;&lt;/span&gt;
+    &lt;span class=&quot;token builtin class-name&quot;&gt;exit&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;fi&lt;/span&gt;
+
+&lt;span class=&quot;token assign-left variable&quot;&gt;folder&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;$1&lt;/span&gt;
+&lt;span class=&quot;token assign-left variable&quot;&gt;output_file&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;$2&lt;/span&gt;
+
+&lt;span class=&quot;token assign-left variable&quot;&gt;inputs&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&quot;&lt;/span&gt;
+&lt;span class=&quot;token assign-left variable&quot;&gt;filter_complex&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&quot;&lt;/span&gt;
+&lt;span class=&quot;token assign-left variable&quot;&gt;concat_filter&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&quot;&lt;/span&gt;
+&lt;span class=&quot;token assign-left variable&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;
+
+&lt;span class=&quot;token assign-left variable&quot;&gt;jpegCount&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;find&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$folder&lt;/span&gt;&quot;&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-type&lt;/span&gt; f &lt;span class=&quot;token parameter variable&quot;&gt;-name&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;*.jpg&quot;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;wc&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-l&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token assign-left variable&quot;&gt;mp4Count&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;find&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$folder&lt;/span&gt;&quot;&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-type&lt;/span&gt; f &lt;span class=&quot;token parameter variable&quot;&gt;-name&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;*.mp4&quot;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;wc&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-l&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# count all the files because this will be used as the index for the silent audio&lt;/span&gt;
+&lt;span class=&quot;token assign-left variable&quot;&gt;totalFiles&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$((&lt;/span&gt;jpegCount &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; mp4Count&lt;span class=&quot;token variable&quot;&gt;))&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Total files: &lt;span class=&quot;token variable&quot;&gt;$totalFiles&lt;/span&gt;&quot;&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;token for-or-select variable&quot;&gt;file&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$folder&lt;/span&gt;&quot;&lt;/span&gt;/*&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$file&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; *.jpg &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;then&lt;/span&gt;
+        &lt;span class=&quot;token assign-left variable&quot;&gt;inputs&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;+=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;-loop 1 -t 1 -i &lt;span class=&quot;token variable&quot;&gt;$file&lt;/span&gt; &quot;&lt;/span&gt;
+        &lt;span class=&quot;token assign-left variable&quot;&gt;concat_filter&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;+=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;[v&lt;span class=&quot;token variable&quot;&gt;$index&lt;/span&gt;][&lt;span class=&quot;token variable&quot;&gt;$totalFiles&lt;/span&gt;:a]&quot;&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;# [$totalFiles:a] is the silent audio&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$file&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; *.mp4 &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;then&lt;/span&gt;
+        &lt;span class=&quot;token assign-left variable&quot;&gt;inputs&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;+=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;-t 5 -i &lt;span class=&quot;token variable&quot;&gt;$file&lt;/span&gt; &quot;&lt;/span&gt;
+        &lt;span class=&quot;token assign-left variable&quot;&gt;concat_filter&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;+=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;[v&lt;span class=&quot;token variable&quot;&gt;$index&lt;/span&gt;][&lt;span class=&quot;token variable&quot;&gt;$index&lt;/span&gt;:a]&quot;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;fi&lt;/span&gt;
+    &lt;span class=&quot;token assign-left variable&quot;&gt;filter_complex&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;+=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;[&lt;span class=&quot;token variable&quot;&gt;$index&lt;/span&gt;:v]scale=1080:-1,setsar=1,pad=1080:1920:0:(oh-ih)/2[v&lt;span class=&quot;token variable&quot;&gt;$index&lt;/span&gt;];&quot;&lt;/span&gt;
+    &lt;span class=&quot;token assign-left variable&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$((&lt;/span&gt;index &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;))&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;done&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# Add silent audio for the images&lt;/span&gt;
+&lt;span class=&quot;token assign-left variable&quot;&gt;inputs&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;+=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;-f lavfi -t 1 -i anullsrc=channel_layout=stereo:sample_rate=44100 &quot;&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# Concatenate all video streams&lt;/span&gt;
+&lt;span class=&quot;token assign-left variable&quot;&gt;concat_filter&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;+=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;concat=n=&lt;span class=&quot;token variable&quot;&gt;$index&lt;/span&gt;:v=1:a=1[v][a]&quot;&lt;/span&gt;
+
+ffmpeg &lt;span class=&quot;token variable&quot;&gt;$inputs&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-filter_complex&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$filter_complex&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$concat_filter&lt;/span&gt;&quot;&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-map&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;[v]&quot;&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-map&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;[a]&quot;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$output_file&lt;/span&gt;&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That&#39;s it! Hope you found this useful and hope I didn&#39;t get anything too glaringly wrong. This script worked perfectly for me, but I&#39;m sure there&#39;s probably even better and more concise ways of doing it.&lt;/p&gt;
+</content>
+	</entry>
+</feed>

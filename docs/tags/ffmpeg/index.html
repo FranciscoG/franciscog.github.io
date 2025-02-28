@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Tagged &quot;ffmpeg&quot;</title>
+		<meta name="description" content="Developer ordinaire">
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="Francisco G.">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title="Francisco G.">
+
+		<meta name="generator" content="Eleventy v3.0.1">
+    <script src="/js/theme-switcher.js"></script>
+    
+		
+		<style>.postlist { 
+    counter-reset: start-from 2 
+  }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono,
+		Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono,
+		Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New,
+		Courier, monospace;
+}
+
+/* Theme colors, default: light */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #c0c0c0;
+	--color-gray-90: #333;
+
+	--background-color: #fff;
+
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050f;
+
+	--code-bg-color: var(--color-gray-20);
+
+	--syntax-tab-size: 2;
+}
+@media (prefers-color-scheme: dark) {
+	html:not([data-theme="light"]) {
+		--color-gray-90: #dad8d8;
+		--text-color: var(--color-gray-90);
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+	
+		--background-color: #15202b;
+	
+		--code-bg-color: #272822;
+	}
+}
+html[data-theme="dark"] {
+	--color-gray-90: #dad8d8;
+	--text-color: var(--color-gray-90);
+	/* --text-color is assigned to --color-gray-_ above */
+	--text-color-link: #1493fb;
+	--text-color-link-active: #6969f7;
+	--text-color-link-visited: #a6a6f8;
+
+	--background-color: #15202b;
+
+	--code-bg-color: #272822;
+}
+
+/* Global stylesheet */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	:root {
+		scroll-behavior: smooth;
+	}
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0;
+	font-family: var(--font-family);
+	font-size: 18px;
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	line-height: 1.75;
+	min-height: 100vh;
+}
+
+#page {
+	color: var(--text-color);
+	background-color: var(--background-color);
+	height: 100%;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+header,
+main,
+footer {
+	width: 100%;
+	max-width: 50em;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+a[href]:visited {
+	color: var(--text-color-link-visited);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--text-color-link-active);
+}
+
+main {
+	padding: 1rem;
+	flex: 1;
+}
+main :first-child {
+	margin-top: 0;
+}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+header:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+table td,
+table th {
+	padding-right: 1em;
+}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+pre:not([class*="language-"]) {
+	margin: 0.5em 0;
+	line-height: 1.375; /* 22px /16 */
+	-moz-tab-size: var(--syntax-tab-size);
+	-o-tab-size: var(--syntax-tab-size);
+	tab-size: var(--syntax-tab-size);
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+}
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em 0.5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+.home-link:link:not(:hover) {
+	text-decoration: none;
+}
+
+nav {
+	flex: 1;
+}
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	align-items: center;
+}
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+.nav-item a[href]:not(:hover) {
+	text-decoration: none;
+}
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* .nav-item-feed {
+	margin-left: auto;
+} */
+
+/************************/
+/* Dark mode checkbox */
+.nav-item-theme {
+	margin-left: auto;
+}
+.color-theme-picker {
+	font-size: 0.8rem;
+	width: 140px;
+	display: block;
+}
+
+/* Posts list */
+.postlist {
+	list-style: none;
+	padding: 0;
+}
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	margin-bottom: 1em;
+}
+.postlist-date,
+.postlist-item:before {
+	font-size: 0.8125em; /* 13px /16 */
+	color: var(--color-gray-90);
+}
+.postlist-date {
+	word-spacing: -0.5px;
+}
+.postlist-link {
+	font-size: 1.1875em; /* 19px /16 */
+	font-weight: 700;
+	flex-basis: calc(100% - 1.5rem);
+	padding-right: 0.5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;
+}
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-transform: lowercase;
+	font-style: italic;
+}
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 0.5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.post-metadata time {
+	margin-right: 1em;
+}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: 0.1em;
+}
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+a[href].header-anchor:focus,
+a[href].header-anchor:hover {
+	text-decoration: underline;
+}
+a[href].header-anchor:focus,
+:hover > a[href].header-anchor {
+	color: #aaa;
+}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+footer {
+	padding-bottom: 20px;
+}
+
+code[class*="language-"],
+pre[class*="language-"] {
+	font-size: 0.875rem;
+}
+
+/* inline code blocks */
+code:not([class]) {
+	background-color: var(--code-bg-color);
+	padding: 0.1em 0.3em;
+	border-radius: 0.2em;
+}
+
+.sidenote {
+	padding: 20px;
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+.visually-hidden,
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+	width: 1px !important;
+	height: 1px !important;
+	padding: 0 !important;
+	margin: -1px !important;
+	overflow: hidden !important;
+	clip: rect(0, 0, 0, 0) !important;
+	white-space: nowrap !important;
+	border: 0 !important;
+}
+.visually-hidden:not(caption),
+.visually-hidden-focusable:not(:focus):not(:focus-within):not(caption) {
+	position: absolute !important;
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+    <div id="page">
+
+      <header>
+        <a href="/" class="home-link">Francisco G.</a>
+        <nav>
+          <h2 class="visually-hidden">Top level navigation menu</h2>
+          <ul class="nav">
+            <li class="nav-item"><a href="/">Home</a></li>
+            <li class="nav-item"><a href="/blog/">Archive</a></li>
+            <li class="nav-item"><a href="/misc/">Misc</a></li>
+
+           <li class="nav-item nav-item-feed">
+              <a href="/feed/feed.xml">
+                Feed
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <label class="color-theme-picker">
+          Color Scheme
+          <select id="color-scheme-select">
+            <option value="auto">System Preference</option>
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+          </select>
+        </label>
+      </header>
+
+      <main id="skip">
+        
+<h1>Tagged #ffmpeg</h1>
+
+
+
+<ol reversed="" class="postlist">
+
+	<li class="postlist-item">
+		<a href="/blog/ffmpeg/" class="postlist-link">
+      Stitching together videos and images with FFmpeg
+    </a>
+		<time class="postlist-date" datetime="2025-02-28">February 2025</time>
+	</li>
+
+</ol>
+
+<p>See <a href="/tags/">all tags</a>.</p>
+
+
+      </main>
+
+      <!-- outputs all the icons used on the page -->
+      
+
+      <footer>
+        <p>
+          &copy; Francisco G. 2025
+        </p>
+      </footer>
+    </div>
+		<!-- Current page: /tags/ffmpeg/ -->
+    
+
+    <script>
+      // quick fix for theme switch
+      window.ColorTheme.reflectPreference();
+    </script>
+	</body>
+</html>

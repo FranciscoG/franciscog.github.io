@@ -11,3 +11,8 @@ node_modules
 npm-debug.log
 tmp
 .vs*
+
+_site/
+node_modules/
+
+DRAFT-*.md

@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Stitching together videos and images with FFmpeg</title>
+		<meta name="description" content="Developer ordinaire">
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="Francisco G.">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title="Francisco G.">
+
+		<meta name="generator" content="Eleventy v3.0.1">
+    <script src="/js/theme-switcher.js"></script>
+    
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono,
+		Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono,
+		Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New,
+		Courier, monospace;
+}
+
+/* Theme colors, default: light */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #c0c0c0;
+	--color-gray-90: #333;
+
+	--background-color: #fff;
+
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050f;
+
+	--code-bg-color: var(--color-gray-20);
+
+	--syntax-tab-size: 2;
+}
+@media (prefers-color-scheme: dark) {
+	html:not([data-theme="light"]) {
+		--color-gray-90: #dad8d8;
+		--text-color: var(--color-gray-90);
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+	
+		--background-color: #15202b;
+	
+		--code-bg-color: #272822;
+	}
+}
+html[data-theme="dark"] {
+	--color-gray-90: #dad8d8;
+	--text-color: var(--color-gray-90);
+	/* --text-color is assigned to --color-gray-_ above */
+	--text-color-link: #1493fb;
+	--text-color-link-active: #6969f7;
+	--text-color-link-visited: #a6a6f8;
+
+	--background-color: #15202b;
+
+	--code-bg-color: #272822;
+}
+
+/* Global stylesheet */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	:root {
+		scroll-behavior: smooth;
+	}
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0;
+	font-family: var(--font-family);
+	font-size: 18px;
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	line-height: 1.75;
+	min-height: 100vh;
+}
+
+#page {
+	color: var(--text-color);
+	background-color: var(--background-color);
+	height: 100%;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+header,
+main,
+footer {
+	width: 100%;
+	max-width: 50em;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+a[href]:visited {
+	color: var(--text-color-link-visited);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--text-color-link-active);
+}
+
+main {
+	padding: 1rem;
+	flex: 1;
+}
+main :first-child {
+	margin-top: 0;
+}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+header:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+table td,
+table th {
+	padding-right: 1em;
+}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+pre:not([class*="language-"]) {
+	margin: 0.5em 0;
+	line-height: 1.375; /* 22px /16 */
+	-moz-tab-size: var(--syntax-tab-size);
+	-o-tab-size: var(--syntax-tab-size);
+	tab-size: var(--syntax-tab-size);
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+}
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em 0.5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+.home-link:link:not(:hover) {
+	text-decoration: none;
+}
+
+nav {
+	flex: 1;
+}
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	align-items: center;
+}
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+.nav-item a[href]:not(:hover) {
+	text-decoration: none;
+}
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* .nav-item-feed {
+	margin-left: auto;
+} */
+
+/************************/
+/* Dark mode checkbox */
+.nav-item-theme {
+	margin-left: auto;
+}
+.color-theme-picker {
+	font-size: 0.8rem;
+	width: 140px;
+	display: block;
+}
+
+/* Posts list */
+.postlist {
+	list-style: none;
+	padding: 0;
+}
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	margin-bottom: 1em;
+}
+.postlist-date,
+.postlist-item:before {
+	font-size: 0.8125em; /* 13px /16 */
+	color: var(--color-gray-90);
+}
+.postlist-date {
+	word-spacing: -0.5px;
+}
+.postlist-link {
+	font-size: 1.1875em; /* 19px /16 */
+	font-weight: 700;
+	flex-basis: calc(100% - 1.5rem);
+	padding-right: 0.5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;
+}
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-transform: lowercase;
+	font-style: italic;
+}
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 0.5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.post-metadata time {
+	margin-right: 1em;
+}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: 0.1em;
+}
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+a[href].header-anchor:focus,
+a[href].header-anchor:hover {
+	text-decoration: underline;
+}
+a[href].header-anchor:focus,
+:hover > a[href].header-anchor {
+	color: #aaa;
+}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+footer {
+	padding-bottom: 20px;
+}
+
+code[class*="language-"],
+pre[class*="language-"] {
+	font-size: 0.875rem;
+}
+
+/* inline code blocks */
+code:not([class]) {
+	background-color: var(--code-bg-color);
+	padding: 0.1em 0.3em;
+	border-radius: 0.2em;
+}
+
+.sidenote {
+	padding: 20px;
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+.visually-hidden,
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+	width: 1px !important;
+	height: 1px !important;
+	padding: 0 !important;
+	margin: -1px !important;
+	overflow: hidden !important;
+	clip: rect(0, 0, 0, 0) !important;
+	white-space: nowrap !important;
+	border: 0 !important;
+}
+.visually-hidden:not(caption),
+.visually-hidden-focusable:not(:focus):not(:focus-within):not(caption) {
+	position: absolute !important;
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+    <div id="page">
+
+      <header>
+        <a href="/" class="home-link">Francisco G.</a>
+        <nav>
+          <h2 class="visually-hidden">Top level navigation menu</h2>
+          <ul class="nav">
+            <li class="nav-item"><a href="/">Home</a></li>
+            <li class="nav-item"><a href="/blog/">Archive</a></li>
+            <li class="nav-item"><a href="/misc/">Misc</a></li>
+
+           <li class="nav-item nav-item-feed">
+              <a href="/feed/feed.xml">
+                Feed
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <label class="color-theme-picker">
+          Color Scheme
+          <select id="color-scheme-select">
+            <option value="auto">System Preference</option>
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+          </select>
+        </label>
+      </header>
+
+      <main id="skip">
+        
+
+<h1>Stitching together videos and images with FFmpeg</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2025-02-28">28 February 2025</time></li>
+	<li><a href="/tags/ffmpeg/" class="post-tag">ffmpeg</a>, </li>
+	<li><a href="/tags/bash/" class="post-tag">bash</a></li>
+</ul>
+
+<style>
+    .icon { width: 15px; height: 15px;}
+</style>
+<p>I wanted do a quick write-up about something I figured out with code.</p>
+<p>Back in early January I was trying to create one of those year-end highlight reels you see on social media that quickly goes through a bunch of photos and videos. Google Photos has a feature where you can combine photos and videos into a &quot;movie&quot; but it has a limit of 50 items, I had 124 items 😬. I knew there was a way to do this with FFmpeg but I had never tried it before. So I took a crack at it and it wasn't that hard in the end.</p>
+<p>The data source:</p>
+<ul>
+<li>I had photos in either landscape or portrait mode, all jpg</li>
+<li>I had videos in either landscape or portrait mode, all mp4</li>
+<li>the videos are of varying lengths</li>
+</ul>
+<p>Desired outcome:</p>
+<ul>
+<li>to produce a single video with everything stitched together</li>
+<li>for videos it should only use the first 5 seconds</li>
+<li>output a video in portrait mode with anything in landscape scaled to fit width-wise without cropping, showing black bars above and below, no distortion</li>
+</ul>
+<p>I'm going to start by showing you an example of what the CLI command looks like and then I'll break down and explain each part.</p>
+<p>In this command we are combining 2 videos and 2 images into 1 video.</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash">ffmpeg <span class="token punctuation">\</span>
+<span class="token parameter variable">-loop</span> <span class="token number">1</span> <span class="token parameter variable">-t</span> <span class="token number">1</span> <span class="token parameter variable">-i</span> photo1.jpg <span class="token punctuation">\</span>
+<span class="token parameter variable">-t</span> <span class="token number">5</span> <span class="token parameter variable">-i</span> video1.mp4 <span class="token punctuation">\</span>
+<span class="token parameter variable">-loop</span> <span class="token number">1</span> <span class="token parameter variable">-t</span> <span class="token number">1</span> <span class="token parameter variable">-i</span> photo2.jpg <span class="token punctuation">\</span>
+<span class="token parameter variable">-t</span> <span class="token number">5</span> <span class="token parameter variable">-i</span> video2.mp4 <span class="token punctuation">\</span>
+<span class="token parameter variable">-f</span> lavfi <span class="token parameter variable">-t</span> <span class="token number">1</span> <span class="token parameter variable">-i</span> anullsrc <span class="token punctuation">\</span>
+<span class="token parameter variable">-filter_complex</span> <span class="token string">"\
+[0:v]scale=1080:-1,setsar=1,pad=1080:1920:0:(oh-ih)/2[v0];\
+[1:v]scale=1080:-1,setsar=1,pad=1080:1920:0:(oh-ih)/2[v1];\
+[2:v]scale=1080:-1,setsar=1,pad=1080:1920:0:(oh-ih)/2[v2];\
+[3:v]scale=1080:-1,setsar=1,pad=1080:1920:0:(oh-ih)/2[v3];\
+[v0][4:a][v1][1:a][v2][4:a][v3][3:a]concat=n=4:v=1:a=1[v][a]"</span> <span class="token punctuation">\</span>
+<span class="token parameter variable">-map</span> <span class="token string">"[v]"</span> <span class="token parameter variable">-map</span> <span class="token string">"[a]"</span> <span class="token string">"output.mp4"</span></code></pre>
+<p>Lets break this down.</p>
+<h3 id="part-1-the-inputs" tabindex="-1">Part 1: The Inputs <a class="header-anchor" href="#part-1-the-inputs">#</a></h3>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token parameter variable">-loop</span> <span class="token number">1</span> <span class="token parameter variable">-t</span> <span class="token number">1</span> <span class="token parameter variable">-i</span> photo1.jpg <span class="token punctuation">\</span>
+<span class="token parameter variable">-t</span> <span class="token number">5</span> <span class="token parameter variable">-i</span> video1.mp4 <span class="token punctuation">\</span>
+<span class="token parameter variable">-loop</span> <span class="token number">1</span> <span class="token parameter variable">-t</span> <span class="token number">1</span> <span class="token parameter variable">-i</span> photo2.jpg <span class="token punctuation">\</span>
+<span class="token parameter variable">-t</span> <span class="token number">5</span> <span class="token parameter variable">-i</span> video2.mp4 <span class="token punctuation">\</span>
+<span class="token parameter variable">-f</span> lavfi <span class="token parameter variable">-t</span> <span class="token number">1</span> <span class="token parameter variable">-i</span> anullsrc <span class="token punctuation">\</span></code></pre>
+<ul>
+<li><code>-loop &lt;duration&gt;</code> - (images only) continually loop the image for the duration <a href="https://ffmpeg.org/ffmpeg-formats.html#image2-1"><span title="documentation"><svg class="icon" aria-hidden="true"><use href="#fas-fa-book" xlink:href="#fas-fa-book"></use></svg><span class="visually-hidden">documentation</span></span></a></li>
+<li><code>-t &lt;duration&gt;</code> - &quot;When used as an input option (before <code>-i</code>), limit the duration of data read from the input file&quot; <a href="https://ffmpeg.org/ffmpeg.html#Main-options"><span title="documentation"><svg class="icon" aria-hidden="true"><use href="#fas-fa-book" xlink:href="#fas-fa-book"></use></svg><span class="visually-hidden">documentation</span></span></a>. In the case of a video input, only read the first 5 seconds of the video. For images, loop the images to 1 second.</li>
+<li><code>-i &lt;file&gt;</code> - the input (the file to use)</li>
+</ul>
+<p>This is one is a little different but it's important.</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token parameter variable">-f</span> lavfi <span class="token parameter variable">-t</span> <span class="token number">1</span> <span class="token parameter variable">-i</span> anullsrc</code></pre>
+<ul>
+<li><code>-f lavfi</code> - use the Libavfilter virtual input device <a href="https://ffmpeg.org/ffmpeg-devices.html#lavfi"><span title="documentation"><svg class="icon" aria-hidden="true"><use href="#fas-fa-book" xlink:href="#fas-fa-book"></use></svg><span class="visually-hidden">documentation</span></span></a></li>
+<li><code>-t 1</code> - for 1 second</li>
+<li><code>-i anullsrc</code> - creates a null audio source which generates silent audio frames <a href="https://ffmpeg.org/ffmpeg-filters.html#anullsrc"><span title="documentation"><svg class="icon" aria-hidden="true"><use href="#fas-fa-book" xlink:href="#fas-fa-book"></use></svg><span class="visually-hidden">documentation</span></span></a>. Since the final product is a video, we need an audio track to go along with the images.</li>
+</ul>
+<h3 id="part-2-the-filter-complex" tabindex="-1">Part 2: The -filter_complex <a class="header-anchor" href="#part-2-the-filter-complex">#</a></h3>
+<p>You'll see this repeated a few times:</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token punctuation">[</span><span class="token number">0</span>:v<span class="token punctuation">]</span>scale<span class="token operator">=</span><span class="token number">1080</span>:-1,setsar<span class="token operator">=</span><span class="token number">1</span>,pad<span class="token operator">=</span><span class="token number">1080</span>:1920:0:<span class="token punctuation">(</span>oh-ih<span class="token punctuation">)</span>/2<span class="token punctuation">[</span>v0<span class="token punctuation">]</span><span class="token punctuation">;</span></code></pre>
+<ul>
+<li><code>[0:v]</code> - Select the video input from the file at index 0 (this could be an image or a video)</li>
+<li><code>scale=1080:-1</code> - scales input to 1080px width. The <code>-1</code> means auto-calculate height. This keeps the aspect ratio of the input so it's not distorted.</li>
+<li><code>setsar=1</code> - sets the Sample Aspect Ratio (SAR) of a video to 1:1. This means that each pixel in the video is treated as a perfect square <a href="https://ffmpeg.org/ffmpeg-filters.html#setdar_002c-setsar"><span title="documentation"><svg class="icon" aria-hidden="true"><use href="#fas-fa-book" xlink:href="#fas-fa-book"></use></svg><span class="visually-hidden">documentation</span></span></a>.</li>
+<li><code>pad=1080:1920</code> - This helps set the output to exactly 1080x1920. By default it will fill with the color black and if an input doesn't cover the space, then this is what will give us the black bars. <a href="https://ffmpeg.org/ffmpeg-filters.html#pad-1"><span title="documentation"><svg class="icon" aria-hidden="true"><use href="#fas-fa-book" xlink:href="#fas-fa-book"></use></svg><span class="visually-hidden">documentation</span></span></a></li>
+<li><code>0:(oh-ih)/2</code> - the <code>x:y</code> coordinates of where to place the input within the 1080x1920 space.
+<ul>
+<li><code>0</code> - Since we always scale our inputs to 1080, we know the <code>x</code> position will always be 0.</li>
+<li><code>(oh-ih)/2</code> = <code>(output height - input height) / 2</code> - which is the calculation for the <code>y</code> position to get the input vertically centerd</li>
+</ul>
+</li>
+<li><code>[v0]</code> - label the output of this filter for further use in the filter chain.</li>
+</ul>
+<h3 id="part-3-the-concat-filter" tabindex="-1">Part 3: The concat filter <a class="header-anchor" href="#part-3-the-concat-filter">#</a></h3>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token punctuation">[</span>v0<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">4</span>:a<span class="token punctuation">]</span><span class="token punctuation">[</span>v1<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">1</span>:a<span class="token punctuation">]</span><span class="token punctuation">[</span>v2<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">4</span>:a<span class="token punctuation">]</span><span class="token punctuation">[</span>v3<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">3</span>:a<span class="token punctuation">]</span></code></pre>
+<p>This pairs the labeled video inputs with an audio. You'll notice that <code>[4:a]</code> is used twice. This is a reference to the silent audio track paired with an image input. Remember that we have 5 inputs, 4 files and the 5th one being the generated silent audio. <code>[4:a]</code> refers to that 5th audio input in our 0-indexed inputs array.</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token assign-left variable">concat</span><span class="token operator">=</span>n<span class="token operator">=</span><span class="token number">4</span>:v<span class="token operator">=</span><span class="token number">1</span>:a<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">[</span>v<span class="token punctuation">]</span><span class="token punctuation">[</span>a<span class="token punctuation">]</span></code></pre>
+<p>This is what concatenates multiple input streams.</p>
+<ul>
+<li><code>concat</code> - is the filter name. <a href="https://ffmpeg.org/ffmpeg-filters.html#concat"><span title="documentation"><svg class="icon" aria-hidden="true"><use href="#fas-fa-book" xlink:href="#fas-fa-book"></use></svg><span class="visually-hidden">documentation</span></span></a></li>
+<li><code>n=4</code> - specifies that four input segments will be concatenated.</li>
+<li><code>v=1</code> - indicates that one video stream will be in the output.</li>
+<li><code>a=1</code> - specifies that one audio stream will be in the output.</li>
+<li><code>[v][a]</code> are new labels for the output video and audio streams</li>
+</ul>
+<h3 id="part-4-map-to-output" tabindex="-1">Part 4: Map to output <a class="header-anchor" href="#part-4-map-to-output">#</a></h3>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token parameter variable">-map</span> <span class="token string">"[v]"</span> <span class="token parameter variable">-map</span> <span class="token string">"[a]"</span> <span class="token string">"output.mp4"</span></code></pre>
+<ul>
+<li><code>-map &quot;[v]&quot;</code> - selects the video stream labeled as <code>[v]</code> from the filter complex output.</li>
+<li><code>-map &quot;[a]&quot;</code> - selects the audio stream labeled as <code>[a]</code> from the filter complex output.</li>
+<li><code>&quot;output.mp4&quot;</code> - the name of our final output file</li>
+</ul>
+<h2 id="automate" tabindex="-1">Automate <a class="header-anchor" href="#automate">#</a></h2>
+<p>As you can see, the command for just 4 files is not very small. I had 124 files to handle. I wrote a Bash script to help me with this:</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<span class="token comment"># Usage: ./concat.sh &lt;folder> &lt;output_file></span>
+<span class="token comment"># Example: ./concat.sh /home/user/videos output.mp4</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">"<span class="token variable">$#</span>"</span> <span class="token parameter variable">-ne</span> <span class="token number">2</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">"Usage: <span class="token variable">$0</span> &lt;folder> &lt;output_file>"</span>
+    <span class="token builtin class-name">exit</span> <span class="token number">1</span>
+<span class="token keyword">fi</span>
+
+<span class="token assign-left variable">folder</span><span class="token operator">=</span><span class="token variable">$1</span>
+<span class="token assign-left variable">output_file</span><span class="token operator">=</span><span class="token variable">$2</span>
+
+<span class="token assign-left variable">inputs</span><span class="token operator">=</span><span class="token string">""</span>
+<span class="token assign-left variable">filter_complex</span><span class="token operator">=</span><span class="token string">""</span>
+<span class="token assign-left variable">concat_filter</span><span class="token operator">=</span><span class="token string">""</span>
+<span class="token assign-left variable">index</span><span class="token operator">=</span><span class="token number">0</span>
+
+<span class="token assign-left variable">jpegCount</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">find</span> <span class="token string">"<span class="token variable">$folder</span>"</span> <span class="token parameter variable">-type</span> f <span class="token parameter variable">-name</span> <span class="token string">"*.jpg"</span> <span class="token operator">|</span> <span class="token function">wc</span> <span class="token parameter variable">-l</span><span class="token variable">)</span></span>
+<span class="token assign-left variable">mp4Count</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">find</span> <span class="token string">"<span class="token variable">$folder</span>"</span> <span class="token parameter variable">-type</span> f <span class="token parameter variable">-name</span> <span class="token string">"*.mp4"</span> <span class="token operator">|</span> <span class="token function">wc</span> <span class="token parameter variable">-l</span><span class="token variable">)</span></span>
+
+<span class="token comment"># count all the files because this will be used as the index for the silent audio</span>
+<span class="token assign-left variable">totalFiles</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$((</span>jpegCount <span class="token operator">+</span> mp4Count<span class="token variable">))</span></span>
+<span class="token builtin class-name">echo</span> <span class="token string">"Total files: <span class="token variable">$totalFiles</span>"</span>
+
+<span class="token keyword">for</span> <span class="token for-or-select variable">file</span> <span class="token keyword">in</span> <span class="token string">"<span class="token variable">$folder</span>"</span>/*<span class="token punctuation">;</span> <span class="token keyword">do</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token variable">$file</span> <span class="token operator">==</span> *.jpg <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token assign-left variable">inputs</span><span class="token operator">+=</span><span class="token string">"-loop 1 -t 1 -i <span class="token variable">$file</span> "</span>
+        <span class="token assign-left variable">concat_filter</span><span class="token operator">+=</span><span class="token string">"[v<span class="token variable">$index</span>][<span class="token variable">$totalFiles</span>:a]"</span> <span class="token comment"># [$totalFiles:a] is the silent audio</span>
+    <span class="token keyword">elif</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token variable">$file</span> <span class="token operator">==</span> *.mp4 <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token assign-left variable">inputs</span><span class="token operator">+=</span><span class="token string">"-t 5 -i <span class="token variable">$file</span> "</span>
+        <span class="token assign-left variable">concat_filter</span><span class="token operator">+=</span><span class="token string">"[v<span class="token variable">$index</span>][<span class="token variable">$index</span>:a]"</span>
+    <span class="token keyword">fi</span>
+    <span class="token assign-left variable">filter_complex</span><span class="token operator">+=</span><span class="token string">"[<span class="token variable">$index</span>:v]scale=1080:-1,setsar=1,pad=1080:1920:0:(oh-ih)/2[v<span class="token variable">$index</span>];"</span>
+    <span class="token assign-left variable">index</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$((</span>index <span class="token operator">+</span> <span class="token number">1</span><span class="token variable">))</span></span>
+<span class="token keyword">done</span>
+
+<span class="token comment"># Add silent audio for the images</span>
+<span class="token assign-left variable">inputs</span><span class="token operator">+=</span><span class="token string">"-f lavfi -t 1 -i anullsrc=channel_layout=stereo:sample_rate=44100 "</span>
+
+<span class="token comment"># Concatenate all video streams</span>
+<span class="token assign-left variable">concat_filter</span><span class="token operator">+=</span><span class="token string">"concat=n=<span class="token variable">$index</span>:v=1:a=1[v][a]"</span>
+
+ffmpeg <span class="token variable">$inputs</span> <span class="token parameter variable">-filter_complex</span> <span class="token string">"<span class="token variable">$filter_complex</span> <span class="token variable">$concat_filter</span>"</span> <span class="token parameter variable">-map</span> <span class="token string">"[v]"</span> <span class="token parameter variable">-map</span> <span class="token string">"[a]"</span> <span class="token string">"<span class="token variable">$output_file</span>"</span></code></pre>
+<p>That's it! Hope you found this useful and hope I didn't get anything too glaringly wrong. This script worked perfectly for me, but I'm sure there's probably even better and more concise ways of doing it.</p>
+
+      </main>
+
+      <!-- outputs all the icons used on the page -->
+      <svg style="display: none;"><symbol aria-hidden="true" focusable="false" data-prefix="fas" data-icon="book" class="svg-inline--fa fa-book" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" id="fas-fa-book"><path fill="currentColor" d="M96 0C43 0 0 43 0 96L0 416c0 53 43 96 96 96l288 0 32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-64c17.7 0 32-14.3 32-32l0-320c0-17.7-14.3-32-32-32L384 0 96 0zm0 384l256 0 0 64L96 448c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16zm16 48l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16s7.2-16 16-16z"></path></symbol></svg>
+
+      <footer>
+        <p>
+          &copy; Francisco G. 2025
+        </p>
+      </footer>
+    </div>
+		<!-- Current page: /blog/ffmpeg/ -->
+    
+
+    <script>
+      // quick fix for theme switch
+      window.ColorTheme.reflectPreference();
+    </script>
+	</body>
+</html>

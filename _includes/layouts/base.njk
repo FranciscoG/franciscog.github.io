@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="{{ metadata.language }}">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>{{ title or metadata.title }}</title>
+		<meta name="description" content="{{ description or metadata.description }}">
+
+		{#- Atom and JSON feeds included by default #}
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="{{ metadata.title }}">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title="{{ metadata.title }}">
+
+		<meta name="generator" content="{{ eleventy.generator }}">
+    <script src="/js/theme-switcher.js"></script>
+
+		{%- css %}{% include "public/css/index.css" %}{% endcss %}
+    {# I have commented out the prism css because it's no conditionally added to pages that have syntax on it #}
+		{# {%- css %}{% include "node_modules/prismjs/themes/prism-okaidia.css" %}{% endcss %} #}
+
+		{#- Render the CSS bundle using Inlined CSS (for the fastest site performance in production) #}
+		<style>{% getBundle "css" %}</style>
+		{#- Renders the CSS bundle using a separate file, if you can't set CSP directive style-src: 'unsafe-inline' #}
+		{#- <link rel="stylesheet" href="{% getBundleFileUrl "css" %}"> #}
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+    <div id="page">
+
+      <header>
+        <a href="/" class="home-link">{{ metadata.title }}</a>
+        {#- Read more about `eleventy-navigation` at https://www.11ty.dev/docs/plugins/navigation/ #}
+        <nav>
+          <h2 class="visually-hidden">Top level navigation menu</h2>
+          <ul class="nav">
+          {%- for entry in collections.all | eleventyNavigation %}
+            <li class="nav-item"><a href="{{ entry.url }}"{% if entry.url == page.url %} aria-current="page"{% endif %}>{{ entry.title }}</a></li>
+          {%- endfor %}
+
+           <li class="nav-item nav-item-feed">
+              <a href="/feed/feed.xml">
+                Feed
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <label class="color-theme-picker">
+          Color Scheme
+          <select id="color-scheme-select">
+            <option value="auto">System Preference</option>
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+          </select>
+        </label>
+      </header>
+
+      <main id="skip">
+        {{ content | safe }}
+      </main>
+
+      <!-- outputs all the icons used on the page -->
+      {% getBundle "fontawesome" %}
+
+      <footer>
+        <p>
+          &copy; {{ metadata.title }} {{ "" | year }}
+        </p>
+      </footer>
+    </div>
+		<!-- Current page: {{ page.url | htmlBaseUrl }} -->
+    <script>{% getBundle "js" %}</script>
+
+    <script>
+      // quick fix for theme switch
+      window.ColorTheme.reflectPreference();
+    </script>
+	</body>
+</html>
