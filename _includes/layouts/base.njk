@@ -57,6 +57,9 @@
         {{ content | safe }}
       </main>
 
+      <!-- outputs all the icons used on the page -->
+      {% getBundle "fontawesome" %}
+
       <footer>
         <p>
           &copy; {{ metadata.title }} {{ year }}
