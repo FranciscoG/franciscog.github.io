@@ -8,13 +8,11 @@
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="Francisco G.">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="Francisco G.">
 
-		<meta name="generator" content="Eleventy v2.0.1">
-    <script defer src="/js/theme-switcher.js"></script>
+		<meta name="generator" content="Eleventy v3.0.1">
+    <script src="/js/theme-switcher.js"></script>
     
 		
 		<style>/* Defaults */
-@import "https://unpkg.com/open-props/easings.min.css";
-
 :root {
 	--font-family: -apple-system, system-ui, sans-serif;
 	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono,
@@ -36,9 +34,24 @@
 	--text-color-link-active: #5f2b48;
 	--text-color-link-visited: #17050f;
 
+	--code-bg-color: var(--color-gray-20);
+
 	--syntax-tab-size: 2;
 }
-
+@media (prefers-color-scheme: dark) {
+	html:not([data-theme="light"]) {
+		--color-gray-90: #dad8d8;
+		--text-color: var(--color-gray-90);
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+	
+		--background-color: #15202b;
+	
+		--code-bg-color: #272822;
+	}
+}
 html[data-theme="dark"] {
 	--color-gray-90: #dad8d8;
 	--text-color: var(--color-gray-90);
@@ -48,6 +61,8 @@ html[data-theme="dark"] {
 	--text-color-link-visited: #a6a6f8;
 
 	--background-color: #15202b;
+
+	--code-bg-color: #272822;
 }
 
 /* Global stylesheet */
@@ -210,6 +225,7 @@ nav {
 	padding: 0;
 	margin: 0;
 	list-style: none;
+	align-items: center;
 }
 .nav-item {
 	display: inline-block;
@@ -231,8 +247,10 @@ nav {
 .nav-item-theme {
 	margin-left: auto;
 }
-.dark-mode-checkbox {
-
+.color-theme-picker {
+	font-size: 0.8rem;
+	width: 140px;
+	display: block;
 }
 
 /* Posts list */
@@ -325,6 +343,13 @@ pre[class*="language-"] {
 	font-size: 0.875rem;
 }
 
+/* inline code blocks */
+code:not([class]) {
+	background-color: var(--code-bg-color);
+	padding: 0.1em 0.3em;
+	border-radius: 0.2em;
+}
+
 .sidenote {
 	padding: 20px;
 	background-color: rgba(0, 0, 0, 0.2);
@@ -364,16 +389,16 @@ pre[class*="language-"] {
                 Feed
               </a>
             </li>
-
-            <li class="nav-item nav-item-theme">
-              <label for="theme-toggle" class="dark-mode-checkbox">
-                Dark Mode
-                <input type="checkbox" role="switch" id="theme-toggle">
-              </label>
-
-            </li>
           </ul>
         </nav>
+        <label class="color-theme-picker">
+          Color Scheme
+          <select id="color-scheme-select">
+            <option value="auto">System Preference</option>
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+          </select>
+        </label>
       </header>
 
       <main id="skip">
@@ -394,18 +419,21 @@ This will work for both GitHub pages and Netlify:
 
       </main>
 
+      <!-- outputs all the icons used on the page -->
+      
+
       <footer>
         <p>
-          &copy; Francisco G. 
+          &copy; Francisco G. 2025
         </p>
       </footer>
     </div>
 		<!-- Current page: /404.html -->
-    <script></script>
+    
 
     <script>
       // quick fix for theme switch
-      window.themeToggle.reflectPreference();
+      window.ColorTheme.reflectPreference();
     </script>
 	</body>
 </html>
