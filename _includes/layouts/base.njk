@@ -41,16 +41,16 @@
                 Feed
               </a>
             </li>
-
-            <li class="nav-item nav-item-theme">
-              <label for="theme-toggle" class="dark-mode-checkbox">
-                Dark Mode
-                <input type="checkbox" role="switch" id="theme-toggle">
-              </label>
-
-            </li>
           </ul>
         </nav>
+        <label class="color-theme-picker">
+          Color Scheme
+          <select id="color-scheme-select">
+            <option value="auto">System Preference</option>
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+          </select>
+        </label>
       </header>
 
       <main id="skip">
@@ -71,7 +71,7 @@
 
     <script>
       // quick fix for theme switch
-      window.themeToggle.reflectPreference();
+      window.ColorTheme.reflectPreference();
     </script>
 	</body>
 </html>
