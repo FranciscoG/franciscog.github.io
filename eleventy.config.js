@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import markdownItAnchor from "markdown-it-anchor";
 import markdownItFootnote from "markdown-it-footnote";
-
+import fontAwesomePlugin from "@11ty/font-awesome";
 import pluginRss from "@11ty/eleventy-plugin-rss";
 import pluginSyntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 import pluginBundle from "@11ty/eleventy-plugin-bundle";
@@ -41,10 +41,15 @@ export default function (eleventyConfig) {
 	eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
 	eleventyConfig.addPlugin(pluginBundle);
 	eleventyConfig.addPlugin(EleventyRenderPlugin);
+	eleventyConfig.addPlugin(fontAwesomePlugin);
 	// eleventyConfig.addPlugin(pluginWebc, {
 	// 	components: "./_components/**/*.webc",
 	// });
 	// eleventyConfig.addPlugin(UpgradeHelper);
+
+	eleventyConfig.addShortcode("icon", function (icon, a11yText) {
+		return `<span title="${a11yText}"><i class="${icon} icon" aria-hidden="true"></i><span class="visually-hidden">${a11yText}</span></span>`;
+	});
 
 	eleventyConfig.addFilter(
 		"getNewestCollectionItemDate",
