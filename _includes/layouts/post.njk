@@ -1,11 +1,11 @@
 ---
 layout: layouts/base.njk
 ---
-{%- if syntax %}
-{# Only include the syntax highlighter CSS on blog posts #}
-{%- css %}{% include "node_modules/prismjs/themes/prism-okaidia.css" %}{% endcss %}
-{%- css %}{% include "public/css/prism-diff.css" %}{%- endcss %}
-{%- endif %}
+{%- if syntax -%}
+{# Only include the syntax highlighter CSS on blog posts that ask for it #}
+{%- css %}{% include "node_modules/prismjs/themes/prism-okaidia.css" %}{% endcss -%}
+{%- css %}{% include "public/css/prism-diff.css" %}{% endcss -%}
+{%- endif -%}
 <h1>{{ title }}</h1>
 
 <ul class="post-metadata">
@@ -15,6 +15,9 @@ layout: layouts/base.njk
 	<li><a href="{{ tagUrl }}" class="post-tag">{{ tag }}</a>{%- if not loop.last %}, {% endif %}</li>
 	{%- endfor %}
 </ul>
+	{% if updated %}
+		<p class="post-updated"><b>Updated:</b>&nbsp;<time datetime="{{ updated | htmlDateString }}">{{ updated | readableDate }}</time></p>
+	{% endif %}
 
 {{ content | safe }}
 
