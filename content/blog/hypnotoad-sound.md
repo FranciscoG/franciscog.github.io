@@ -1,8 +1,10 @@
 ---
 title: Recreating the Hypnotoad Sound with JS
 date: 2025-03-16
-draft: true
 syntax: true
+tags:
+  - js
+	- p5
 ---
 
 Not long ago I came across this [blog post](https://keliris.dev/articles/deep-note), via [Reddit](https://www.reddit.com/r/javascript/comments/1dywp7x/recreating_the_thx_deep_note_in_javascript/), about how someone recreated THX’s signature [“Deep Note”](https://en.wikipedia.org/wiki/Deep_Note) sound using Javascript. It reminded me of a similar project I worked on which involves recreating another well known signature sound from popular culture, Futurama’s Hypnotoad sound, which actually has a name: “Angry Machine"
