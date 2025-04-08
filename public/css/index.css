@@ -375,3 +375,7 @@ code:not([class]) {
 .visually-hidden-focusable:not(:focus):not(:focus-within):not(caption) {
 	position: absolute !important;
 }
+
+p > code {
+	word-break: keep-all;
+}
