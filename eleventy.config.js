@@ -7,12 +7,8 @@ import pluginSyntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 import pluginBundle from "@11ty/eleventy-plugin-bundle";
 import pluginNavigation from "@11ty/eleventy-navigation";
 import { EleventyHtmlBasePlugin, EleventyRenderPlugin } from "@11ty/eleventy";
-// import pluginWebc from "@11ty/eleventy-plugin-webc";
-
 import pluginDrafts from "./eleventy.config.drafts.js";
 import pluginImages from "./eleventy.config.images.js";
-
-// import UpgradeHelper from "@11ty/eleventy-upgrade-help";
 
 export default function (eleventyConfig) {
 	// Copy the contents of the `public` folder to the output folder
@@ -42,10 +38,6 @@ export default function (eleventyConfig) {
 	eleventyConfig.addPlugin(pluginBundle);
 	eleventyConfig.addPlugin(EleventyRenderPlugin);
 	eleventyConfig.addPlugin(fontAwesomePlugin);
-	// eleventyConfig.addPlugin(pluginWebc, {
-	// 	components: "./_components/**/*.webc",
-	// });
-	// eleventyConfig.addPlugin(UpgradeHelper);
 
 	eleventyConfig.addShortcode("icon", function (icon, a11yText) {
 		return `<span title="${a11yText}"><i class="${icon} icon" aria-hidden="true"></i><span class="visually-hidden">${a11yText}</span></span>`;
