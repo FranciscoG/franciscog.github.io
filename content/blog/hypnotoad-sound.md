@@ -1,5 +1,5 @@
 ---
-title: Recreating the Hypnotoad Sound with JS
+title: Recreating the Hypnotoad Sound with JavaScript
 date: 2025-03-16
 syntax: true
 tags:
