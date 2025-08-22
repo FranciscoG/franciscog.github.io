@@ -5,7 +5,7 @@
 		Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono,
 		Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New,
 		Courier, monospace;
-	
+
 	--max-width: 1000px;
 
 	--color-gray-20: #e0e0e0;
@@ -13,6 +13,7 @@
 	--color-gray-90: #333;
 
 	--background-color: #fff;
+	--bg-alpha: rgba(0, 0, 0, 0.2);
 
 	--text-color: var(--color-gray-90);
 	--text-color-link: #082840;
@@ -35,6 +36,7 @@
 		--text-color-link-visited: #a6a6f8;
 		--background-color: #15202b;
 		--code-bg-color: #272822;
+		--bg-alpha: rgba(100, 100, 100, 0.2);
 	}
 }
 html[data-theme="dark"] {
@@ -45,6 +47,7 @@ html[data-theme="dark"] {
 	--text-color-link-visited: #a6a6f8;
 	--background-color: #15202b;
 	--code-bg-color: #272822;
+	--bg-alpha: rgba(100, 100, 100, 0.2);
 }
 
 .color-theme-picker {
@@ -87,13 +90,13 @@ html,
 body {
 	padding: 0;
 	margin: 0;
-	font-family: var(--font-family);
-	font-size: 18px;
 }
 html {
 	overflow-y: scroll;
 }
 body {
+	font-family: var(--font-family);
+	font-size: 18px;
 	line-height: 1.75;
 	min-height: 100vh;
 }
@@ -114,17 +117,6 @@ footer {
 	max-width: var(--max-width);
 	margin-left: auto;
 	margin-right: auto;
-}
-
-/* https://www.a11yproject.com/posts/how-to-hide-content/ */
-.visually-hidden {
-	clip: rect(0 0 0 0);
-	clip-path: inset(50%);
-	height: 1px;
-	overflow: hidden;
-	position: absolute;
-	white-space: nowrap;
-	width: 1px;
 }
 
 p:last-child {
@@ -160,11 +152,6 @@ main :first-child {
 
 header {
 	border-bottom: 1px dashed var(--color-gray-20);
-}
-header:after {
-	content: "";
-	display: table;
-	clear: both;
 }
 
 .links-nextprev {
@@ -355,9 +342,74 @@ code:not([class]) {
 	border-radius: 0.2em;
 }
 
+/***************************************
+ Post styles
+ */
+.post {
+	/* 
+	  clear all bottom margins because we only
+		want to space in one direction (I chose top)
+    because it prevents dealing with collapsing
+		margins
+	*/
+	* {
+		margin-bottom: 0;
+	}
+
+	/* Basic markdown elements */
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		margin-top: 2.5rem;
+		line-height: 1.2;
+	}
+
+	h1 {
+		font-size: 2rem;
+	}
+
+	ol,
+	ul,
+	pre {
+		margin-top: 1em;
+	}
+
+	aside {
+		padding: 1.5rem;
+		margin: 1rem 0;
+		background-color: var(--bg-alpha);
+	}
+
+	/* 
+	code {}
+	li {}
+	ol li {}
+	ul li {}
+	blockquote {}
+	blockquote p {}
+	hr {}
+	a {}
+  img {} */
+}
+
 .sidenote {
 	padding: 20px;
 	background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
 }
 
 .visually-hidden,
@@ -378,4 +430,64 @@ code:not([class]) {
 
 p > code {
 	word-break: keep-all;
+}
+
+demo-component {
+	display: block;
+	margin-top: 1rem;
+	border: 1px solid #666;
+	padding: 40px;
+	background: linear-gradient(to bottom, #222, #333);
+}
+
+.demo-inner {
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	border: 1px solid #666;
+	background-color: #fff;
+	color: #000;
+}
+
+.browser-header {
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	background-color: #f1f1f1;
+	padding: 10px;
+	display: flex;
+	position: relative;
+	border-bottom: 1px solid #ccc;
+}
+
+.browser-header::before,
+.browser-header::after {
+	content: "";
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	position: absolute;
+	top: 5px;
+}
+.browser-header::before {
+	left: 10px;
+	background-color: #ff5f56;
+}
+.browser-header::after {
+	left: 30px;
+	background-color: #27c93f;
+}
+
+.demo-load-btn {
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	padding: 10px 15px;
+	margin: 0 auto;
+	cursor: pointer;
+	transition: background-color 0.3s;
+	display: block;
+}
+
+.demo-load-btn:hover {
+	background-color: #0056b3;
 }
