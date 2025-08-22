@@ -1,7 +1,6 @@
 ---
 title: Experiments in HTML includes
 date: 2025-08-22
-draft: true
 syntax: true
 ---
 
