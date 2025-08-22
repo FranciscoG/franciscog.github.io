@@ -1,0 +1,104 @@
+<style>
+	/* Base styles repeated from the main index.css file */
+	:root {
+		--font-family: -apple-system, system-ui, sans-serif;
+		--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT,
+			Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono,
+			Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New,
+			Courier, monospace;
+
+		--max-width: 1000px;
+
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #c0c0c0;
+		--color-gray-90: #333;
+
+		--background-color: #fff;
+
+		--text-color: var(--color-gray-90);
+		--text-color-link: #082840;
+		--text-color-link-active: #5f2b48;
+		--text-color-link-visited: #17050f;
+
+		--code-bg-color: var(--color-gray-20);
+
+		--syntax-tab-size: 2;
+	}
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+	html,
+	body {
+		padding: 0;
+		margin: 0;
+	}
+	html {
+		overflow-y: scroll;
+	}
+	body {
+		font-family: var(--font-family);
+		font-size: 18px;
+		line-height: 1.75;
+		min-height: 100vh;
+	}
+	a[href] {
+		color: var(--text-color-link);
+	}
+	a[href]:visited {
+		color: var(--text-color-link-visited);
+	}
+	a[href]:hover,
+	a[href]:active {
+		color: var(--text-color-link-active);
+	}
+
+	/* Header styles unique to this component */
+	header {
+		border-bottom: 1px dashed var(--color-gray-20);
+	}
+	header,
+	.demo-footer {
+		padding: 1rem;
+		margin: 0;
+	}
+	.demo-content {
+		padding: 1rem;
+		margin: 0;
+	}
+	header {
+		padding: 10px;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 50px;
+		align-items: center;
+	}
+	header .h1 {
+		font-size: 1.4rem;
+	}
+	header nav ul {
+		list-style-type: none;
+		display: flex;
+		gap: 20px;
+		align-items: center;
+		padding: 0;
+		margin: 0;
+	}
+	@media screen and (max-width: 512px) {
+		header {
+			gap: 10px;
+		}
+	}
+</style>
+<header>
+	<span class="h1">My Header</span>
+	<nav>
+		<ul>
+			<li><a href="/" target="_top">Home</a></li>
+			<li><a href="/" target="_top">Lorem</a></li>
+			<li><a href="/" target="_top">Ipsum</a></li>
+		</ul>
+	</nav>
+</header>
+<script>console.log('The header with css has loaded');</script>
