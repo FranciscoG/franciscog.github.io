@@ -43,6 +43,10 @@ export default function (eleventyConfig) {
 		return `<span title="${a11yText}"><i class="${icon} icon" aria-hidden="true"></i><span class="visually-hidden">${a11yText}</span></span>`;
 	});
 
+	eleventyConfig.addShortcode("externalLink", function (href, text) {
+		return `<a href="${href}" target="_blank" rel="noopener">${text || href}</a>`;
+	});
+
 	eleventyConfig.addFilter(
 		"getNewestCollectionItemDate",
 		pluginRss.getNewestCollectionItemDate
@@ -111,6 +115,27 @@ export default function (eleventyConfig) {
 			slugify: eleventyConfig.getFilter("slugify"),
 		});
 		mdLib.use(markdownItFootnote);
+
+		// Remember the old renderer if overridden, or proxy to the default renderer.
+		const defaultRender =
+			mdLib.renderer.rules.link_open ||
+			function (tokens, idx, options, env, self) {
+				return self.renderToken(tokens, idx, options);
+			};
+
+		mdLib.renderer.rules.link_open = function (
+			tokens,
+			idx,
+			options,
+			env,
+			self
+		) {
+			// Add a new `target` attribute, or replace the value of the existing one.
+			tokens[idx].attrSet("target", "_blank");
+
+			// Pass the token to the default renderer.
+			return defaultRender(tokens, idx, options, env, self);
+		};
 	});
 
 	// Features to make your build faster (when you need them)
