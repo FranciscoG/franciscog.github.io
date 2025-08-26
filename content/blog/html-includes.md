@@ -306,7 +306,6 @@ iframe#demo-with-css { border: none; width: 100%; height: 60px; }
 	}
 }
 .demo-header, .demo-footer { padding: 1rem; margin: 0; }
-.demo-content { padding: 1rem; margin: 0;}
 .demo-header {
 	padding: 10px;
 	display: flex;
