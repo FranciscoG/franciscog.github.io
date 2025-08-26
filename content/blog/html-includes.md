@@ -2,6 +2,11 @@
 title: Experiments in HTML includes
 date: 2025-08-22
 syntax: true
+tags:
+  - js
+  - html
+  - Custom Elements
+  - HTML Includes
 ---
 
 I was curious to see what could be done today to create a site without any server side code, no build process, but still allow you to modularize parts of your layout. I'm certainly not the first one to write about this but I wanted to use this post as means to getting more familiar with the various options.
