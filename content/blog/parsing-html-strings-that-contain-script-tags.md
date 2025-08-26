@@ -2,6 +2,11 @@
 title: Parsing HTML strings that contain script tags
 date: 2025-08-26
 syntax: true
+tags:
+  - js
+  - html
+  - Custom Elements
+  - HTML Includes
 ---
 
 In my [last post](/blog/html-includes/) I experimented with some ways to implement HTML includes with the technology available in browsers today. In that post I created a Custom Element that would fetch the HTML from a URL and inject that into the DOM. One of the things you might expect to happen during this process is if the HTML contained a `<script>` tag, it _should_ immediately (or eventually if it was deferred or async) evaluate that script upon insertion. Turns out that not all ways of parsing HTML strings containing script tags will execute scripts, in fact there's only 1 method that will excute them out of the box.
