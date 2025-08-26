@@ -37,7 +37,7 @@ class DemoComponent extends HTMLElement {
 			<div class="demo-inner">
 				${this.header}
 				<div class="demo-content demo-delay-start">
-					<button class="demo-load-btn" type="button">Load Demo Content</button>
+					<button class="demo-load-btn" type="button">Run Demo</button>
 				</div>
 			</div>`;
 
