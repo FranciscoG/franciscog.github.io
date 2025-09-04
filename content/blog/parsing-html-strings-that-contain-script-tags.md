@@ -1,6 +1,7 @@
 ---
 title: Parsing HTML strings that contain script tags
 date: 2025-08-26
+updated: 2025-09-04
 syntax: true
 tags:
   - js
@@ -94,6 +95,9 @@ class CustomInclude extends HTMLElement {
 				for (const child of tempDiv.childNodes) {
 					frag.appendChild(child);
 				}
+
+				let scriptOnlyProperties;
+
 				// scripts created using `createElement` will be evaluated
 				// upon insertion into the DOM so we just need to go through
 				// all of the scripts in the documentFragment and replace them
@@ -101,17 +105,18 @@ class CustomInclude extends HTMLElement {
 				Array.from(frag.querySelectorAll("script")).forEach((oldScript) => {
 					const newScript = document.createElement("script");
 
-					for (const prop in oldScript) {
-						// hasOwn/getOwnPropertyNames/hasOwnProperty don't work on native elements
-						// so we just compare it to a plain div and we can get the script 
-						// only properties
-						if (!(prop in tempDiv) && prop !== 'text') {
-							if (oldScript[prop]) newScript[prop]
-						}
+					if (!scriptOnlyProperties) {
+						// get only HTMLScriptElement properties, not the inherited ones 
+						// from HTMLElement. We don't need the constructor either.
+						scriptOnlyProperties = Object.getOwnPropertyNames(
+							Object.getPrototypeOf(newScript)
+						).filter((prop) => prop !== "constructor");
 					}
 
-					if (oldScript.textContent) {
-						newScript.textContent = oldScript.textContent;
+					for (const prop in scriptOnlyProperties) {
+						// one of the properties of a script element is .text which will
+						// be the code in the script if it has any
+						if (oldScript[prop]) newScript[prop] = oldScript[prop];
 					}
 
 					oldScript.parentElement.replaceChild(newScript, oldScript);
@@ -274,10 +279,20 @@ Source: [8.5.7 The createContextualFragment() method](<https://html.spec.whatwg.
 
 What I'm not sure about is why the working group decided that `createContextualFragment` is the method that will execute scripts. Apparently it was originally an undocumented API that some libraries used (mainly PrototypeJS). I found some discussion about it here: [https://bugzilla.mozilla.org/show_bug.cgi?id=599588](https://bugzilla.mozilla.org/show_bug.cgi?id=599588). There was some disagreement and then they had an offline voice discussion and all agreed that scripts should be runnable. 🤷‍♂️
 
+### Update
+
+Fixed error and improved code in one of the code samples
+
 {% js %}
 
 <script src="/js/demo-component.js"></script>
 <script>
+	function getScriptOnlyProperties() {
+		const tempScript = document.createElement('script');
+		return Object.getOwnPropertyNames(Object.getPrototypeOf(tempScript))
+		  .filter(prop => prop !== 'constructor')
+	}
+	const scriptProps = getScriptOnlyProperties();
 	class CustomIncludeInner extends HTMLElement {
 		constructor() {
 			super();
@@ -313,13 +328,9 @@ What I'm not sure about is why the working group decided that `createContextualF
 				}
 				Array.from(frag.querySelectorAll('script')).forEach(oldScript => {
 					const newScript = document.createElement('script');
-					for (const prop in oldScript) {
-						if (!(prop in tempDiv) && prop !== 'text') {
-							// HTMLScriptElement instance properties only
-							console.log('HTMLScriptElement', prop, '=', oldScript[prop])
-						}
+					for (const prop of scriptProps) {
+						if (oldScript[prop]) newScript[prop] = oldScript[prop]
 					}
-					newScript.textContent = oldScript.textContent;
 					oldScript.parentElement.replaceChild(newScript, oldScript);
 				});
 				this.appendChild(frag)
