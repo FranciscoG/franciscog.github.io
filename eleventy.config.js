@@ -47,6 +47,10 @@ export default function (eleventyConfig) {
 		return `<a href="${href}" target="_blank" rel="noopener">${text || href}</a>`;
 	});
 
+	eleventyConfig.addShortcode("clr", function (colorHex) {
+		return `<span class="color-block" style="background-color: ${colorHex};"></span>`;
+	});
+
 	eleventyConfig.addFilter(
 		"getNewestCollectionItemDate",
 		pluginRss.getNewestCollectionItemDate
