@@ -1,7 +1,6 @@
 ---
 title: Bikeshedding
-date: 
-draft: true
+date: 2025-09-18
 syntax: true
 ---
 
