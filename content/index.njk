@@ -9,7 +9,8 @@ numberOfLatestPostsToShow: 10
 {% set latestPostsCount = postsCount | min(numberOfLatestPostsToShow) %}
 <h1>Latest Post{% if latestPostsCount != 1 %}s{% endif %}</h1>
 
-{% set postslist = collections.posts | head(-1 * numberOfLatestPostsToShow) %}
+{# take all posts, sort all drafts to the end, take the latest 10 #}
+{% set postslist = collections.posts | sortDrafts | head(-1 * numberOfLatestPostsToShow) %}
 {% set postslistCounter = postsCount %}
 {% include "postslist.njk" %}
 

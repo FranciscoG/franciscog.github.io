@@ -16,5 +16,6 @@ _site/
 node_modules/
 
 DRAFT-*.md
+content/drafts/*.md
 
 docs/
