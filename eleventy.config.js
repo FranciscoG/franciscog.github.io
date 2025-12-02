@@ -106,6 +106,23 @@ export default function (eleventyConfig) {
 		);
 	});
 
+	// this filter moves all drafts up to the top of the list
+	eleventyConfig.addFilter("sortDrafts", (collection) => {
+		return collection.sort((a, b) => {
+			if (a.data.tags && a.data.tags.includes("drafts")) {
+				return 1;
+			} else if (b.data.tags && b.data.tags.includes("drafts")) {
+				return -1;
+			}
+			return 0;
+		});
+	});
+
+	// 11ty by default reads your .gitignore and ignores files listed there.
+	// I turned it off because it was ignoring my drafts folder.
+	// https://www.11ty.dev/docs/ignores/
+	eleventyConfig.setUseGitIgnore(false);
+
 	// Customize Markdown library settings:
 	eleventyConfig.amendLibrary("md", (mdLib) => {
 		mdLib.use(markdownItAnchor, {

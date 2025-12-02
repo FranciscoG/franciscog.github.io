@@ -7,30 +7,36 @@ layout: layouts/base.njk
 {%- css %}{% include "public/css/prism-diff.css" %}{% endcss -%}
 {%- endif -%}
 <article class="post">
-<h1>{{ title }}</h1>
 
-<ul class="post-metadata">
-	<li><time datetime="{{ page.date | htmlDateString }}">{{ page.date | readableDate }}</time></li>
-	{%- for tag in tags | filterTagList %}
-	{%- set tagUrl %}/tags/{{ tag | slugify }}/{% endset %}
-	<li><a href="{{ tagUrl }}" class="post-tag">{{ tag }}</a>{%- if not loop.last %}, {% endif %}</li>
-	{%- endfor %}
-</ul>
-	{% if updated %}
-		<p class="post-updated"><b>Updated:</b>&nbsp;<time datetime="{{ updated | htmlDateString }}">{{ updated | readableDate }}</time></p>
-	{% endif %}
-
-{{ content | safe }}
+	<header class="post-header">
+		{%- if tags.includes("drafts") %}
+			<h2 class="post-draft">DRAFT</h2>
+		{%- endif %}
+		<h1>{{ title }}</h1>
+		<ul class="post-metadata">
+			<li class="post-date"><time datetime="{{ page.date | htmlDateString }}">{{ page.date | readableDate }}</time></li>
+			{% if updated %}
+			<li class="post-updated"><b>Updated:</b>&nbsp;<time datetime="{{ updated | htmlDateString }}">{{ updated | readableDate }}</time></li>
+			{% endif %}
+			{%- for tag in tags | filterTagList %}
+			{%- set tagUrl %}/tags/{{ tag | slugify }}/{% endset %}
+			<li class="post-tag"><a href="{{ tagUrl }}" class="post-tag-link">{{ tag }}</a>{%- if not loop.last %}, {% endif %}</li>
+			{%- endfor %}
+		</ul>
+	</header>
+	<div class="post-content">
+		{{ content | safe }}
+	</div>
 
 </article>
 
 {%- if collections.posts %}
-{%- set previousPost = collections.posts | getPreviousCollectionItem %}
-{%- set nextPost = collections.posts | getNextCollectionItem %}
-{%- if nextPost or previousPost %}
-<ul class="links-nextprev">
-	{%- if previousPost %}<li>Previous: <a href="{{ previousPost.url }}">{{ previousPost.data.title }}</a></li>{% endif %}
-	{%- if nextPost %}<li>Next: <a href="{{ nextPost.url }}">{{ nextPost.data.title }}</a></li>{% endif %}
-</ul>
-{%- endif %}
+	{%- set previousPost = collections.posts | getPreviousCollectionItem %}
+	{%- set nextPost = collections.posts | getNextCollectionItem %}
+	{%- if nextPost or previousPost %}
+		<ul class="links-nextprev">
+			{%- if previousPost %}<li>Previous: <a href="{{ previousPost.url }}">{{ previousPost.data.title }}</a></li>{% endif %}
+			{%- if nextPost %}<li>Next: <a href="{{ nextPost.url }}">{{ nextPost.data.title }}</a></li>{% endif %}
+		</ul>
+	{%- endif %}
 {%- endif %}

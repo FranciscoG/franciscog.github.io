@@ -24,9 +24,29 @@ function eleventyComputedExcludeFromCollections() {
 	};
 }
 
-export { eleventyComputedPermalink, eleventyComputedExcludeFromCollections };
+function eleventyComputedDraft() {
+	// Return true for files inside any "drafts" directory unless draft is already set in frontmatter.
+	return (data) => {
+		if (!data) {
+			return false;
+		}
+		const page = data.page || {};
+		const pathLike = page.inputPath || page.filePathStem || "";
+		if (typeof pathLike === "string" && /(^|\/)drafts(\/|$)/.test(pathLike)) {
+			return true;
+		}
+
+		return false;
+	};
+}
+
+export { eleventyComputedPermalink, eleventyComputedExcludeFromCollections, eleventyComputedDraft };
 
 export default function (eleventyConfig) {
+	eleventyConfig.addGlobalData(
+		"eleventyComputed.draft",
+		eleventyComputedDraft()
+	);
 	eleventyConfig.addGlobalData(
 		"eleventyComputed.permalink",
 		eleventyComputedPermalink
