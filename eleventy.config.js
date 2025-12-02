@@ -118,7 +118,7 @@ export default function (eleventyConfig) {
 		});
 	});
 
-	// 11ty by default reads your .gitignore and igores files listed there.
+	// 11ty by default reads your .gitignore and ignores files listed there.
 	// I turned it off because it was ignoring my drafts folder.
 	// https://www.11ty.dev/docs/ignores/
 	eleventyConfig.setUseGitIgnore(false);
