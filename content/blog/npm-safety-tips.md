@@ -1,6 +1,6 @@
 ---
 title: NPM Safety Tips
-date: 2025-12-02
+date: 2025-12-03
 syntax: true
 tags:
 - npm
