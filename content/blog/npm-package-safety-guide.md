@@ -1,35 +1,35 @@
 ---
-title: NPM Safety Tips
-date: 2025-12-03
+title: "Mitigating Supply Chain Risk: A Guide to npm Package Safety"
+date: 2025-12-04
 syntax: true
 tags:
 - npm
 - security
 ---
 
-npm has been having one hell of a year. 
+This has been one hell of a year for npm.
 
 In August, the [Nx and `@nx/*` packages were compromised](https://www.aikido.dev/blog/popular-nx-packages-compromised-on-npm) via a Github Actions exploit. 
 
 In September, a successful phishing email [compromised the account of a maintainer of many packages](https://www.aikido.dev/blog/npm-debug-and-chalk-packages-compromised) with _hundreds of millions of weekly downloads_, including `chalk` and `debug`.
 
-Also in September, a self-replicating worm called "Shai-Hulud" (a Dune reference) [wreaked havoc on about 40 packages](https://socket.dev/blog/tinycolor-supply-chain-attack-affects-40-packages).
+Also in September, a self-replicating worm called "Shai-Hulud" [compromised over 40 packages](https://socket.dev/blog/tinycolor-supply-chain-attack-affects-40-packages).
 
-And in November [the Shai-Hulud struck again](https://www.aikido.dev/blog/shai-hulud-strikes-again-hitting-zapier-ensdomains).
+And in November [the Shai-Hulud worm came back with a vengeance](https://www.aikido.dev/blog/shai-hulud-strikes-again-hitting-zapier-ensdomains), this time affecting 492 packages.
 
-Thankfully, due to active monitoring of the npm ecosystem, these malicious packages are often discovered within 5 minutes to 4 hours of publication.
+The good news is that the npm ecosystem is actively monitored, so malicious packages usually get flagged and taken down pretty fast&ndash;sometimes within a few minutes, other times up to four hours. The bad news? That's still a huge window for someone to get compromised.
 
-Given the state of npm security these days, I wanted to jot down some tips I use to help protect against accidentally installing a malicious package. This post is meant for people using npm to install dependencies and not meant for publishers of packages.
+Given how often we see these supply chain attacks pop up, I decided to write down some practical tips I use myself to stay safe. Just to be clear, this is for those who are installing dependencies, not for people publishing them.
 
 ## TL:DR
 
-- Ignore scripts
+- Add `ignore-scripts=true` to your `.npmrc` ([caveat](#what-about-my-own-lifecycle-scripts) regarding your own scripts)
 - Commit your lockfile
-- Pin your dependencies
-- Use `npm ci` over `npm install` when installing all dependencies in any environment
-- Include the "engines" property in your package.json and enforce it
-- Set `legacy-peer-deps=true` in your `.npmrc`
+- Pin your dependencies and add `save-exact=true` to your `.npmrc`
+- Use `npm ci` over `npm install` in any environment
+- Include the `"engines"` property in your package.json and enforce it by adding `engine-strict=true` to your `.npmrc`
 - run `npm audit --audit-level=critical` in your build step before `npm ci`
+- Use an `.npmrc` file at both the project level and your OS user level (`~/.npmrc` or `$HOME/.npmrc`)
 
 ```json
 {
@@ -41,18 +41,15 @@ Given the state of npm security these days, I wanted to jot down some tips I use
 }
 ```
 
-Add the following to **both** your project's `.npmrc` and your user's `~/.npmrc` or `$HOME/.npmrc`
-
 ```ini
 ignore-scripts=true
 save-exact=true
 engine-strict=true
-legacy-peer-deps=true
 ```
 
 OR
 
-Use `pnpm >=v10.16` instead of `npm` because it:
+Use pnpm `>=v10.16` instead of npm because it:
 
 - ignores scripts by default while still running your own lifecycle scripts
 - allow certain dependencies to run their lifecycle scripts using an [allow list in your config](https://pnpm.io/settings#onlybuiltdependencies)
@@ -97,7 +94,7 @@ Personally, I rarely need a package that uses one of these scripts, but they are
 
 Using `ignore-scripts` also means that your own package.json's lifecycle scripts get ignored as well. So if you use a popular library like [Husky](https://typicode.github.io/husky/), which adds a `prepare` script to your package.json, you'll need to manually run the `prepare` script. 
 
-You could also use an alternative package manager like `pnpm` or `bun`.
+Some alternative package managers have fixed this issue by allowing your own lifecycle scripts to run, see [pnpm section below](#you-should-try-pnpm).
 
 ## Commit your lockfile
 
@@ -125,13 +122,17 @@ While the lockfile is designed to ensure reproducible builds by locking dependen
 
 - If you, or someone on your team, deletes the lockfile, then npm will rebuild it from scratch and can possibly install a malicious version if it still exists.
 
-- If the lockfile was generated with an older version of npm and you're running `npm install` with a newer version. This might cause changes to your lockfile that make npm re-resolve some dependencies.
+- If the lockfile was generated with an older version of npm and you're running `npm install` with a newer version. This might cause changes to your lockfile that make npm re-resolve some dependencies. This is why you should be [enforcing npm version](#enforce-strict-engine-use) in your project.
 
 The next 3 sections should help prevent some of these issues.
 
 ## Pin your dependencies
 
-This one is more controversial. Why do you need this if a lockfile already ensures you're installing specific versions? One is human error, someone could accidentally delete the lockfile and commit that. The other, more important one is that most of the tips in this post rely on malicious packages being discovered and reported. If an account is compromised and it publishes a new malicious package that no one finds for a while, not pinning your dependencies puts you at a greater risk. 
+This one is more controversial. Why do you need this if a lockfile already ensures you're installing specific versions? 
+
+A lockfile is great for ensuring repeatable builds, but it's not foolproof. The bigger issue is the risk you face when you decide to update. If you use a broad version range like `^1.2.3` in your package.json (allowing non-breaking updates), and a maintainer's account is compromised, the next time you update, you could pull a malicious version before anyone even knows it exists.
+
+Since all our security tips depend on someone finding and reporting the bad package, pinning to a specific version number is one of the best defenses against a recently published, but not yet discovered, supply chain attack.
 
 To pin a dependency, use the `--save-exact` flag when adding a new package: 
 
@@ -180,42 +181,31 @@ npm config set engine-strict true
 
 <https://docs.npmjs.com/cli/v8/using-npm/config#engine-strict>
 
-## Use legacy peer deps
+## Run npm audit in Your CI/CD Pipelines
 
-Since npm v7, peer dependencies are auto-installed and captured in the lockfile. Peer dependency resolution changes can update the lockfile when package.json changes, even if top-level versions are pinned. Add `legacy-peer-deps=true` to your `.npmrc` to prevent this from happening:
+npm audit is not perfect. It often flags dependencies that aren't actually vulnerable in your specific context. Dan Abramov has a [great post about this](https://overreacted.io/npm-audit-broken-by-design/). 
 
-```sh
-# locally in your project adjacent to the package.json
-npm config --location project set legacy-peer-deps true
-# globally at the user level: ~/.npmrc
-npm config set legacy-peer-deps true
-```
+However, despite its flaws, I still think it has value as another simple layer of defense, especially in CI/CD.
 
-<https://docs.npmjs.com/cli/v8/using-npm/config#legacy-peer-deps>
-
-## Run npm audit in your build jobs
-
-Npm audit is not perfect. Dan Abramov has a good post outlining its issues: <https://overreacted.io/npm-audit-broken-by-design/>. 
-
-But I still find some value in it as another line of defense in my CI/CD workflows. I like to add a step in my build jobs that runs an audit check before the step that runs `npm ci`. This will help prevent accidentally installing a malicious package. 
+I like to add a step that runs an audit check before the step that runs `npm ci`. Why? Because npm audit checks the dependencies listed in your package-lock.json against a known database of vulnerabilities. If a critical vulnerability has been reported in one of those dependencies, running the audit first will fail the build before the package even has a chance to be installed locally.
 
 ```sh
 npm audit --audit-level=critical
 ```
 
-There's probably going to be a very tiny window where a package has been given a critical severity and has not been removed from the registry by npm. But adding this doesn't hurt your pipeline so it's better to have it than not.
+Is there a tiny window where a brand new, malicious package slips through? Sure. But adding this line takes virtually zero effort and can prevent known, critical risks from ever making it into your deployment.
 
-## pnpm
+## You should try pnpm
 
-I highly recommend switching to pnpm as your package manager because it handles so many of the above issues by default.
+I highly recommend switching to pnpm as your package manager. It fixes so many of the security and dependency headaches mentioned in this post, _by default_.
 
-In their v10 release, they disabled running dependency scripts by default while still running your own lifecycle scripts. You can also enable specific package lifecycle scripts by using the [`onlyBuiltDependencies`](https://pnpm.io/settings#onlybuiltdependencies) setting^[<https://github.com/orgs/pnpm/discussions/8945>].
+- Since [their v10 release](https://github.com/orgs/pnpm/discussions/8945), pnpm disables running dependency lifecycle scripts (`preinstall`, `install`, and `postinstall`) by default. These are the hooks attackers often use to inject malicious code during installation. If you need them, you can still selectively enable them using the [`onlyBuiltDependencies`](https://pnpm.io/settings#onlybuiltdependencies) setting.
 
-As of their v10.16 release, they added a new flag called [`minimumReleaseAge`](https://pnpm.io/settings#minimumreleaseage) that prevents the installation of a package that was published too recently. Most malicious published packages are being caught and taken down within hours or less. Using this flag will give you some extra buffer time if you happen to be installing during the window where the malicious packages are still in the registry.
+- [In v10.16](https://pnpm.io/blog/releases/10.16), pnpm added a fantastic flag called [`minimumReleaseAge`](https://pnpm.io/settings#minimumreleaseage). Since most malicious packages are caught and removed within hours, this flag prevents installation if a package was published too recently. This creates a crucial buffer time, protecting you from installing a compromised package during that critical discovery window.
 
-It also comes with [auditing functionality](https://pnpm.io/cli/audit) and allows you to add CVEs to an ignore list because they don't affect your project. This solves some of the issues Dan Abramov was mentioning in his article.
+- pnpm comes with robust auditing functionality and allows you to add specific CVEs to an [ignore list](https://pnpm.io/settings#auditconfigignorecves). This directly addresses the 'audit fatigue' problem, letting you silence false positives that don't actually affect your project.
 
-Other nice defaults pnpm provides is not installing legacy peer deps automatically and enforcing the strict engine use if you have added it to your engines property of your package.json.
+- Beyond security, pnpm provides better defaults, like not automatically installing legacy peer dependencies and enforcing strict use of the engines property in your package.json. These features lead to cleaner, more predictable, and ultimately safer dependency trees.
 
 ```json
 {
@@ -225,7 +215,7 @@ Other nice defaults pnpm provides is not installing legacy peer deps automatical
 }
 ```
 
-The only thing it doesn't do is save exact versions by default. When adding new packages you can use the `--save-exact` flag, or set it in the pnpm-workspace.yaml by adding `save-prefix=''`
+The one security measure pnpm doesn't enforce by default is pinning your dependency versions, but it's trivial to enforce. When adding new packages, you can use the `--save-exact` flag. Even better, you can set it globally in your workspace configuration by adding `save-prefix=''` to your pnpm-workspace.yaml.
 
 ```sh
 pnpm add pkg --save-exact
@@ -235,3 +225,8 @@ pnpm config set save-prefix=''
 ```
 
 <https://pnpm.io/settings#saveprefix>
+
+
+## Conclusion
+
+There's probably a lot more I can write about regarding this topic-like keeping your dependencies shallow and how to choose a dependency-but those are a little more squishy. I wanted to keep this post focused on more actionable items that were easy to implement and you didn't have to think about. By implementing these few small settings you can immediately and significantly reduce your exposure to the most common supply chain attacks. 

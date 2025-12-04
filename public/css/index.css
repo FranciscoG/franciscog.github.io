@@ -640,7 +640,7 @@ aside.admonition-info {
 	position: absolute !important;
 }
 
-p>code {
+*:not(pre) > code {
 	word-break: keep-all;
 }
 

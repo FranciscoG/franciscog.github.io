@@ -151,8 +151,13 @@ export default function (eleventyConfig) {
 			env,
 			self
 		) {
-			// Add a new `target` attribute, or replace the value of the existing one.
-			tokens[idx].attrSet("target", "_blank");
+			const hrefIndex = tokens[idx].attrIndex('href');
+			const href = hrefIndex >= 0 ? tokens[idx].attrs[hrefIndex][1] : '';
+
+			// Only add target="_blank" to external links (http/https)
+			if (href.startsWith('http://') || href.startsWith('https://')) {
+				tokens[idx].attrSet("target", "_blank");
+			}
 
 			// Pass the token to the default renderer.
 			return defaultRender(tokens, idx, options, env, self);
