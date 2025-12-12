@@ -518,17 +518,16 @@ code:not([class]) {
 	padding: 2rem;
 	background-color: var(--aside-bg-color);
 	border-left: 5px solid var(--aside-border-color);
-	font-style: italic;
 	color: var(	--text-color);
 }
 
 aside::before {
-    content: "Note:";
+		content: attr(data-prefix); 
     display: block;
     margin-bottom: 10px;
     font-weight: bold;
     font-size: 0.9em;
-    color: #007bff; /* Use your accent color */
+    color: var(--aside-border-color);
     text-transform: uppercase;
 }
 
@@ -551,6 +550,7 @@ aside.admonition-info {
 	margin: 1em 0;
 	border-left: 6px solid var(--color-gray-90);
 	background-color: var(--bg-alpha);
+	font-style: italic;
 }
 
 .post blockquote {
