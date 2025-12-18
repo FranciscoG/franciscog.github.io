@@ -38,9 +38,9 @@ In the demo you'll notice a few things:
 
 - Page styles do not get applied to content inside the iframe.
 - The iframe itself has some terrible default styling. By default it has a set dimension of 300px width by 150px height, and also comes with a 2px border. For the purposes of this demo I gave it a new 100% width.
-- And depening on your internet connection, it could take a quick, but noticeable, moment to load the content. This is not great for something like a header that it is the first thing users will see on the page.
+- And depending on your internet connection, it could take a quick, but noticeable, moment to load the content. This is not great for something like a header that it is the first thing users will see on the page.
 
-The first and last issues are due to the fact that the iframe loads content into a completely separate [Browing Context](https://developer.mozilla.org/en-US/docs/Glossary/Browsing_context). Basically a web page within a web page. Setting up that context and loading the resource contributes to that delay, and it being isolated from the parent page cause the lack of styling.
+The first and last issues are due to the fact that the iframe loads content into a completely separate [Browsing Context](https://developer.mozilla.org/en-US/docs/Glossary/Browsing_context). Basically a web page within a web page. Setting up that context and loading the resource contributes to that delay, and it being isolated from the parent page cause the lack of styling.
 
 We can fix the styling issues without JavaScript by including styles within the html file being loaded. But that comes with it's own pros and cons:
 
@@ -50,7 +50,7 @@ We can fix the styling issues without JavaScript by including styles within the 
 **Cons:**
 - We need to repeat some of the base styles from the page. This could be negligible depending on the size and complexity of your site, but even if so, it still feels wrong to have to repeat CSS.
 - Speaking of repeating styles... If you plan on using the HTML more than once on a page, you'll be repeating all of the CSS it comes with as well.
-- iframes can't auto-size themsevles based on their content so without JS we need to give it dimensions. Widths are less of an issue as setting it to `100%` covers most cases, it's the height that requires some more planning, especially when it comes to different screen sizes.
+- iframes can't auto-size themselves based on their content so without JS we need to give it dimensions. Widths are less of an issue as setting it to `100%` covers most cases, it's the height that requires some more planning, especially when it comes to different screen sizes.
 
 Here's that same example from above but with styles included within the [source](/html/header-with-css.html) and some dimensions given to the iframe:
 
@@ -93,7 +93,7 @@ Much nicer now. But we had to repeat styles and we had to know the exact dimensi
 <p class="demo-content">My main content</p>
 </demo-component>
 
-Much better in terms of developer experience because we don't have to repeat styles any more. But still not great becuase we get a flash of unstyled content and layout shift while it's being loaded. 
+Much better in terms of developer experience because we don't have to repeat styles any more. But still not great because we get a flash of unstyled content and layout shift while it's being loaded. 
 
 ## object
 
@@ -172,7 +172,7 @@ This is a simple JavaScript solution, similar to how we were swapping out the if
 
 2 things to note;
 
-- this is faster than the iframe because we don't have to intialize the browser context on top of fetching the resource
+- this is faster than the iframe because we don't have to initialize the browser context on top of fetching the resource
 - notice the use of `Range.createContextualFragment`. This methods parses and executes any JavaScript within the fragment. `innerHTML` and `outerHTML` do not do that.
 
 
