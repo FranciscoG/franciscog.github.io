@@ -22,7 +22,9 @@ These are the main methods that parse an HTML string into a DOM tree:
 1. [`element.setHTMLUnsafe`](https://developer.mozilla.org/en-US/docs/Web/API/Element/setHTMLUnsafe)
 1. [`Document.parseHTMLUnsafe`](https://developer.mozilla.org/en-US/docs/Web/API/Document/parseHTMLUnsafe_static)
 
-<aside data-prefix="Note:">
+<aside>
+
+<span class="aside-prefix">Note:</span>
 
 There's also [`document.write`](https://developer.mozilla.org/en-US/docs/Web/API/Document/write) and [`document.writeln`](https://developer.mozilla.org/en-US/docs/Web/API/Document/writeln), but I've left them out because they are both deprecated and not recommended for use anymore. [`Element.append`](https://developer.mozilla.org/en-US/docs/Web/API/Element/append) also takes a string but it doesn't parse it into Nodes, it appends it as plain text like `textContent`.
 
