@@ -1,7 +1,7 @@
 ---
 title: Parsing HTML strings that contain script tags
 date: 2025-08-26
-updated: 2025-09-04
+updated: 2025-12-18
 syntax: true
 tags:
   - js
@@ -10,7 +10,7 @@ tags:
   - HTML Includes
 ---
 
-In my [last post](/blog/html-includes/) I experimented with some ways to implement HTML includes with the technology available in browsers today. In that post I created a Custom Element that would fetch the HTML from a URL and inject that into the DOM. One of the things you might expect to happen during this process is if the HTML contained a `<script>` tag, it _should_ immediately (or eventually if it was deferred or async) evaluate that script upon insertion. Turns out that not all ways of parsing HTML strings containing script tags will execute scripts, in fact there's only 1 method that will excute them out of the box.
+In my [last post](/blog/html-includes/) I experimented with some ways to implement HTML includes with the technology available in browsers today. In that post I created a Custom Element that would fetch the HTML from a URL and inject that into the DOM. One of the things you might expect to happen during this process is if the HTML contained a `<script>` tag, it _should_ immediately (or eventually if it was deferred or async) evaluate that script upon insertion. Turns out that not all ways of parsing HTML strings containing script tags will execute scripts, in fact there's only 1 method that will execute them out of the box.
 
 These are the main methods that parse an HTML string into a DOM tree:
 
@@ -22,7 +22,9 @@ These are the main methods that parse an HTML string into a DOM tree:
 1. [`element.setHTMLUnsafe`](https://developer.mozilla.org/en-US/docs/Web/API/Element/setHTMLUnsafe)
 1. [`Document.parseHTMLUnsafe`](https://developer.mozilla.org/en-US/docs/Web/API/Document/parseHTMLUnsafe_static)
 
-<aside data-prefix="Note:">
+<aside>
+
+<span class="aside-prefix">Note:</span>
 
 There's also [`document.write`](https://developer.mozilla.org/en-US/docs/Web/API/Document/write) and [`document.writeln`](https://developer.mozilla.org/en-US/docs/Web/API/Document/writeln), but I've left them out because they are both deprecated and not recommended for use anymore. [`Element.append`](https://developer.mozilla.org/en-US/docs/Web/API/Element/append) also takes a string but it doesn't parse it into Nodes, it appends it as plain text like `textContent`.
 
@@ -234,7 +236,7 @@ Finally our JS got executed without any workarounds or hacks!
 
 But why do some of these work and some don't?
 
-When parsing HTML from a string and a `script` tag is encountered, the HTML Parser will internally maintain a boolean state called ["already started"](https://html.spec.whatwg.org/multipage/scripting.html#already-started) that will indicate whether this script will be evaluated or not. Depending on which parsing alogrithm is used determines whether this is initially set to true or false. Only a value of false means that the script _should_ be executed upon insertion.
+When parsing HTML from a string and a `script` tag is encountered, the HTML Parser will internally maintain a boolean state called ["already started"](https://html.spec.whatwg.org/multipage/scripting.html#already-started) that will indicate whether this script will be evaluated or not. Depending on which parsing algorithm is used determines whether this is initially set to true or false. Only a value of false means that the script _should_ be executed upon insertion.
 
 [`innerHTML`](https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#the-innerhtml-property), [`outerHTML`](https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#the-outerhtml-property), [`insertAdjacentHTML`](<https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#the-insertadjacenthtml()-method>), [`element.setHTMLUnsafe`, and `Document.parseHTMLUnsafe`](https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#unsafe-html-parsing-methods) all use the [HTML fragment parsing algorithm](https://html.spec.whatwg.org/multipage/parsing.html#html-fragment-parsing-algorithm) which sets the "already started" flag to true, which means it should not be executed:
 
@@ -281,7 +283,7 @@ What I'm not sure about is why the working group decided that `createContextualF
 
 ### Update
 
-Fixed error and improved code in one of the code samples
+Fixed error and improved code in one of the code samples. Fixed spelling errors.
 
 {% js %}
 

@@ -78,7 +78,9 @@ npm config set ignore-scripts true
 
 <https://docs.npmjs.com/cli/v8/using-npm/config#ignore-scripts>
 
-<aside data-prefix="Note:">
+<aside>
+
+<span class="aside-prefix">Note:</span>
 
 I recommend adding it in both places because at the project level it ensures all team members are protected and you also don't need to remember it for CI/CD environments. At the user level it protects you when installing dependencies of a project that doesn't have it set in its own `.npmrc`.
 
