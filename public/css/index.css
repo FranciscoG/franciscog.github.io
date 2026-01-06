@@ -511,6 +511,20 @@ code:not([class]) {
 	margin-top: 1em;
 }
 
+.post-content code[class*=language-],
+.post-content pre[class*=language-] {
+	font-size: 1.6rem;
+}
+
+@media screen and (min-width: 58rem) {
+	.post-content pre[class*=language-] {
+		width: 100vw;
+		max-width: 90rem;
+		margin-left: 50% !important;
+		transform: translateX(-50%);
+	}
+}
+
 .post li {
 	margin-top: 0.5em;
 }

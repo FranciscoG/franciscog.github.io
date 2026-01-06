@@ -3,8 +3,8 @@ layout: layouts/base.njk
 ---
 {%- if syntax -%}
 {# Only include the syntax highlighter CSS on blog posts that ask for it #}
-{%- css %}{% include "node_modules/prismjs/themes/prism-okaidia.css" %}{% endcss -%}
-{%- css %}{% include "public/css/prism-diff.css" %}{% endcss -%}
+{%- css "syntax" %}{% include "node_modules/prismjs/themes/prism-okaidia.css" %}{% endcss -%}
+{%- css "syntax2" %}{% include "public/css/prism-diff.css" %}{% endcss -%}
 {%- endif -%}
 <article class="post">
 

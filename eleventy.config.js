@@ -7,6 +7,8 @@ import pluginSyntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 import pluginBundle from "@11ty/eleventy-plugin-bundle";
 import pluginNavigation from "@11ty/eleventy-navigation";
 import { EleventyHtmlBasePlugin, EleventyRenderPlugin } from "@11ty/eleventy";
+import CleanCSS from "clean-css";
+import htmlmin from "html-minifier-terser";
 import pluginDrafts from "./eleventy.config.drafts.js";
 import pluginImages from "./eleventy.config.images.js";
 
@@ -35,7 +37,16 @@ export default function (eleventyConfig) {
 	});
 	eleventyConfig.addPlugin(pluginNavigation);
 	eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
-	eleventyConfig.addPlugin(pluginBundle);
+	eleventyConfig.addPlugin(pluginBundle, {
+		transforms: [
+			async function (content) {
+				if (this.type === 'css') {
+					return new CleanCSS({}).minify(content).styles;
+				}
+				return content;
+			}
+		]
+	});
 	eleventyConfig.addPlugin(EleventyRenderPlugin);
 	eleventyConfig.addPlugin(fontAwesomePlugin);
 
@@ -118,10 +129,30 @@ export default function (eleventyConfig) {
 		});
 	});
 
+	eleventyConfig.addFilter("cssmin", function (code) {
+		return new CleanCSS({}).minify(code).styles;
+	});
+
 	// 11ty by default reads your .gitignore and ignores files listed there.
 	// I turned it off because it was ignoring my drafts folder.
 	// https://www.11ty.dev/docs/ignores/
 	eleventyConfig.setUseGitIgnore(false);
+
+	eleventyConfig.addTransform("htmlmin", function (content) {
+		// String conversion to handle `permalink: false`
+		if ((this.page.outputPath || "").endsWith(".html")) {
+			let minified = htmlmin.minify(content, {
+				useShortDoctype: true,
+				removeComments: true,
+				collapseWhitespace: true,
+			});
+
+			return minified;
+		}
+
+		// If not an HTML output, return content as-is
+		return content;
+	});
 
 	// Customize Markdown library settings:
 	eleventyConfig.amendLibrary("md", (mdLib) => {
