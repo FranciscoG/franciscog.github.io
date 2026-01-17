@@ -68,8 +68,15 @@
         <p>
           &copy; {{ metadata.title }} {{ "" | year }}
         </p>
+
+        <label title="See my post 'Fun with view transitions' for more information.">
+          <input type="checkbox" switch id="enable-transitions-checkbox">
+          Enable View Transitions
+        </label>
       </footer>
     </div>
+    <script src="/js/main.js"></script>
+
 		<!-- Current page: {{ page.url | htmlBaseUrl }} -->
     {% getBundle "js" %}
 
