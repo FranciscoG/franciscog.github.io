@@ -3,7 +3,7 @@ title: Pure CSS theme switcher
 date: 2025-04-08
 syntax: true
 tags:
-  - css
+  - CSS
 ---
 
 I have a simple theme switcher on my site and currently it relies on JavaScript to function properly. However, if anyone came to my site with JavaScript disabled, it wouldn't do anything, which isn't a great user experience. In this post I'm going to show you how easy it is to make it work with JavasScript disabled using pure CSS only, meaning that I don't have to touch the HTML at all.

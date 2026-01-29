@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "strict": true,
+    "target": "ES2023",
+    "module": "es2022",
+    "moduleResolution": "node",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "**/*.js",
+    "**/*.mjs",
+    "**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "_site",
+    "docs"
+  ]
+}

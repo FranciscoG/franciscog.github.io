@@ -16,7 +16,7 @@ numberOfLatestPostsToShow: 10
 
 {% set morePosts = postsCount - numberOfLatestPostsToShow %}
 {% if morePosts > 0 %}
-<p>{{ morePosts }} more post{% if morePosts != 1 %}s{% endif %} can be found in <a href="/blog/">the archive</a>.</p>
+<p style="view-transition-name: more-posts">{{ morePosts }} more post{% if morePosts != 1 %}s{% endif %} can be found in <a href="/blog/">the archive</a>.</p>
 {% endif %}
 
 {# List every content page in the project #}
@@ -27,3 +27,9 @@ numberOfLatestPostsToShow: 10
 	{%- endfor %}
 </ul>
 #}
+
+{% css %}
+@view-transition {
+	navigation: auto;
+}
+{% endcss %}
