@@ -193,9 +193,9 @@ I'm also using the [window.navigation](https://developer.mozilla.org/en-US/docs/
 
 ## Final thoughts
 
-It's interesting to see how page transitions work, or at least how I think they work. Here's what I think is happening:
+It's interesting to see how page transitions work, or at least how I think they work. Here's what I assume is happening:
 
-1. Starts be taking a snapshot of the old page.
+1. Starts by taking a snapshot of the old page.
 1. Navigates to the new page and and takes a snapshot of that.
 1. Then sets the new page's transition state to the beginning frame and holds it there.
 1. Starts animating the old page snapshot above the new page snapshot.

@@ -530,6 +530,7 @@ code:not([class]) {
 		transform: translateX(-50%);
 		transition: max-width 0.3s ease-in-out;
 	}
+
 	.post-content pre[class*=language-].expanded {
 		max-width: 98vw;
 	}
@@ -632,6 +633,12 @@ aside.admonition-info {
 
 .post .embed {
 	margin-top: 1.6rem;
+}
+
+.post picture {
+	overflow-x: auto;
+	max-width: 100%;
+	display: block;
 }
 
 .demo-content {
@@ -805,17 +812,49 @@ main {
 	animation-fill-mode: forwards;
 }
 
-.transitions-enabled::view-transition-old(item-1) { animation-delay: 0s; }
-.transitions-enabled::view-transition-old(item-2) { animation-delay: 0.1s; }
-.transitions-enabled::view-transition-old(item-3) { animation-delay: 0.3s; }
-.transitions-enabled::view-transition-old(item-4) { animation-delay: 0.2s; }
-.transitions-enabled::view-transition-old(item-5) { animation-delay: 0.1s; }
-.transitions-enabled::view-transition-old(item-6) { animation-delay: 0.6s; }
-.transitions-enabled::view-transition-old(item-7) { animation-delay: 0.4s; }
-.transitions-enabled::view-transition-old(item-8) { animation-delay: 0.5s; }
-.transitions-enabled::view-transition-old(item-9) { animation-delay: 0.8s; }
-.transitions-enabled::view-transition-old(item-10) { animation-delay: 0.9s; }
-.transitions-enabled::view-transition-old(more-posts) { animation-delay: 1s; }
+.transitions-enabled::view-transition-old(item-1) {
+	animation-delay: 0s;
+}
+
+.transitions-enabled::view-transition-old(item-2) {
+	animation-delay: 0.1s;
+}
+
+.transitions-enabled::view-transition-old(item-3) {
+	animation-delay: 0.3s;
+}
+
+.transitions-enabled::view-transition-old(item-4) {
+	animation-delay: 0.2s;
+}
+
+.transitions-enabled::view-transition-old(item-5) {
+	animation-delay: 0.1s;
+}
+
+.transitions-enabled::view-transition-old(item-6) {
+	animation-delay: 0.6s;
+}
+
+.transitions-enabled::view-transition-old(item-7) {
+	animation-delay: 0.4s;
+}
+
+.transitions-enabled::view-transition-old(item-8) {
+	animation-delay: 0.5s;
+}
+
+.transitions-enabled::view-transition-old(item-9) {
+	animation-delay: 0.8s;
+}
+
+.transitions-enabled::view-transition-old(item-10) {
+	animation-delay: 0.9s;
+}
+
+.transitions-enabled::view-transition-old(more-posts) {
+	animation-delay: 1s;
+}
 
 .transitions-enabled::view-transition-new(nextContent) {
 	animation-name: fade-in;
