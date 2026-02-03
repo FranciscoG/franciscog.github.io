@@ -45,21 +45,6 @@
 	view-transition-name: none;
 }
 
-@media (prefers-color-scheme: dark) {
-	html:not([data-theme="light"]) {
-		--text-color: var(--dark-text-color);
-		--text-color-link: var(--dark-text-color-link);
-		--text-color-link-active: var(--dark-text-color-link-active);
-		--text-color-link-visited: var(--dark-text-color-link-visited);
-		--background-color: var(--dark-background-color);
-		--code-bg-color: var(--dark-code-bg-color);
-		--code-text-color: var(--dark-code-text-color);
-		--bg-alpha: var(--dark-bg-alpha);
-		--aside-bg-color: var(--dark-aside-bg-color);
-		--aside-border-color: var(--dark-aside-border-color);
-	}
-}
-
 html[data-theme="dark"] {
 	--text-color: var(--dark-text-color);
 	--text-color-link: var(--dark-text-color-link);
