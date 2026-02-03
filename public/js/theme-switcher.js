@@ -55,8 +55,12 @@ class ColorTheme {
 
 	reflectPreference() {
 		if (this.userSelectedTheme === "auto") {
-			// remove the attribute and let css handle it
-			document.firstElementChild.removeAttribute("data-theme");
+			const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+			if (isDark) {
+				document.firstElementChild.setAttribute("data-theme", this.DARK);
+			} else {
+				document.firstElementChild.setAttribute("data-theme", this.LIGHT);
+			}
 		} else {
 			document.firstElementChild.setAttribute(
 				"data-theme",
