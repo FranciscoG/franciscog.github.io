@@ -135,8 +135,13 @@ Now, what can we do with this? I'm not sure. I think I'll try and create a simpl
 fieldset {
   --bg-color-off: #FFE3E3;
   --bg-color-on: #bfd;
+  --text-color: #000;
   --logic-bg-color: var(--bg-color-off);
   margin-top: 2rem;
+}
+
+[data-theme="dark"] fieldset {
+   --bg-color-off: #f98a8a;
 }
 
 label {
@@ -155,6 +160,7 @@ output {
   display: block;
   margin-top: 1rem;
   width: fit-content;
+  color: var(--text-color);
 }
 
 /* AND: both have to be checked */
