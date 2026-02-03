@@ -27,13 +27,13 @@ function askQuestion(question) {
 }
 
 /**
- * Sanitizes a string to create a valid filename
- * @param {string} str - The string to sanitize
- * @returns {string} The sanitized filename
+ * Formats a string to create a valid filename
+ * @param {string} str - The string to format
+ * @returns {string} The formatted filename
  */
-function sanitizeFilename(str) {
+function formatFilename(str) {
 	// Convert to lowercase
-	let filename = str.toLowerCase();
+	let filename = str.toLowerCase().trim();
 	// Replace spaces with hyphens
 	filename = filename.replace(/\s+/g, '-');
 	// Remove special characters (keep only letters, numbers, hyphens, underscores)
@@ -82,9 +82,9 @@ async function main() {
 		console.log('Generating filename, removing special characters...');
 		console.log('original:', fileName || postName);
 		if (fileName.trim()) {
-			fileName = sanitizeFilename(fileName);
+			fileName = formatFilename(fileName);
 		} else {
-			fileName = sanitizeFilename(postName);
+			fileName = formatFilename(postName);
 		}
 
 		// Add .md extension
