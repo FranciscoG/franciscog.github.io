@@ -132,7 +132,7 @@ Now, what can we do with this? I'm not sure. I think I'll try and create a simpl
 
 <style>
 {% css %}
-fieldset {
+.post-content fieldset {
   --bg-color-off: #FFE3E3;
   --bg-color-on: #bfd;
   --text-color: #000;
@@ -140,14 +140,28 @@ fieldset {
   margin-top: 2rem;
 }
 
-[data-theme="dark"] fieldset {
+[data-theme="dark"] .post-content fieldset {
    --bg-color-off: #f98a8a;
 }
 
-label {
+.post-content fieldset label {
  font-weight: bold;
- margin-left: 5px; 
+ margin-left: 1rem;
 }
+.post-content fieldset label:last-of-type {
+ margin-left: 3rem;
+}
+
+.post-content fieldset input {
+  transform: scale(2);
+  display: inline-block;
+  margin-left: 1rem;
+}
+
+.post-content fieldset input:last-of-type {
+  margin-left: 3rem;
+}
+
 
 /* Default state for all is "off" */
 .output-on {
@@ -158,7 +172,7 @@ output {
   background-color: var(--logic-bg-color);
   padding: 2px 5px;
   display: block;
-  margin-top: 1rem;
+  margin-top: 2rem;
   width: fit-content;
   color: var(--text-color);
 }
