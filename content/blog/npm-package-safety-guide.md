@@ -17,7 +17,7 @@ Also in September, a self-replicating worm called "Shai-Hulud" [compromised over
 
 And in November [the Shai-Hulud worm came back with a vengeance](https://www.aikido.dev/blog/shai-hulud-strikes-again-hitting-zapier-ensdomains), this time affecting 492 packages.
 
-The good news is that the npm ecosystem is actively monitored, so malicious packages usually get flagged and taken down pretty fast&ndash;sometimes within a few minutes, other times up to four hours. The bad news? That's still a huge window for someone to get compromised.
+The good news is that the npm ecosystem is actively monitored, so malicious packages usually get flagged and taken down pretty fast, sometimes within a few minutes, other times up to four hours. The bad news? That's still a huge window for someone to get compromised.
 
 Given how often we see these supply chain attacks pop up, I decided to write down some practical tips I use myself to stay safe. Just to be clear, this is for those who are installing dependencies, not for people publishing them.
 
