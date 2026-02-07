@@ -7,12 +7,16 @@ import pluginSyntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 import pluginBundle from "@11ty/eleventy-plugin-bundle";
 import pluginNavigation from "@11ty/eleventy-navigation";
 import { EleventyHtmlBasePlugin, EleventyRenderPlugin } from "@11ty/eleventy";
-import CleanCSS from "clean-css";
+import postcss from "postcss";
+import postcssNested from "postcss-nested";
+import cssnano from "cssnano";
 import htmlmin from "html-minifier-terser";
 import pluginDrafts from "./eleventy.config.drafts.js";
 import pluginImages from "./eleventy.config.images.js";
 
 export default function (eleventyConfig) {
+	const isDev = process.env.ELEVENTY_RUN_MODE === "serve";
+
 	// Copy the contents of the `public` folder to the output folder
 	// For example, `./public/css/` ends up in `_site/css/`
 	eleventyConfig.addPassthroughCopy({
@@ -41,7 +45,13 @@ export default function (eleventyConfig) {
 		transforms: [
 			async function (content) {
 				if (this.type === 'css') {
-					return new CleanCSS({}).minify(content).styles;
+					// Skip PostCSS in development - use native CSS nesting
+					if (isDev) {
+						return content;
+					}
+					const result = await postcss([postcssNested, cssnano])
+						.process(content, { from: undefined });
+					return result.css;
 				}
 				return content;
 			}
@@ -129,8 +139,14 @@ export default function (eleventyConfig) {
 		});
 	});
 
-	eleventyConfig.addFilter("cssmin", function (code) {
-		return new CleanCSS({}).minify(code).styles;
+	eleventyConfig.addFilter("cssmin", async function (code) {
+		// Skip PostCSS in development - use native CSS nesting
+		if (isDev) {
+			return code;
+		}
+		const result = await postcss([postcssNested, cssnano])
+			.process(code, { from: undefined });
+		return result.css;
 	});
 
 	// 11ty by default reads your .gitignore and ignores files listed there.
@@ -139,6 +155,11 @@ export default function (eleventyConfig) {
 	eleventyConfig.setUseGitIgnore(false);
 
 	eleventyConfig.addTransform("htmlmin", function (content) {
+		// Skip minification in development
+		if (isDev) {
+			return content;
+		}
+
 		// String conversion to handle `permalink: false`
 		if ((this.page.outputPath || "").endsWith(".html")) {
 			let minified = htmlmin.minify(content, {
