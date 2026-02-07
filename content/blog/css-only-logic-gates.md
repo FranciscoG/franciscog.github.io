@@ -1,12 +1,21 @@
 ---
 title: CSS-only logic gates 
 date: 2026-02-03
+updated: 2026-02-06
 syntax: true
 tags:
   - CSS
 ---
 
 Experimenting to see if I can implement simple [logic gates](https://en.wikipedia.org/wiki/Logic_gate) using pure CSS and HTML, no JavaScript.
+
+<aside>
+
+<span class="aside-prefix">Edit:</span>
+
+To clarify, this is more like "visualizing" binary logic gates and not an actual implementation or emulation.
+
+</aside>
 
 I'm sure this has been done before by many people, but I have never seen it, nor tried it before, so I wanted to figure it out on my own. No AI, no googling.
 
