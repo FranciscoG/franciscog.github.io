@@ -13,6 +13,7 @@ import cssnano from "cssnano";
 import htmlmin from "html-minifier-terser";
 import pluginDrafts from "./eleventy.config.drafts.js";
 import pluginImages from "./eleventy.config.images.js";
+import pluginTOC from "eleventy-plugin-toc";
 
 export default function (eleventyConfig) {
 	const isDev = process.env.ELEVENTY_RUN_MODE === "serve";
@@ -214,6 +215,10 @@ export default function (eleventyConfig) {
 			// Pass the token to the default renderer.
 			return defaultRender(tokens, idx, options, env, self);
 		};
+	});
+
+	eleventyConfig.addPlugin(pluginTOC, {
+		wrapper: 'div'
 	});
 
 	// Features to make your build faster (when you need them)

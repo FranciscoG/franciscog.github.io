@@ -538,7 +538,7 @@ code:not([class]) {
 	margin-top: 0.5em;
 }
 
-.post aside {
+.post aside:not(.post-toc) {
 	margin: 3rem 0;
 	padding: 2rem;
 	background-color: var(--aside-bg-color);
