@@ -31,5 +31,8 @@
 		"markdown-it-footnote": "^4.0.0",
 		"postcss": "8.5.6",
 		"postcss-nested": "7.0.2"
+	},
+	"dependencies": {
+		"eleventy-plugin-toc": "1.1.5"
 	}
 }

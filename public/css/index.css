@@ -510,7 +510,7 @@ code:not([class]) {
 	.post-content pre[class*=language-] {
 		position: relative;
 		width: 100vw;
-		max-width: 90rem;
+		max-width: var(--max-width);
 		margin-left: 50% !important;
 		transform: translateX(-50%);
 		transition: max-width 0.3s ease-in-out;
@@ -538,7 +538,7 @@ code:not([class]) {
 	margin-top: 0.5em;
 }
 
-.post aside {
+.post aside:not(.post-toc) {
 	margin: 3rem 0;
 	padding: 2rem;
 	background-color: var(--aside-bg-color);
@@ -891,5 +891,52 @@ main {
 @keyframes fade-in {
 	from {
 		opacity: 0;
+	}
+}
+
+/* Table of Contents */
+.post-toc {
+	margin-top: 2rem;
+}
+
+.post-toc + .post-content {
+	margin-top: 3rem;
+}
+
+.post-toc h2 {
+	margin-top: 0;
+	font-size: 1.6rem;
+}
+
+.post-toc ol {
+	margin: 0;
+	padding-left: 3rem;
+	font-size: 1.4rem;
+}
+
+.post-toc li {
+	margin-top: 0.5rem;
+}
+
+/* Sticky sidebar TOC for wider screens */
+@media screen and (min-width: 1200px) {
+	.post {
+		position: relative;
+	}
+
+	.post-toc {
+		position: sticky;
+		top: 2rem;
+		left: 0;
+		float: left;
+		width: 250px;
+		max-height: calc(100vh - 4rem);
+		overflow-y: auto;
+		margin-left: -280px;
+		margin-bottom: 0;
+	}
+
+	.post-content {
+		margin-left: 0;
 	}
 }
