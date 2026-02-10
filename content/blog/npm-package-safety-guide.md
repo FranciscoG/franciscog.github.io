@@ -231,4 +231,4 @@ pnpm config set save-prefix=''
 
 ## Conclusion
 
-There's probably a lot more I can write about regarding this topic-like keeping your dependencies shallow and how to choose a dependency-but those are a little more squishy. I wanted to keep this post focused on more actionable items that were easy to implement and you didn't have to think about. By implementing these few small settings you can immediately and significantly reduce your exposure to the most common supply chain attacks. 
+There's probably a lot more I can write about regarding this topic, like keeping your dependencies shallow and how to choose a dependency, but those are a little more squishy. I wanted to keep this post focused on more actionable items that were easy to implement and you didn't have to think about. By implementing these few small settings you can immediately and significantly reduce your exposure to the most common supply chain attacks. 
