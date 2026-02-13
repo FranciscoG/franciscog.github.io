@@ -1,6 +1,9 @@
 ---
 title: "Switching from Android to iOS. Part 2"
 date: 2025-12-18
+tags:
+  - Android
+  - iOS
 ---
 
 This is the 2nd part of my 2-part post series.  [Read part 1 here](/blog/android-to-ios-part-1/).

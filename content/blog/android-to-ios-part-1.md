@@ -1,6 +1,9 @@
 ---
 title: "Switching from Android to iOS: Part 1"
 date: 2025-12-12
+tags:
+  - Android
+  - iOS
 ---
 
 After many years of being a green bubble Android user, I've decided to switch over to iOS.

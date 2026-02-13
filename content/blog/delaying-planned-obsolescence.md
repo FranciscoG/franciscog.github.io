@@ -1,7 +1,6 @@
 ---
 title: Delaying planned obsolescence
 date: 2026-02-13
-draft: true
 syntax: false
 ---
 
