@@ -1,10 +1,9 @@
 ---
 title: Binary calculation in pure CSS and HTML
-date:
-draft: true
+date: 2026-02-07
 syntax: true
 tags:
-  - post
+  - CSS
 ---
 
 <aside class="supports">
