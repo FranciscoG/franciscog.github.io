@@ -18,6 +18,5 @@ pre-commit:
     #   glob: "*.{js,ts,jsx,tsx}
 
     - name: validate post dates
-      script: "validate-post-dates.js"
-      runner: node
+      run: node validate-post-dates.js {staged_files}
       glob: "content/blog/*.md"
