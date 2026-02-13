@@ -1,0 +1,23 @@
+# EXAMPLE USAGE:
+#
+#   Refer for explanation to following link:
+#   https://lefthook.dev/configuration/
+#
+pre-push:
+  jobs:
+    - name: packages audit
+      tags:
+        - frontend
+        - security
+      run: npm audit --audit-level=critical
+
+pre-commit:
+  parallel: true
+  jobs:
+    # - run: yarn eslint {staged_files}
+    #   glob: "*.{js,ts,jsx,tsx}
+
+    - name: validate post dates
+      script: "validate-post-dates.js"
+      runner: node
+      glob: "content/blog/*.md"
