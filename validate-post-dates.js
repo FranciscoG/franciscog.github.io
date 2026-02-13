@@ -6,12 +6,19 @@ import path from 'path';
 const BLOG_DIR = './content/blog';
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
+/**
+ * 
+ * @param {string} content 
+ */
 function parseFrontMatter(content) {
 	const frontMatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
 	if (!frontMatterMatch) {
 		return null;
 	}
 
+	/**
+	 * @type {Record<string, string>}
+	 */
 	const frontMatter = {};
 	const lines = frontMatterMatch[1].split('\n');
 
@@ -27,6 +34,11 @@ function parseFrontMatter(content) {
 	return frontMatter;
 }
 
+/**
+ * 
+ * @param {string} dateString 
+ * @returns 
+ */
 function validateDateFormat(dateString) {
 	if (!dateString) return false;
 	return DATE_PATTERN.test(dateString);
@@ -59,7 +71,7 @@ function main() {
 			if (!filePath.endsWith('.md')) continue;
 
 			const fileName = path.basename(filePath);
-			
+
 			try {
 				const content = fs.readFileSync(filePath, 'utf-8');
 				const frontMatter = parseFrontMatter(content);
@@ -78,7 +90,11 @@ function main() {
 					hasErrors = true;
 				}
 			} catch (error) {
-				errors.push(`${fileName}: Error reading file - ${error.message}`);
+				if (error instanceof Error) {
+					errors.push(`${fileName}: Error reading file - ${error.message}`);
+				} else {
+					errors.push(`${fileName}: Unknown error reading file: ${error}`);
+				}
 				hasErrors = true;
 			}
 		}
@@ -91,7 +107,11 @@ function main() {
 			console.log(`✅ All ${filesToCheck.length} file(s) have valid dates!`);
 		}
 	} catch (error) {
-		console.error(`Error: ${error.message}`);
+		if (error instanceof Error) {
+			console.error(`Error: ${error.message}`);
+		} else {
+			console.error(`Unknown error occurred: ${error}`);
+		}
 		process.exit(1);
 	}
 }
