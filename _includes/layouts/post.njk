@@ -24,10 +24,12 @@ layout: layouts/base.njk
 			{%- endfor %}
 		</ul>
 	</header>
+	{% if content | toc %}
 	<nav id="post-toc" class="post-toc" aria-labelledby="toc-heading">
 		<h2 id="toc-heading">Table of Contents</h2>
 		{{ content | toc | safe }}
 	</nav>
+	{% endif %}
 	<section class="post-content">
 		{{ content | safe }}
 	</section>
