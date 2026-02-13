@@ -1,6 +1,7 @@
 ---
 title: Binary calculation in pure CSS and HTML
 date: 2026-02-07
+updated: 2026-02-13
 syntax: true
 tags:
   - CSS
@@ -99,9 +100,9 @@ fieldset#css-content {
 
 The only other way I could think of doing this is by having 256 `<span>` elements and using a ridiculous amount of CSS to hide/show the correct number based on what inputs were checked. 
 
-And that's exactly what I did. I'm using a combination of `:has()` and `:not(:has())` to detect every possible combination of checked inputs. Basically the CSS equivalent of brute forcing the solution.
+And that's exactly what I did. The solution uses a combination of `:has()` and `:not(:has())` to detect every possible combination of checked inputs. Basically the CSS equivalent of brute force.
 
-Disclaimer: I wrote the HTML and most of the CSS for this one, but there's no way I was writing all of the central CSS logic by hand. I asked AI to output that part specifically. It would have taken me forever to do it myself.
+Disclaimer: I wrote the HTML and most of the CSS for this post, but there's no way I was writing all of the central CSS logic by hand for this version. I asked AI to output that part specifically. It would have taken me forever to do it myself.
 
 Here it is in action:
 
@@ -402,7 +403,3097 @@ Here it is in action:
 
 It works and is more accessible!
 
-This CSS is way too big to show you, so you'll need to view the page source where the CSS is both minified and post-css processed.
+~~This CSS is way too big to show you, so you'll need to view the page source where the CSS is both minified and post-css processed.~~
+
+**Update:** I've decided to show the CSS so you can see just how ridiculous it is:
+
+```css
+fieldset#many-spans {
+  output span {
+    display: none;
+  }
+
+  output span:first-child {
+    display: inline-block;
+  }
+
+  &:has(:checked) output span:first-child {
+    display: none;
+  }
+
+  &:not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(1) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(2) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(3) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(4) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(5) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(6) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(7) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(8) {
+    display: inline-block;
+  }
+
+  &:has(#bit-4:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(9) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-4:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(10) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(11) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(12) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(13) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(14) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(15) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(16) {
+    display: inline-block;
+  }
+
+  &:has(#bit-5:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(17) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-5:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(18) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-5:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(19) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-5:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(20) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(21) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(22) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(23) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(24) {
+    display: inline-block;
+  }
+
+  &:has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(25) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(26) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(27) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(28) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(29) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(30) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(31) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(32) {
+    display: inline-block;
+  }
+
+  &:has(#bit-6:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(33) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(34) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(35) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(36) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(37) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(38) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(39) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(40) {
+    display: inline-block;
+  }
+
+  &:has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(41) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(42) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(43) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(44) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(45) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(46) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(47) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(48) {
+    display: inline-block;
+  }
+
+  &:has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(49) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(50) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(51) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(52) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(53) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(54) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(55) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(56) {
+    display: inline-block;
+  }
+
+  &:has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(57) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(58) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(59) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(60) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(61) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(62) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(63) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :not(:has(#bit-7:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(64) {
+    display: inline-block;
+  }
+
+  &:has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(65) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(66) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(67) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(68) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(69) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(70) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(71) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(72) {
+    display: inline-block;
+  }
+
+  &:has(#bit-4:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(73) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-4:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(74) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(75) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(76) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(77) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(78) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(79) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(80) {
+    display: inline-block;
+  }
+
+  &:has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(81) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(82) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(83) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(84) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(85) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(86) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(87) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(88) {
+    display: inline-block;
+  }
+
+  &:has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(89) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(90) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(91) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(92) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(93) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(94) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(95) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(96) {
+    display: inline-block;
+  }
+
+  &:has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(97) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(98) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(99) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(100) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(101) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(102) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(103) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(104) {
+    display: inline-block;
+  }
+
+  &:has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(105) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(106) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(107) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(108) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(109) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(110) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(111) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(112) {
+    display: inline-block;
+  }
+
+  &:has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(113) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(114) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(115) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(116) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(117) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(118) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(119) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(120) {
+    display: inline-block;
+  }
+
+  &:has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(121) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(122) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(123) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(124) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(125) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(126) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(127) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :not(:has(#bit-8:checked)) 
+    output span:nth-child(128) {
+    display: inline-block;
+  }
+
+  &:has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(129) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(130) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(131) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(132) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(133) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(134) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(135) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(136) {
+    display: inline-block;
+  }
+
+  &:has(#bit-4:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(137) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-4:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(138) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(139) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(140) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(141) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(142) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(143) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(144) {
+    display: inline-block;
+  }
+
+  &:has(#bit-5:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(145) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-5:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(146) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-5:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(147) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-5:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(148) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(149) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(150) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(151) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(152) {
+    display: inline-block;
+  }
+
+  &:has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(153) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(154) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(155) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(156) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(157) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(158) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(159) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-6:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(160) {
+    display: inline-block;
+  }
+
+  &:has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(161) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(162) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(163) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(164) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(165) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(166) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(167) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(168) {
+    display: inline-block;
+  }
+
+  &:has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(169) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(170) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(171) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(172) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(173) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(174) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(175) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(176) {
+    display: inline-block;
+  }
+
+  &:has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(177) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(178) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(179) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(180) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(181) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(182) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(183) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(184) {
+    display: inline-block;
+  }
+
+  &:has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(185) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(186) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(187) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(188) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(189) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(190) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(191) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-7:checked)) 
+    output span:nth-child(192) {
+    display: inline-block;
+  }
+
+  &:has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(193) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(194) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(195) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(196) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(197) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(198) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(199) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(200) {
+    display: inline-block;
+  }
+
+  &:has(#bit-4:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(201) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-4:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(202) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(203) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(204) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(205) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(206) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(207) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-5:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(208) {
+    display: inline-block;
+  }
+
+  &:has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(209) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(210) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(211) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(212) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(213) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(214) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(215) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(216) {
+    display: inline-block;
+  }
+
+  &:has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(217) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(218) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(219) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(220) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(221) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(222) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(223) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-6:checked)) 
+    output span:nth-child(224) {
+    display: inline-block;
+  }
+
+  &:has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked)) 
+    output span:nth-child(225) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked)) 
+    output span:nth-child(226) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked)) 
+    output span:nth-child(227) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked)) 
+    output span:nth-child(228) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked)) 
+    output span:nth-child(229) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked)) 
+    output span:nth-child(230) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked)) 
+    output span:nth-child(231) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-4:checked))
+    :not(:has(#bit-5:checked)) 
+    output span:nth-child(232) {
+    display: inline-block;
+  }
+
+  &:has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked)) 
+    output span:nth-child(233) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked)) 
+    output span:nth-child(234) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked)) 
+    output span:nth-child(235) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-5:checked)) 
+    output span:nth-child(236) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-5:checked)) 
+    output span:nth-child(237) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-5:checked)) 
+    output span:nth-child(238) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-5:checked)) 
+    output span:nth-child(239) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-5:checked)) 
+    output span:nth-child(240) {
+    display: inline-block;
+  }
+
+  &:has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked)) 
+    output span:nth-child(241) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked)) 
+    output span:nth-child(242) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked)) 
+    output span:nth-child(243) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-3:checked))
+    :not(:has(#bit-4:checked)) 
+    output span:nth-child(244) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked)) 
+    output span:nth-child(245) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-4:checked)) 
+    output span:nth-child(246) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-4:checked)) 
+    output span:nth-child(247) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-4:checked)) 
+    output span:nth-child(248) {
+    display: inline-block;
+  }
+
+  &:has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked)) 
+    output span:nth-child(249) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked))
+    :not(:has(#bit-3:checked)) 
+    output span:nth-child(250) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-3:checked)) 
+    output span:nth-child(251) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-3:checked)) 
+    output span:nth-child(252) {
+    display: inline-block;
+  }
+
+  &:has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked))
+    :not(:has(#bit-2:checked)) 
+    output span:nth-child(253) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-2:checked)) 
+    output span:nth-child(254) {
+    display: inline-block;
+  }
+
+  &:has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked)
+    :not(:has(#bit-1:checked)) 
+    output span:nth-child(255) {
+    display: inline-block;
+  }
+
+  &:has(#bit-1:checked)
+    :has(#bit-2:checked)
+    :has(#bit-3:checked)
+    :has(#bit-4:checked)
+    :has(#bit-5:checked)
+    :has(#bit-6:checked)
+    :has(#bit-7:checked)
+    :has(#bit-8:checked) 
+    output span:nth-child(256) {
+    display: inline-block;
+  }
+}
+```
 
 <style>
 {% css %}
@@ -470,7 +3561,7 @@ This CSS is way too big to show you, so you'll need to view the page source wher
     display: none;
   }
 
-    &:not(:has(#bit-1:checked)):not(:has(#bit-2:checked)):not(:has(#bit-3:checked)):not(:has(#bit-4:checked)):not(:has(#bit-5:checked)):not(:has(#bit-6:checked)):not(:has(#bit-7:checked)):not(:has(#bit-8:checked)) output span:nth-child(1) { display: inline-block; }
+  &:not(:has(#bit-1:checked)):not(:has(#bit-2:checked)):not(:has(#bit-3:checked)):not(:has(#bit-4:checked)):not(:has(#bit-5:checked)):not(:has(#bit-6:checked)):not(:has(#bit-7:checked)):not(:has(#bit-8:checked)) output span:nth-child(1) { display: inline-block; }
   &:has(#bit-1:checked):not(:has(#bit-2:checked)):not(:has(#bit-3:checked)):not(:has(#bit-4:checked)):not(:has(#bit-5:checked)):not(:has(#bit-6:checked)):not(:has(#bit-7:checked)):not(:has(#bit-8:checked)) output span:nth-child(2) { display: inline-block; }
   &:has(#bit-2:checked):not(:has(#bit-1:checked)):not(:has(#bit-3:checked)):not(:has(#bit-4:checked)):not(:has(#bit-5:checked)):not(:has(#bit-6:checked)):not(:has(#bit-7:checked)):not(:has(#bit-8:checked)) output span:nth-child(3) { display: inline-block; }
   &:has(#bit-1:checked):has(#bit-2:checked):not(:has(#bit-3:checked)):not(:has(#bit-4:checked)):not(:has(#bit-5:checked)):not(:has(#bit-6:checked)):not(:has(#bit-7:checked)):not(:has(#bit-8:checked)) output span:nth-child(4) { display: inline-block; }
