@@ -82,11 +82,18 @@ function main() {
 					continue;
 				}
 
+				// Validate the date field has a value and is in the correct format
 				if (!frontMatter.date) {
 					errors.push(`${fileName}: Missing 'date' property`);
 					hasErrors = true;
 				} else if (!validateDateFormat(frontMatter.date)) {
 					errors.push(`${fileName}: Invalid date format '${frontMatter.date}' (expected YYYY-MM-DD)`);
+					hasErrors = true;
+				}
+
+				// Validate the the `draft: true` has been removed
+				if (typeof frontMatter.draft !== 'undefined') {
+					errors.push(`${fileName}: 'draft' property should be removed`);
 					hasErrors = true;
 				}
 			} catch (error) {
@@ -100,11 +107,11 @@ function main() {
 		}
 
 		if (hasErrors) {
-			console.error('❌ Date validation failed:\n');
+			console.error('❌ Post validation failed:\n');
 			errors.forEach(error => console.error(`  ${error}`));
 			process.exit(1);
 		} else {
-			console.log(`✅ All ${filesToCheck.length} file(s) have valid dates!`);
+			console.log(`✅ All ${filesToCheck.length} file(s) are valid`);
 		}
 	} catch (error) {
 		if (error instanceof Error) {
