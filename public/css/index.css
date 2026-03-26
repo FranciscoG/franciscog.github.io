@@ -1,6 +1,6 @@
 /* Defaults */
 :root {
-	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family: 'Outfit', -apple-system, system-ui, sans-serif;
 	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono,
 		Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono,
 		Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New,
@@ -120,6 +120,7 @@ body {
 	font-size: 1.8rem;
 	line-height: 1.75;
 	min-height: 100vh;
+	font-kerning: normal;
 }
 
 #page {
@@ -261,8 +262,8 @@ code {
 }
 
 .home-link {
-	font-size: 1.8rem;
-	font-weight: 700;
+	font-size: 2.4rem;
+	font-weight: 600;
 	margin-right: 2em;
 }
 
@@ -337,8 +338,8 @@ nav {
 }
 
 .postlist-link {
-	font-size: 1.9rem;
-	font-weight: 700;
+	font-size: 2rem;
+	font-weight: 600;
 	flex-basis: calc(100% - 1.5rem);
 	padding-right: 0.5em;
 	text-underline-position: from-font;
@@ -475,17 +476,27 @@ code:not([class]) {
 }
 
 .post h1 {
-	font-size: 3.2rem;
+	font-size: 3.6rem;
+	font-weight: 600;
+	letter-spacing: -0.01em;
 }
 
 .post h2 {
-	font-size: 2.6rem;
+	font-size: 2.8rem;
+	font-weight: 600;
 	margin-top: 2em;
+	letter-spacing: -0.01em;
 }
 
 .post h3 {
-	font-size: 1.8rem;
+	font-size: 2.2rem;
+	font-weight: 600;
 	margin-top: 2em;
+}
+
+.post h4 {
+	font-size: 1.8rem;
+	font-weight: 600;
 }
 
 .post-draft {
@@ -761,6 +772,9 @@ nobr,
 } */
 
 main>h1 {
+	font-size: 3.2rem;
+	font-weight: 600;
+	letter-spacing: -0.01em;
 	view-transition-name: heading
 }
 
