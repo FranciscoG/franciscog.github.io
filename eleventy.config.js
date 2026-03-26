@@ -134,6 +134,20 @@ export default function (eleventyConfig) {
 		});
 	});
 
+	// filter out draft posts from a collection
+	eleventyConfig.addFilter("excludeDrafts", (collection) => {
+		return (collection || []).filter(
+			(item) => !item.data.draft && !(item.data.tags && item.data.tags.includes("drafts"))
+		);
+	});
+
+	// filter to only draft posts
+	eleventyConfig.addFilter("onlyDrafts", (collection) => {
+		return (collection || []).filter(
+			(item) => item.data.draft || (item.data.tags && item.data.tags.includes("drafts"))
+		);
+	});
+
 	eleventyConfig.addFilter("cssmin", async function (code) {
 		// Skip PostCSS in development - use native CSS nesting
 		if (isDev) {

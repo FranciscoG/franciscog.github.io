@@ -1,4 +1,7 @@
-/* Defaults */
+/* ==========================================================================
+   1. Design Tokens
+   ========================================================================== */
+
 :root {
 	--font-family: 'Outfit', -apple-system, system-ui, sans-serif;
 	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono,
@@ -7,7 +10,6 @@
 		Courier, monospace;
 
 	--max-width: 68.8rem;
-	/* ~688px at 10px font size */
 	--syntax-tab-size: 2;
 
 	--color-gray-10: #d8d8d8;
@@ -15,19 +17,20 @@
 	--color-gray-50: #c0c0c0;
 	--color-gray-90: #333;
 
-	/* Light theme colors */
+	/* Light theme */
 	--background-color: #fff;
 	--bg-alpha: rgba(0, 0, 0, 0.2);
-
 	--text-color: var(--color-gray-90);
 	--text-color-link: #082840;
 	--text-color-link-active: #5f2b48;
 	--text-color-link-visited: #17050f;
-
+	--text-color-muted: #767676;
 	--code-bg-color: var(--color-gray-20);
 	--code-text-color: var(--color-gray-90);
+	--aside-bg-color: #e6f7ff;
+	--aside-border-color: #007bff;
 
-	/* Dark theme variables */
+	/* Dark theme values (applied via data-theme="dark") */
 	--dark-text-color: var(--color-gray-10);
 	--dark-text-color-link: #1493fb;
 	--dark-text-color-link-active: #6969f7;
@@ -35,10 +38,8 @@
 	--dark-background-color: #15202b;
 	--dark-code-bg-color: #272822;
 	--dark-code-text-color: var(--color-gray-20);
+	--dark-text-color-muted: #9a9a9a;
 	--dark-bg-alpha: rgba(100, 100, 100, 0.2);
-
-	--aside-bg-color: #e6f7ff;
-	--aside-border-color: #007bff;
 	--dark-aside-bg-color: #2b2b2b;
 	--dark-aside-border-color: #4da6ff;
 
@@ -56,18 +57,10 @@ html[data-theme="dark"] {
 	--bg-alpha: var(--dark-bg-alpha);
 	--aside-bg-color: var(--dark-aside-bg-color);
 	--aside-border-color: var(--dark-aside-border-color);
+	--text-color-muted: var(--dark-text-color-muted);
 }
 
-.color-theme-picker {
-	display: none;
-}
-
-@media (scripting: enabled) {
-	.color-theme-picker {
-		display: block;
-	}
-}
-
+/* No-JS dark mode fallback via native <select> inside <noscript> */
 @media (scripting: none) {
 	html:has(#color-scheme-select option[value="dark"]:checked) {
 		--text-color: var(--dark-text-color);
@@ -80,14 +73,14 @@ html[data-theme="dark"] {
 		--bg-alpha: var(--dark-bg-alpha);
 		--aside-bg-color: var(--dark-aside-bg-color);
 		--aside-border-color: var(--dark-aside-border-color);
-	}
-
-	.color-theme-picker {
-		display: block;
+		--text-color-muted: var(--dark-text-color-muted);
 	}
 }
 
-/* Global stylesheet */
+/* ==========================================================================
+   2. Reset & Base
+   ========================================================================== */
+
 *,
 *::before,
 *::after {
@@ -101,8 +94,8 @@ html[data-theme="dark"] {
 }
 
 html {
+	/* 1rem = 10px (16 * 0.625 = 10) */
 	font-size: 62.5%;
-	/* This sets 1rem to 10px, assuming a default browser font size of 16px (16 * 0.625 = 10) */
 	overflow-y: scroll;
 }
 
@@ -117,43 +110,30 @@ body {
 
 body {
 	font-family: var(--font-family);
-	font-size: 1.8rem;
+	font-size: 1.6rem;
 	line-height: 1.75;
 	min-height: 100vh;
 	font-kerning: normal;
 }
 
-#page {
-	color: var(--text-color);
-	height: 100%;
-	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
+@media screen and (min-width: 720px) {
+	body {
+		font-size: 1.8rem;
+	}
 }
 
-.site-header,
-main,
-footer {
-	width: 100%;
-	max-width: var(--max-width);
-	margin-left: auto;
-	margin-right: auto;
+p,
+li {
+	line-height: 1.5;
 }
 
 p:last-child {
 	margin-bottom: 0;
 }
 
-p {
-	line-height: 1.5;
-}
-
-li {
-	line-height: 1.5;
-}
-
 a[href] {
 	color: var(--text-color-link);
+	transition: color 0.15s ease;
 }
 
 a[href]:visited {
@@ -165,50 +145,10 @@ a[href]:active {
 	color: var(--text-color-link-active);
 }
 
-main {
-	padding: 1.6rem;
-	flex: 1;
-}
-
-footer {
-	padding: 1.6rem;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-@media screen and (min-width: 720px) {
-
-	main,
-	footer {
-		padding: 1.6rem 0;
-	}
-
-}
-
-main :first-child {
-	margin-top: 0;
-}
-
-.site-header {
-	border-bottom: 1px dashed var(--color-gray-20);
-}
-
-.links-nextprev {
-	list-style: none;
-	border-top: 1px dashed var(--color-gray-20);
-	padding: 1em 0;
-	display: flex;
-	justify-content: space-between;
-}
-
-.links-nextprev li span {
-	font-weight: 700;
-	display: block;
-}
-
-.links-nextprev li:nth-child(2) {
-	text-align: right;
+a[href]:focus-visible {
+	outline: 2px solid var(--text-color-link);
+	outline-offset: 2px;
+	border-radius: 2px;
 }
 
 table {
@@ -228,7 +168,6 @@ code {
 pre:not([class*="language-"]) {
 	margin: 0.5em 0;
 	line-height: 1.375;
-	/* 22px /16 */
 	-moz-tab-size: var(--syntax-tab-size);
 	-o-tab-size: var(--syntax-tab-size);
 	tab-size: var(--syntax-tab-size);
@@ -246,48 +185,162 @@ code {
 	word-break: break-all;
 }
 
-/* Header */
+*:not(pre) > code {
+	word-break: keep-all;
+}
+
+code[class*="language-"],
+pre[class*="language-"] {
+	font-size: 1.4rem;
+}
+
+/* Inline code */
+code:not([class]) {
+	background-color: var(--code-bg-color);
+	color: var(--code-text-color);
+	padding: 0.1em 0.3em;
+	border-radius: 0.2em;
+	font-size: 1.4rem;
+}
+
+/* ==========================================================================
+   3. Layout
+   ========================================================================== */
+
+#page {
+	color: var(--text-color);
+	height: 100%;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.site-header,
+main,
+footer {
+	width: 100%;
+	max-width: var(--max-width);
+	margin-left: auto;
+	margin-right: auto;
+}
+
+main {
+	padding: 3.2rem 1.6rem;
+	flex: 1;
+	view-transition-name: nextContent;
+}
+
+main :first-child {
+	margin-top: 0;
+}
+
+main > h1 {
+	font-size: 3.2rem;
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	margin-bottom: 2.4rem;
+	view-transition-name: heading;
+}
+
+footer {
+	padding: 1.6rem;
+	margin-top: 4.8rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-top: 1px solid var(--color-gray-20);
+	font-size: 1.4rem;
+	color: var(--text-color-muted);
+}
+
+@media screen and (min-width: 720px) {
+	main {
+		padding: 3.2rem 0;
+	}
+
+	footer {
+		padding: 1.6rem 0;
+	}
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden,
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+	width: 1px !important;
+	height: 1px !important;
+	padding: 0 !important;
+	margin: -1px !important;
+	overflow: hidden !important;
+	clip: rect(0, 0, 0, 0) !important;
+	white-space: nowrap !important;
+	border: 0 !important;
+}
+
+.visually-hidden:not(caption),
+.visually-hidden-focusable:not(:focus):not(:focus-within):not(caption) {
+	position: absolute !important;
+}
+
+nobr,
+.nobr {
+	display: inline;
+	white-space: nowrap;
+}
+
+/* ==========================================================================
+   4. Header & Navigation
+   ========================================================================== */
+
 .site-header {
 	display: flex;
-	gap: 1em 0.5em;
-	flex-wrap: wrap;
-	align-items: center;
-	padding: 1em;
+	flex-direction: column;
+	gap: 0.8rem;
+	padding: 2.4rem 1em 1.6rem;
+	border-bottom: 1px solid var(--color-gray-20);
 }
 
 @media screen and (min-width: 720px) {
 	.site-header {
-		padding: 1em 0;
+		padding: 2.4rem 0 1.6rem;
 	}
 }
 
 .home-link {
-	font-size: 2.4rem;
-	font-weight: 600;
-	margin-right: 2em;
+	font-size: 2.8rem;
+	font-weight: 700;
+	letter-spacing: -0.02em;
 }
 
 .home-link:link:not(:hover) {
 	text-decoration: none;
 }
 
-nav {
-	flex: 1;
+nav:not(.post-toc) {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
 }
 
-/* Nav */
 .nav {
 	display: flex;
 	padding: 0;
 	margin: 0;
 	list-style: none;
 	align-items: center;
-	font-size: 1.6rem;
+	gap: 1.6em;
+	font-size: 1.5rem;
+	text-transform: lowercase;
+	letter-spacing: 0.03em;
 }
 
 .nav-item {
 	display: inline-block;
-	margin-right: 1em;
+}
+
+.nav-item-feed a {
+	display: flex;
+	align-items: center;
 }
 
 .nav-item a[href]:not(:hover) {
@@ -298,23 +351,92 @@ nav {
 	text-decoration: underline;
 }
 
-/* .nav-item-feed {
-	margin-left: auto;
-} */
-
-/************************/
-/* Dark mode checkbox */
-.nav-item-theme {
-	margin-left: auto;
+/* Theme switcher (JS-enabled icon toggle) */
+.theme-switcher {
+	display: none;
+	position: relative;
+	background: color-mix(in oklch, var(--text-color) 8%, transparent);
+	border-radius: 9999px;
+	padding: 3px;
+	gap: 2px;
 }
 
+@media (scripting: enabled) {
+	.theme-switcher {
+		display: flex;
+	}
+}
+
+.theme-switcher-btn {
+	appearance: none;
+	border: none;
+	background: transparent;
+	color: var(--text-color);
+	opacity: 0.45;
+	cursor: pointer;
+	padding: 6px;
+	border-radius: 9999px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	z-index: 1;
+	transition: opacity 0.25s ease;
+}
+
+.theme-switcher-btn:hover {
+	opacity: 0.75;
+}
+
+.theme-switcher-btn[aria-checked="true"] {
+	opacity: 1;
+}
+
+.theme-switcher-btn:focus-visible {
+	outline: 2px solid var(--text-color-link);
+	outline-offset: 2px;
+}
+
+.theme-switcher-indicator {
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	width: calc((100% - 6px - 4px) / 3);
+	height: calc(100% - 6px);
+	background: var(--background-color);
+	border-radius: 9999px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+	transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+	z-index: 0;
+}
+
+.theme-switcher-indicator[data-position="0"] {
+	transform: translateX(0);
+}
+
+.theme-switcher-indicator[data-position="1"] {
+	transform: translateX(calc(100% + 2px));
+}
+
+.theme-switcher-indicator[data-position="2"] {
+	transform: translateX(calc(200% + 4px));
+}
+
+/* Theme switcher no-JS fallback (<select> inside <noscript>) */
 .color-theme-picker {
 	font-size: 1.2rem;
 	width: 140px;
-	display: block;
 }
 
-/* Posts list */
+.color-theme-picker select {
+	background-color: transparent;
+	color: var(--text-color);
+}
+
+/* ==========================================================================
+   5. Post List & Tags
+   ========================================================================== */
+
 .postlist {
 	list-style: none;
 	padding: 0;
@@ -324,49 +446,54 @@ nav {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: baseline;
-	margin-bottom: 1em;
+	padding: 1rem 0;
 }
 
 .postlist-date,
 .postlist-item:before {
 	font-size: 1.3rem;
-	color: var(--text-color);
+	color: var(--text-color-muted);
 }
 
 .postlist-date {
 	word-spacing: -0.5px;
+	order: 2;
 }
 
 .postlist-link {
-	font-size: 2rem;
-	font-weight: 600;
+	font-size: 1.5rem;
+	font-weight: 400;
 	flex-basis: calc(100% - 1.5rem);
 	padding-right: 0.5em;
 	text-underline-position: from-font;
 	text-underline-offset: 0;
 	text-decoration-thickness: 1px;
+	order: 1;
+}
+
+@media screen and (min-width: 720px) {
+	.postlist-item {
+		flex-wrap: nowrap;
+		gap: 1rem;
+	}
+
+	.postlist-date {
+		flex-shrink: 0;
+		width: 10rem;
+		order: -1;
+	}
+
+	.postlist-link {
+		font-size: 2rem;
+		flex-basis: auto;
+		order: 0;
+	}
 }
 
 .postlist-item-active .postlist-link {
 	font-weight: bold;
 }
 
-.postlist-item-draft {
-	opacity: 0.6;
-}
-
-.postlist-draft {
-	display: inline-block;
-	margin-right: 1ch;
-	font-size: 1.2rem;
-	font-weight: 700;
-	color: var(--text-color);
-	padding: 0.1em 0.3em;
-	border-radius: 0.2em;
-	border: 1px solid var(--text-color);
-}
-
-/* Tags */
 .post-tag-link {
 	display: inline-flex;
 	align-items: center;
@@ -375,96 +502,65 @@ nav {
 	font-style: italic;
 }
 
-.postlist-item>.post-tag-link {
+.postlist-item > .post-tag-link {
 	align-self: center;
 }
 
-/* Tags list */
 .post-metadata {
 	display: inline-flex;
 	flex-wrap: wrap;
 	gap: 0.5em;
 	list-style: none;
-	padding: 0;
-	margin: 0;
-	font-size: 1.4rem;
+	padding: 1.2rem 0 0;
+	margin: 1.2rem 0 0;
+	border-top: 1px solid var(--color-gray-20);
+	font-size: 1.6rem;
+	color: var(--text-color-muted);
+}
+
+.post-metadata a[href] {
+	color: var(--text-color-link);
 }
 
 .post-metadata time {
 	margin-right: 1em;
 }
 
+/* Prev/next post navigation */
+.links-nextprev {
+	list-style: none;
+	border-top: 1px solid var(--color-gray-20);
+	padding: 2.4em 0 0;
+	margin-top: 4.8rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.2em;
+}
+
+.links-nextprev li span {
+	font-size: 1.3rem;
+	color: var(--text-color-muted);
+	display: inline;
+	margin-right: 0.3em;
+}
+
+/* ==========================================================================
+   6. Post Content
+   ========================================================================== */
+
 /*
-	These are the styles for the '#' anchor links injected by
-	the eleventy.config.js. They are visually hidden but you see
-	them when you hover over them. It's so you can easily copy the link
-	to a specific sub-header in the post. They are injected inside 
-	the header tags (h1, h2, etc).
-*/
-.header-anchor {
-	text-decoration: none;
-	font-style: normal;
-	font-size: 1em;
-	/* leave as 1em to match the header style */
-	margin-left: 0.1em;
-}
-
-a[href].header-anchor,
-a[href].header-anchor:visited {
-	color: transparent;
-}
-
-a[href].header-anchor:focus,
-a[href].header-anchor:hover {
-	text-decoration: underline;
-}
-
-a[href].header-anchor:focus,
-:hover>a[href].header-anchor {
-	color: #aaa;
-}
-
-h2+.header-anchor {
-	font-size: 1.5em;
-}
-
-footer {
-	padding-bottom: 20px;
-}
-
-code[class*="language-"],
-pre[class*="language-"] {
-	font-size: 1.4rem;
-}
-
-/* inline code blocks */
-code:not([class]) {
-	background-color: var(--code-bg-color);
-	color: var(--code-text-color);
-	padding: 0.1em 0.3em;
-	border-radius: 0.2em;
-	font-size: 1.4rem;
-}
-
-/***************************************
- Post styles
- */
-/* 
-  clear all bottom margins because we only
-	want to space in one direction (I chose top)
-  because it prevents dealing with collapsing
-	margins
+  Clear all bottom margins — spacing uses margin-top only
+  to avoid collapsing margin issues.
 */
 .post * {
 	margin-bottom: 0;
 }
 
 .post-content {
-	margin-top: 1.5rem;
+	margin-top: 3.2rem;
 }
 
-/* Basic markdown elements */
-
+/* Headings */
 .post h1,
 .post h2,
 .post h3,
@@ -476,15 +572,16 @@ code:not([class]) {
 }
 
 .post h1 {
-	font-size: 3.6rem;
-	font-weight: 600;
-	letter-spacing: -0.01em;
+	font-size: clamp(3.2rem, 2.4rem + 2vw, 4.4rem);
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	line-height: 1.1;
 }
 
 .post h2 {
 	font-size: 2.8rem;
 	font-weight: 600;
-	margin-top: 2em;
+	margin-top: 3em;
 	letter-spacing: -0.01em;
 }
 
@@ -499,17 +596,50 @@ code:not([class]) {
 	font-weight: 600;
 }
 
-.post-draft {
+h2.post-draft {
 	background-color: rgba(245, 237, 2, 0.2);
 	padding: 0.2em 0.5em;
 	border: 1px solid #f5ed02;
 	text-align: center;
+	margin-top: 1rem;
 }
 
+/* Anchor links on headings (injected by markdown-it-anchor) */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: 0.1em;
+}
+
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+
+a[href].header-anchor:focus,
+a[href].header-anchor:hover {
+	text-decoration: underline;
+}
+
+a[href].header-anchor:focus,
+:hover > a[href].header-anchor {
+	color: var(--text-color-muted);
+}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/* Lists & code in posts */
 .post ol,
 .post ul,
 .post pre {
 	margin-top: 1em;
+}
+
+.post li {
+	margin-top: 0.5em;
 }
 
 .post-content code[class*=language-],
@@ -517,6 +647,7 @@ code:not([class]) {
 	font-size: 1.6rem;
 }
 
+/* Expandable code blocks on wider screens */
 @media screen and (min-width: 58rem) {
 	.post-content pre[class*=language-] {
 		position: relative;
@@ -534,74 +665,32 @@ code:not([class]) {
 
 .expand-code-button {
 	position: absolute;
-	top: 10px;
-	right: 10px;
+	top: 1rem;
+	right: 1rem;
 	background-color: rgba(0, 0, 0, 0.5);
 	color: white;
 	border: none;
-	padding: 5px 10px;
+	padding: 0.5rem 1rem;
 	cursor: pointer;
+	font-family: var(--font-family);
 	font-size: 1.2rem;
 	border-radius: 3px;
+	transition: background-color 0.15s ease;
 }
 
-.post li {
-	margin-top: 0.5em;
+.expand-code-button:hover {
+	background-color: rgba(0, 0, 0, 0.7);
 }
 
-.post aside:not(.post-toc) {
-	margin: 3rem 0;
-	padding: 2rem;
-	background-color: var(--aside-bg-color);
-	border-left: 5px solid var(--aside-border-color);
-	color: var(--text-color);
-}
-
-.aside-prefix,
-aside::before {
-	display: block;
-	margin-bottom: 10px;
-	font-weight: bold;
-	font-size: 0.9em;
-	color: var(--aside-border-color);
-	text-transform: uppercase;
-}
-
-aside.admonition-info {
-	border-left: 4px solid #2f86eb;
-}
-
-.post figure {
-	margin: 1.6rem 0;
-}
-
-@media screen and (min-width: 720px) {
-	.post figure {
-		margin: 1.6rem;
-	}
-}
-
+/* Blockquotes */
 .post blockquote {
 	padding: 1em 1.5em;
-	margin: 1em 0;
-	border-left: 6px solid var(--color-gray-90);
+	margin: 1em 0 0;
+	border-left: 6px solid var(--text-color);
 	background-color: var(--bg-alpha);
 	font-style: italic;
-}
-
-.post blockquote {
-	margin-bottom: 0;
 	position: relative;
-	quotes: "“" "”";
-}
-
-.post blockquote+figcaption {
-	margin-top: 0.5em;
-}
-
-.post figcaption {
-	font-size: 1.4rem;
-	color: var(--color-gray-90);
+	quotes: "\201C" "\201D";
 }
 
 .post blockquote::before,
@@ -627,8 +716,25 @@ aside.admonition-info {
 	right: 0;
 }
 
-.post .embed {
-	margin-top: 1.6rem;
+.post blockquote + figcaption {
+	margin-top: 0.5em;
+}
+
+/* Figures & images */
+.post figure {
+	margin: 1.6rem 0;
+}
+
+@media screen and (min-width: 720px) {
+	.post figure {
+		margin: 1.6rem;
+	}
+}
+
+.post figcaption {
+	font-size: 1.4rem;
+	color: var(--text-color);
+	opacity: 0.7;
 }
 
 .post picture {
@@ -637,16 +743,35 @@ aside.admonition-info {
 	display: block;
 }
 
-.demo-content {
-	padding: 1rem;
-	margin: 0;
+/* Asides / callouts */
+.post aside:not(.post-toc) {
+	margin: 3rem 0;
+	padding: 2rem;
+	background-color: var(--aside-bg-color);
+	border-left: 5px solid var(--aside-border-color);
+	color: var(--text-color);
 }
 
-.sidenote {
-	padding: 20px;
-	background-color: rgba(0, 0, 0, 0.2);
+.aside-prefix,
+aside::before {
+	display: block;
+	margin-bottom: 10px;
+	font-weight: bold;
+	font-size: 0.9em;
+	color: var(--aside-border-color);
+	text-transform: uppercase;
 }
 
+aside.admonition-info {
+	border-left: 4px solid #2f86eb;
+}
+
+/* Embeds */
+.post .embed {
+	margin-top: 1.6rem;
+}
+
+/* Footnotes */
 .footnotes-sep {
 	margin-top: 5rem;
 }
@@ -655,37 +780,15 @@ aside.admonition-info {
 	font-size: 1.4rem;
 }
 
-/* https://www.a11yproject.com/posts/how-to-hide-content/ */
-.visually-hidden {
-	clip: rect(0 0 0 0);
-	clip-path: inset(50%);
-	height: 1px;
-	overflow: hidden;
-	position: absolute;
-	white-space: nowrap;
-	width: 1px;
+/* Misc post elements */
+.sidenote {
+	padding: 2rem;
+	background-color: rgba(0, 0, 0, 0.2);
 }
 
-.visually-hidden,
-.visually-hidden-focusable:not(:focus):not(:focus-within) {
-	width: 1px !important;
-	height: 1px !important;
-	padding: 0 !important;
-	margin: -1px !important;
-	overflow: hidden !important;
-	clip: rect(0, 0, 0, 0) !important;
-	white-space: nowrap !important;
-	border: 0 !important;
-}
-
-.visually-hidden:not(caption),
-.visually-hidden-focusable:not(:focus):not(:focus-within):not(caption) {
-	position: absolute !important;
-}
-
-*:not(pre)>code {
-	word-break: keep-all;
-}
+/* ==========================================================================
+   7. Demo Components (used in specific blog posts)
+   ========================================================================== */
 
 demo-component {
 	display: block;
@@ -706,6 +809,11 @@ demo-component {
 	border: 1px solid #666;
 	background-color: #fff;
 	color: #000;
+}
+
+.demo-content {
+	padding: 1rem;
+	margin: 0;
 }
 
 .browser-header {
@@ -761,26 +869,9 @@ demo-component {
 	border: 1px solid black;
 }
 
-nobr,
-.nobr {
-	display: inline;
-	white-space: nowrap;
-}
-
-/* @view-transition {
-	navigation: auto;
-} */
-
-main>h1 {
-	font-size: 3.2rem;
-	font-weight: 600;
-	letter-spacing: -0.01em;
-	view-transition-name: heading
-}
-
-main {
-	view-transition-name: nextContent
-}
+/* ==========================================================================
+   8. View Transitions
+   ========================================================================== */
 
 .transitions-enabled.view-transitioning {
 	overflow: hidden;
@@ -811,49 +902,17 @@ main {
 	animation-fill-mode: forwards;
 }
 
-.transitions-enabled::view-transition-old(item-1) {
-	animation-delay: 0s;
-}
-
-.transitions-enabled::view-transition-old(item-2) {
-	animation-delay: 0.1s;
-}
-
-.transitions-enabled::view-transition-old(item-3) {
-	animation-delay: 0.3s;
-}
-
-.transitions-enabled::view-transition-old(item-4) {
-	animation-delay: 0.2s;
-}
-
-.transitions-enabled::view-transition-old(item-5) {
-	animation-delay: 0.1s;
-}
-
-.transitions-enabled::view-transition-old(item-6) {
-	animation-delay: 0.6s;
-}
-
-.transitions-enabled::view-transition-old(item-7) {
-	animation-delay: 0.4s;
-}
-
-.transitions-enabled::view-transition-old(item-8) {
-	animation-delay: 0.5s;
-}
-
-.transitions-enabled::view-transition-old(item-9) {
-	animation-delay: 0.8s;
-}
-
-.transitions-enabled::view-transition-old(item-10) {
-	animation-delay: 0.9s;
-}
-
-.transitions-enabled::view-transition-old(more-posts) {
-	animation-delay: 1s;
-}
+.transitions-enabled::view-transition-old(item-1) { animation-delay: 0s; }
+.transitions-enabled::view-transition-old(item-2) { animation-delay: 0.1s; }
+.transitions-enabled::view-transition-old(item-3) { animation-delay: 0.3s; }
+.transitions-enabled::view-transition-old(item-4) { animation-delay: 0.2s; }
+.transitions-enabled::view-transition-old(item-5) { animation-delay: 0.1s; }
+.transitions-enabled::view-transition-old(item-6) { animation-delay: 0.6s; }
+.transitions-enabled::view-transition-old(item-7) { animation-delay: 0.4s; }
+.transitions-enabled::view-transition-old(item-8) { animation-delay: 0.5s; }
+.transitions-enabled::view-transition-old(item-9) { animation-delay: 0.8s; }
+.transitions-enabled::view-transition-old(item-10) { animation-delay: 0.9s; }
+.transitions-enabled::view-transition-old(more-posts) { animation-delay: 1s; }
 
 .transitions-enabled::view-transition-new(nextContent) {
 	animation-name: fade-in;
@@ -908,13 +967,16 @@ main {
 	}
 }
 
-/* Table of Contents */
+/* ==========================================================================
+   9. Table of Contents
+   ========================================================================== */
+
 .post-toc {
 	margin-top: 2rem;
 }
 
 .post-toc + .post-content {
-	margin-top: 3rem;
+	margin-top: 3.2rem;
 }
 
 .post-toc h2 {

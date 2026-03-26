@@ -1,0 +1,13 @@
+---
+layout: layouts/home.njk
+permalink: "{% if isDev %}/drafts/{% else %}false{% endif %}"
+eleventyExcludeFromCollections: true
+---
+<h1>Drafts</h1>
+
+{% set postslist = collections.posts | onlyDrafts %}
+{% if postslist | length %}
+{% include "postslist.njk" %}
+{% else %}
+<p>No drafts right now.</p>
+{% endif %}

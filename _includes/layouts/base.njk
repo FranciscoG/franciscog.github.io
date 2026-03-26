@@ -13,7 +13,7 @@
 		<meta name="generator" content="{{ eleventy.generator }}">
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=optional" rel="stylesheet">
     <script src="/js/theme-switcher.js"></script>
 
 		{%- css "base" %}{% include "public/css/index.css" %}{% endcss %}
@@ -47,21 +47,38 @@
             <li class="nav-item"><a href="{{ entry.url }}"{% if entry.url == page.url %} aria-current="page"{% endif %}>{{ entry.title }}</a></li>
           {%- endfor %}
 
+          {% if isDev %}
+           <li class="nav-item"><a href="/drafts/"{% if page.url == "/drafts/" %} aria-current="page"{% endif %}>Drafts</a></li>
+          {% endif %}
            <li class="nav-item nav-item-feed">
-              <a href="/feed/feed.xml">
-                Feed
+              <a href="/feed/feed.xml" aria-label="RSS Feed" title="RSS Feed">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="6.18" cy="17.82" r="2.18"/><path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/></svg>
               </a>
             </li>
           </ul>
+          <noscript>
+            <label class="color-theme-picker">
+              Color Scheme
+              <select id="color-scheme-select">
+                <option value="auto">System Preference</option>
+                <option value="dark">Dark</option>
+                <option value="light">Light</option>
+              </select>
+            </label>
+          </noscript>
+          <div class="theme-switcher" role="radiogroup" aria-label="Color scheme">
+            <button type="button" role="radio" aria-checked="false" aria-label="Light theme" data-theme-value="light" class="theme-switcher-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </button>
+            <button type="button" role="radio" aria-checked="true" aria-label="System preference" data-theme-value="auto" class="theme-switcher-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </button>
+            <button type="button" role="radio" aria-checked="false" aria-label="Dark theme" data-theme-value="dark" class="theme-switcher-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
+            <div class="theme-switcher-indicator" aria-hidden="true"></div>
+          </div>
         </nav>
-        <label class="color-theme-picker">
-          Color Scheme
-          <select id="color-scheme-select">
-            <option value="auto">System Preference</option>
-            <option value="dark">Dark</option>
-            <option value="light">Light</option>
-          </select>
-        </label>
       </header>
 
       <main id="skip">

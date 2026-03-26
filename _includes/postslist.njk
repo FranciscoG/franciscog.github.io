@@ -9,8 +9,7 @@
 		<a href="{{ post.url }}" class="postlist-link">
       {% if post.data.title %}{{ post.data.title }}{% else %}<code>{{ post.url }}</code>{% endif %}
     </a>
-    {% if post.data.tags.includes("drafts") %}<span class="postlist-draft">DRAFT</span>{% endif %}
-		<time class="postlist-date" datetime="{{ post.date | htmlDateString }}">{{ post.date | readableDate("LLLL d yyyy") }}</time>
+		<time class="postlist-date" datetime="{{ post.date | htmlDateString }}">{{ post.date | readableDate("LLL d yyyy") }}</time>
 	</li>
 {% endfor %}
 </ol>
