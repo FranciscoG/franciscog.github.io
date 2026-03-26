@@ -1,10 +1,19 @@
 ---
 title: Pure CSS theme switcher
 date: 2025-04-08
+updated: 2026-03-26
 syntax: true
 tags:
   - CSS
 ---
+
+<aside>
+
+<span class="aside-prefix">Edit:</span>
+
+Just wanted to note that I no longer use a basic select for my theme switcher. However, everything below still stands and if you disable JS on my site it will fallback to the select.
+
+</aside>
 
 I have a simple theme switcher on my site and currently it relies on JavaScript to function properly. However, if anyone came to my site with JavaScript disabled, it wouldn't do anything, which isn't a great user experience. In this post I'm going to show you how easy it is to make it work with JavasScript disabled using pure CSS only, meaning that I don't have to touch the HTML at all.
 
