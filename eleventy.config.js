@@ -73,12 +73,6 @@ export default function (eleventyConfig) {
 		return `<span class="color-block" style="background-color: ${colorHex};"></span>`;
 	});
 
-	eleventyConfig.addFilter(
-		"getNewestCollectionItemDate",
-		pluginRss.getNewestCollectionItemDate
-	);
-	eleventyConfig.addFilter("dateToRfc3339", pluginRss.dateToRfc3339);
-
 	// Filters
 	eleventyConfig.addFilter("readableDate", (dateObj, format, zone) => {
 		// Formatting tokens for Luxon: https://moment.github.io/luxon/#/formatting?id=table-of-tokens
