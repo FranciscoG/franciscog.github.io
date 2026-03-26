@@ -243,14 +243,16 @@ main > h1 {
 }
 
 footer {
-	padding: 1.6rem;
-	margin-top: 4.8rem;
+	padding: 12rem 1.6rem 1.6rem;
+	margin-top: 0;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	border-top: 1px solid var(--color-gray-20);
 	font-size: 1.4rem;
 	color: var(--text-color-muted);
+	position: relative;
+	z-index: 1;
+	flex-wrap: wrap;
 }
 
 @media screen and (min-width: 720px) {
@@ -259,9 +261,40 @@ footer {
 	}
 
 	footer {
-		padding: 1.6rem 0;
+		padding: 12rem 0 1.6rem;
 	}
 }
+
+/* Blue Ridge Mountains footer decoration */
+.footer-mountains {
+	position: relative;
+	margin-top: 4.8rem;
+}
+
+.mountains-svg {
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	min-width: 600px;
+	width: 100%;
+	height: 250px;
+	z-index: 0;
+}
+
+
+/* Light mode: grayscale, farthest layer lightest */
+.mountain-layer-1 { fill: #b8b8b8; }
+.mountain-layer-2 { fill: #cacaca; }
+.mountain-layer-3 { fill: #dcdcdc; }
+.mountain-layer-4 { fill: #ededed; }
+
+/* Dark mode: deep blue tones that blend into the background (#15202b) */
+html[data-theme="dark"] .mountain-layer-1 { fill: #0a1219; }
+html[data-theme="dark"] .mountain-layer-2 { fill: #0e1821; }
+html[data-theme="dark"] .mountain-layer-3 { fill: #111d28; }
+html[data-theme="dark"] .mountain-layer-4 { fill: #142231; }
+
 
 /* https://www.a11yproject.com/posts/how-to-hide-content/ */
 .visually-hidden,
@@ -359,6 +392,15 @@ nav:not(.post-toc) {
 	border-radius: 9999px;
 	padding: 3px;
 	gap: 2px;
+}
+
+/* on mobile we move the theme switcher to the top right corner */
+@media (max-width: 500px) {
+	.theme-switcher {
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+	}
 }
 
 @media (scripting: enabled) {
