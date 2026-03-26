@@ -10,48 +10,61 @@ class ColorTheme {
 		this.STORAGE_KEY = "theme-preference";
 		this.LIGHT = "light";
 		this.DARK = "dark";
-		this.selector = "#color-scheme-select";
+		this.VALUES = ["light", "auto", "dark"];
 
-		/**
-		 * @type {'auto'|'light'|'dark'}
-		 */
+		/** @type {'auto'|'light'|'dark'} */
 		this.userSelectedTheme = localStorage.getItem(this.STORAGE_KEY) || "auto";
-		// this.systemTheme = this.getSystemPreference();
 
 		this.reflectPreference = this.reflectPreference.bind(this);
 		this.setPreference = this.setPreference.bind(this);
 
 		window.addEventListener("load", this.onLoad.bind(this));
 
-		// window
-		// 	.matchMedia("(prefers-color-scheme: dark)")
-		// 	.addEventListener("change", this.onMatch.bind(this));
-
 		this.reflectPreference();
 	}
 
 	onLoad() {
-		document
-			.querySelector(this.selector)
-			.addEventListener("change", this.themeOnChange.bind(this));
+		// New icon switcher
+		const switcher = document.querySelector(".theme-switcher");
+		if (switcher) {
+			this.buttons = switcher.querySelectorAll(".theme-switcher-btn");
+			this.indicator = switcher.querySelector(".theme-switcher-indicator");
 
-		document.querySelector(this.selector).value = this.userSelectedTheme;
+			this.buttons.forEach((btn) => {
+				btn.addEventListener("click", () => {
+					this.userSelectedTheme = btn.dataset.themeValue;
+					this.setPreference();
+					this.updateSwitcher();
+				});
+			});
+
+			this.updateSwitcher();
+		}
+
+		// No-JS fallback select (inside <noscript>, won't exist with JS enabled)
+		const select = document.querySelector("#color-scheme-select");
+		if (select) {
+			select.addEventListener("change", (e) => {
+				this.userSelectedTheme = e.target.value;
+				this.setPreference();
+			});
+			select.value = this.userSelectedTheme;
+		}
 	}
 
-	/**
-	 * System theme changed
-	 * @param {MediaQueryListEvent} e
-	 */
-	// onMatch(e) {
-	// 	this.systemTheme = e.matches ? this.DARK : this.LIGHT;
-	// 	this.reflectPreference();
-	// }
+	updateSwitcher() {
+		if (!this.buttons) return;
 
-	// getSystemPreference() {
-	// 	return window.matchMedia("(prefers-color-scheme: dark)").matches
-	// 		? this.DARK
-	// 		: this.LIGHT;
-	// }
+		this.buttons.forEach((btn) => {
+			const isActive = btn.dataset.themeValue === this.userSelectedTheme;
+			btn.setAttribute("aria-checked", isActive ? "true" : "false");
+		});
+
+		const position = this.VALUES.indexOf(this.userSelectedTheme);
+		if (this.indicator && position !== -1) {
+			this.indicator.setAttribute("data-position", position);
+		}
+	}
 
 	reflectPreference() {
 		if (this.userSelectedTheme === "auto") {
@@ -73,19 +86,9 @@ class ColorTheme {
 		if (this.userSelectedTheme !== "auto") {
 			localStorage.setItem(this.STORAGE_KEY, this.userSelectedTheme);
 		} else {
-			// for auto we remove the key
 			localStorage.removeItem(this.STORAGE_KEY);
 		}
 		this.reflectPreference();
-	}
-
-	/**
-	 * User manually changed the theme
-	 * @param {Event & { target: HTMLSelectElement }} e
-	 */
-	themeOnChange(e) {
-		this.userSelectedTheme = e.target.value;
-		this.setPreference();
 	}
 }
 

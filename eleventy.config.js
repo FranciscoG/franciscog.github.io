@@ -73,12 +73,6 @@ export default function (eleventyConfig) {
 		return `<span class="color-block" style="background-color: ${colorHex};"></span>`;
 	});
 
-	eleventyConfig.addFilter(
-		"getNewestCollectionItemDate",
-		pluginRss.getNewestCollectionItemDate
-	);
-	eleventyConfig.addFilter("dateToRfc3339", pluginRss.dateToRfc3339);
-
 	// Filters
 	eleventyConfig.addFilter("readableDate", (dateObj, format, zone) => {
 		// Formatting tokens for Luxon: https://moment.github.io/luxon/#/formatting?id=table-of-tokens
@@ -138,6 +132,20 @@ export default function (eleventyConfig) {
 			}
 			return 0;
 		});
+	});
+
+	// filter out draft posts from a collection
+	eleventyConfig.addFilter("excludeDrafts", (collection) => {
+		return (collection || []).filter(
+			(item) => !item.data.draft && !(item.data.tags && item.data.tags.includes("drafts"))
+		);
+	});
+
+	// filter to only draft posts
+	eleventyConfig.addFilter("onlyDrafts", (collection) => {
+		return (collection || []).filter(
+			(item) => item.data.draft || (item.data.tags && item.data.tags.includes("drafts"))
+		);
 	});
 
 	eleventyConfig.addFilter("cssmin", async function (code) {
@@ -228,6 +236,10 @@ export default function (eleventyConfig) {
 	// https://www.11ty.dev/docs/copy/#emulate-passthrough-copy-during-serve
 
 	// eleventyConfig.setServerPassthroughCopyBehavior("passthrough");
+
+	eleventyConfig.setServerOptions({
+		showAllHosts: true
+	});
 
 	return {
 		// Control which files Eleventy will process
