@@ -88,32 +88,16 @@
       <!-- outputs all the icons used on the page -->
       {% getBundle "fontawesome" %}
 
-      <div class="footer-mountains">
-        <svg class="mountains-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 400" preserveAspectRatio="none" aria-hidden="true">
-          <!-- Layer 1: Farthest range — broad peaks with gentle shoulders -->
-          <path class="mountain-layer-1" d="M0,400 L0,190 L30,178 L80,155 L120,132 L180,108 L220,95 L270,82 L330,72 L380,78 L420,90 L470,108 L510,125 L540,118 L580,100 L640,82 L700,95 L740,115 L770,128 L810,120 L850,105 L900,85 L950,68 L1010,58 L1060,52 L1110,60 L1160,75 L1200,92 L1240,108 L1280,100 L1320,88 L1370,95 L1410,110 L1440,125 L1440,400 Z"/>
-          <!-- Layer 2: Asymmetric ridgeline, steep left face, long right slope, deep valley -->
-          <path class="mountain-layer-2" d="M0,400 L0,155 L40,140 L90,115 L130,98 L160,105 L200,125 L240,148 L280,165 L310,175 L350,190 L400,210 L440,225 L480,235 L530,228 L570,215 L610,195 L650,180 L680,170 L720,155 L770,135 L820,118 L870,100 L920,90 L960,95 L1000,108 L1040,122 L1080,115 L1120,100 L1170,88 L1210,98 L1260,118 L1300,135 L1340,145 L1390,155 L1440,162 L1440,400 Z"/>
-          <!-- Layer 3: Dramatic peak left, wide valley, rugged ridge right -->
-          <path class="mountain-layer-3" d="M0,400 L0,195 L50,175 L90,158 L120,170 L160,188 L200,210 L250,238 L300,260 L350,278 L400,288 L460,282 L510,268 L550,250 L590,235 L630,225 L680,218 L720,210 L760,198 L810,185 L850,178 L890,172 L940,168 L980,175 L1020,188 L1060,198 L1100,192 L1140,180 L1190,172 L1230,180 L1270,195 L1310,205 L1360,200 L1400,208 L1440,215 L1440,400 Z"/>
-          <!-- Layer 4: Closest — low undulating mass with subtle knobs -->
-          <path class="mountain-layer-4" d="M0,400 L0,285 L60,278 L120,272 L180,268 L240,275 L300,282 L360,278 L420,270 L480,265 L540,272 L600,280 L660,285 L720,278 L780,270 L840,265 L900,268 L960,275 L1020,272 L1080,265 L1140,270 L1200,278 L1260,275 L1320,268 L1380,272 L1440,278 L1440,400 Z"/>
-        </svg>
-        <footer>
-          <p>
-            &copy; {{ metadata.title }} {{ "" | year }}
-          </p>
+      <footer>
+        <p>
+          &copy; {{ metadata.title }} {{ "" | year }}
+        </p>
 
-          <p>
-            Coming atcha from Appalachia.
-          </p>
-
-          <label title="See my post 'Fun with view transitions' for more information.">
-            <input type="checkbox" switch id="enable-transitions-checkbox">
-            Enable View Transitions
-          </label>
-        </footer>
-      </div>
+        <label title="See my post 'Fun with view transitions' for more information.">
+          <input type="checkbox" id="enable-transitions-checkbox">
+          Enable View Transitions
+        </label>
+      </footer>
     </div>
     <script src="/js/main.js"></script>
 
