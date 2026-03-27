@@ -21,7 +21,7 @@ export default function (eleventyConfig) {
 	// Copy the contents of the `public` folder to the output folder
 	// For example, `./public/css/` ends up in `_site/css/`
 	eleventyConfig.addPassthroughCopy({
-		"./public/": "/",
+		"./src/public/": "/",
 		"./node_modules/prismjs/themes/prism-okaidia.css": "/css/prism-okaidia.css",
 	});
 
@@ -29,7 +29,7 @@ export default function (eleventyConfig) {
 	// https://www.11ty.dev/docs/watch-serve/#add-your-own-watch-targets
 
 	// Watch content images for the image pipeline.
-	eleventyConfig.addWatchTarget("content/**/*.{svg,webp,png,jpeg}");
+	eleventyConfig.addWatchTarget("src/content/**/*.{svg,webp,png,jpeg}");
 
 	// App plugins
 	eleventyConfig.addPlugin(pluginDrafts);
@@ -254,7 +254,7 @@ export default function (eleventyConfig) {
 
 		// These are all optional:
 		dir: {
-			input: "content", // default: "."
+			input: "src/content", // default: "."
 			includes: "../_includes", // default: "_includes"
 			data: "../_data", // default: "_data"
 
