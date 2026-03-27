@@ -3,7 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const BLOG_DIR = './content/blog';
+const BLOG_DIR = './src/content/blog';
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
 /**

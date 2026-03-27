@@ -4,6 +4,12 @@ on:
   # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
+    paths:
+      - "src/**"
+      - "eleventy.config.*"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/static.yml"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:

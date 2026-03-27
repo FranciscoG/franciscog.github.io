@@ -19,4 +19,4 @@ pre-commit:
 
     - name: validate post dates
       run: node validate-post.js {staged_files}
-      glob: "content/blog/*.md"
+      glob: "src/content/blog/*.md"

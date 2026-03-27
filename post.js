@@ -95,7 +95,7 @@ async function main() {
 		const content = printHeader(postName);
 
 		// Write to content/drafts folder
-		const outputPath = path.join(__dirname, 'content', 'drafts', fullFileName);
+		const outputPath = path.join(__dirname, 'src', 'content', 'drafts', fullFileName);
 		fs.writeFileSync(outputPath, content, 'utf-8');
 
 		console.log(`✓ Post created successfully at: ${outputPath}`);
