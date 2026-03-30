@@ -226,7 +226,12 @@ export default function (eleventyConfig) {
 	});
 
 	eleventyConfig.addPlugin(pluginTOC, {
-		wrapper: 'div'
+		wrapper: 'div',
+	});
+
+	eleventyConfig.addFilter("tocWithIntro", function(tocHtml) {
+		if (!tocHtml) return tocHtml;
+		return tocHtml.replace('<ol>', '<ol><li><a href="#post-title">Intro</a></li>');
 	});
 
 	// Features to make your build faster (when you need them)
