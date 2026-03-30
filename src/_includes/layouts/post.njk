@@ -12,7 +12,7 @@ layout: layouts/base.njk
 		{%- if tags.includes("drafts") %}
 			<h2 class="post-draft">DRAFT</h2>
 		{%- endif %}
-		<h1>{{ title }}</h1>
+		<h1 id="post-title">{{ title }}</h1>
 		<ul class="post-metadata">
 			<li class="post-date"><time datetime="{{ page.date | htmlDateString }}">{{ page.date | readableDate }}</time></li>
 			{% if updated %}
@@ -20,14 +20,14 @@ layout: layouts/base.njk
 			{% endif %}
 			{%- for tag in tags | filterTagList %}
 			{%- set tagUrl %}/tags/{{ tag | slugify }}/{% endset %}
-			<li class="post-tag"><a href="{{ tagUrl }}" class="post-tag-link">{{ tag }}</a>{%- if not loop.last %}, {% endif %}</li>
+			<li class="post-tag"><a href="{{ tagUrl }}" class="post-tag-link">{{ tag }}</a>{%- if not loop.last %} {% endif %}</li>
 			{%- endfor %}
 		</ul>
 	</header>
 	{% if content | toc %}
 	<nav id="post-toc" class="post-toc" aria-labelledby="toc-heading">
 		<h2 id="toc-heading">Table of Contents</h2>
-		{{ content | toc | safe }}
+		{{ content | toc | tocWithIntro | safe }}
 	</nav>
 	{% endif %}
 	<section class="post-content">

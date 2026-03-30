@@ -43,3 +43,26 @@ export default function (eleventyConfig) {
 		}
 	);
 }
+
+/*
+For now this site is hosted on Github pages so images are just stored in the repo and linked to directly. 
+
+If we decide to move to another service to host the site that charges for bandwidth, maybe it would make
+sense to convert images to base64 and embed them directly in the HTML. This would reduce the number of 
+requests and bandwidth used, but it would also increase the size of the HTML files.
+
+ 1. Custom shortcode (no plugin needed)
+	// eleventy.config.js
+	const fs = require("fs");
+	const path = require("path");
+
+	eleventyConfig.addShortcode("inlineImg", (src, alt, mimeType = "image/png") => {
+		const data = fs.readFileSync(src);
+		const b64 = data.toString("base64");
+		return `<img src="data:${mimeType};base64,${b64}" alt="${alt}" loading="lazy" decoding="async" />`;
+	});
+
+	2. Or run the image through @11ty/eleventy-img to get an optimized WebP/AVIF, then read that output file and base64 encode it in the same shortcode.
+
+
+*/

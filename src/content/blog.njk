@@ -6,5 +6,12 @@ eleventyNavigation:
 ---
 <h1>Archive</h1>
 
+<ul class="blog-tag-list">
+{% for tag in collections.all | getAllTags | filterTagList %}
+	{% set tagUrl %}/tags/{{ tag | slugify }}/{% endset %}
+	<li><a href="{{ tagUrl }}" class="post-tag">{{ tag }}</a></li>
+{% endfor %}
+</ul>
+
 {% set postslist = collections.posts | excludeDrafts %}
 {% include "postslist.njk" %}
