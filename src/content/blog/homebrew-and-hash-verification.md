@@ -7,7 +7,7 @@ tags:
   - Homebrew
 ---
 
-One of the main reasons I prefer to use [Homebrew](https://brew.sh) to install applications is that it automatically handles verifying the sha256 hash of a file. Otherwise I'd have to do all of that manually, which is annoying, and you know we developers love automating those annoying samll tasks.
+One of the main reasons I prefer to use [Homebrew](https://brew.sh) to install applications is that it automatically handles verifying the sha256 hash of a file. Otherwise I'd have to do all of that manually, which is annoying, and you know we developers love automating those annoying small tasks.
 
 What I didn't realize until recently is that not all developers provide hashes for their formulae/casks. Granted it's very rare, so probably not a huge concern, but if the effort to protect yourself is trivial, then why not employ it.
 
