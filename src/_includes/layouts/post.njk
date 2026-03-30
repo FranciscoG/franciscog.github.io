@@ -20,7 +20,7 @@ layout: layouts/base.njk
 			{% endif %}
 			{%- for tag in tags | filterTagList %}
 			{%- set tagUrl %}/tags/{{ tag | slugify }}/{% endset %}
-			<li class="post-tag"><a href="{{ tagUrl }}" class="post-tag-link">{{ tag }}</a>{%- if not loop.last %}, {% endif %}</li>
+			<li class="post-tag"><a href="{{ tagUrl }}" class="post-tag-link">{{ tag }}</a>{%- if not loop.last %} {% endif %}</li>
 			{%- endfor %}
 		</ul>
 	</header>

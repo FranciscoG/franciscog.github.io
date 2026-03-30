@@ -514,6 +514,58 @@ nav:not(.post-toc) {
 	align-self: center;
 }
 
+/* Tag list on the archive/blog page */
+.blog-tag-list {
+	list-style: none;
+	padding: 0;
+	margin: 0 0 3.2rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.8rem;
+}
+
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.35em 0.85em;
+	font-size: 1.3rem;
+	font-weight: 500;
+	letter-spacing: 0.02em;
+	text-transform: lowercase;
+	text-decoration: none;
+	color: var(--text-color-link);
+	background-color: color-mix(in oklch, var(--text-color-link) 8%, transparent);
+	border: 1px solid color-mix(in oklch, var(--text-color-link) 22%, transparent);
+	border-radius: 9999px;
+	transition:
+		background-color 0.18s ease,
+		color 0.18s ease,
+		border-color 0.18s ease,
+		transform 0.15s ease;
+}
+
+.post-tag:visited {
+	color: var(--text-color-link);
+}
+
+.post-tag:hover {
+	background-color: var(--text-color-link);
+	color: var(--background-color);
+	border-color: var(--text-color-link);
+	transform: translateY(-1px);
+	text-decoration: none;
+}
+
+.post-tag:active {
+	transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.post-tag {
+		transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+	}
+}
+
 .post-metadata {
 	display: inline-flex;
 	flex-wrap: wrap;
@@ -575,7 +627,7 @@ nav:not(.post-toc) {
 .post h4,
 .post h5,
 .post h6 {
-	margin-top: 2.5rem;
+	margin-top: 2em;
 	line-height: 1.2;
 }
 
@@ -589,7 +641,6 @@ nav:not(.post-toc) {
 .post h2 {
 	font-size: 2.8rem;
 	font-weight: 600;
-	margin-top: 3em;
 	letter-spacing: -0.01em;
 }
 
